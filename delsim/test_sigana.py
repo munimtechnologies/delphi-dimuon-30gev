@@ -127,6 +127,7 @@ class TestAnalysis(unittest.TestCase):
         self.assertEqual(r["n_aligned"], 6)
         self.assertEqual(r["mass_resolution"]["n_pairs"], 6)
         self.assertAlmostEqual(r["muon_level"]["eff_track"], 1.0)
+        self.assertAlmostEqual(r["muon_level"]["eff_track_all"], 1.0)
         self.assertGreater(r["mass_resolution"]["median_dm"], 0)
         self.assertEqual(r["selection_counts"]["aligned"], 6)
         self.assertEqual(r["selection_counts"]["truth_pair_selected"],
@@ -140,6 +141,88 @@ class TestAnalysis(unittest.TestCase):
             t["q"] = -t["q"]
         m = sigana.match_muons(self.truth[0], ev["tracks"][:2])
         self.assertTrue(all(x is None for x in m))
+
+    # ---- 0.2.0
+    def test_eff_track_all_counts_lost_events(self):
+        # events 2 and 5 never reconstructed: 4 aligned events x 2 muons found, 6 x 2 in acceptance
+        reco = [self.reco_for(0, 1), self.reco_for(1, 2), self.reco_for(3, 3), self.reco_for(4, 4)]
+        r = sigana.analyse(reco, self.truth, 6)
+        mu = r["muon_level"]
+        self.assertEqual(mu["n_truth_mu_in_acc_all_simulated"], 12)
+        self.assertAlmostEqual(mu["eff_track"], 1.0)
+        self.assertAlmostEqual(mu["eff_track_all"], round(8 / 12, 4))
+
+    def test_eff_track_all_respects_nsim(self):
+        # only the first 4 generated events were simulated; event 4 aligned but beyond nsim
+        reco = [self.reco_for(0, 1), self.reco_for(1, 2), self.reco_for(3, 3), self.reco_for(4, 4)]
+        r = sigana.analyse(reco, self.truth, 4)
+        mu = r["muon_level"]
+        self.assertEqual(mu["n_truth_mu_in_acc_all_simulated"], 8)
+        self.assertAlmostEqual(mu["eff_track_all"], round(6 / 8, 4))
+
+    def test_hemi_tag_matches_dimusel_rule(self):
+        reco = [self.reco_for(j, j + 1) for j in range(4)]
+        hem = [(0.002, 0.5), (0.5, 0.02), (-1.0, 0.5), (0.5, 0.5)]
+        for ev, (h1, h2) in zip(reco, hem):
+            ev["e"]["btp1"], ev["e"]["btp2"] = h1, h2
+        r = sigana.analyse(reco, self.truth, 4)
+        self.assertEqual(r["selection_counts"]["pmiss_lt18"], 4)
+        h = r["hemi_btag_after_selection"]
+        self.assertEqual(h["n_selected"], 4)
+        self.assertEqual(h["n_valid_hemispheres"], 7)
+        self.assertEqual(h["n_selected_no_valid_hemisphere"], 0)
+        self.assertAlmostEqual(h["event_tag_eff"]["0.001"], 0.0)
+        self.assertAlmostEqual(h["event_tag_eff"]["0.003"], 0.25)
+        self.assertAlmostEqual(h["event_tag_eff"]["0.03"], 0.5)
+        self.assertAlmostEqual(h["event_tag_eff"]["0.3"], 0.5)
+        self.assertAlmostEqual(h["event_tag_eff_err"]["0.03"], 0.25)
+        self.assertAlmostEqual(h["per_hemisphere_tag_eff"]["0.03"], round(2 / 7, 4))
+        self.assertEqual(set(h["event_tag_eff"]), {str(w) for w in sigana.HEMI_WP})
+
+    def test_hemi_thrust_sample_for_rho_d(self):
+        reco = [self.reco_for(j, j + 1) for j in range(4)]
+        hem = [(0.002, 0.5), (0.5, 0.02), (-1.0, 0.5), (0.5, 0.5)]
+        axes = [(1.0, 0.0, 0.0), (1.0, 0.0, 1.0), (0.0, 0.0, 1.0), (0.0, 0.0, 0.0)]
+        for ev, (h1, h2), (x, y, z) in zip(reco, hem, axes):
+            ev["e"].update(btp1=h1, btp2=h2, thx=x, thy=y, thz=z)
+        r = sigana.analyse(reco, self.truth, 4)
+        h = r["hemi_btag_after_selection_thrust"]
+        self.assertEqual(h["n_selected"], 2)
+        self.assertEqual(h["n_valid_hemispheres"], 4)
+        self.assertAlmostEqual(h["event_tag_eff"]["0.003"], 0.5)
+        self.assertAlmostEqual(h["event_tag_eff"]["0.03"], 1.0)
+        self.assertEqual(r["hemi_btag_after_selection"]["n_selected"], 4)
+
+    def test_thrust_cut_matches_dimusel(self):
+        try:
+            import dimusel
+        except ImportError:
+            self.skipTest("analysis/dimusel.py not on the path")
+        self.assertAlmostEqual(sigana.THRUST_COS_MAX, dimusel.DEFAULTS["thrust_cos_max"])
+        self.assertFalse(sigana.thrust_ok({"thx": 0.0, "thy": 0.0, "thz": 0.0}))
+        self.assertFalse(sigana.thrust_ok({"thx": 0.1, "thy": 0.0, "thz": 1.0}))
+        self.assertTrue(sigana.thrust_ok({"thx": 0.0, "thy": 1.0, "thz": 0.5}))
+
+    def test_hemi_no_valid_hemisphere_is_untagged(self):
+        e = {"btp1": -1.0, "btp2": 2.0}
+        self.assertFalse(sigana.hemi_tagged(e, 0.3))
+        s = sigana.hemi_tag_summary([e])
+        self.assertEqual(s["n_selected_no_valid_hemisphere"], 1)
+        self.assertEqual(s["n_valid_hemispheres"], 0)
+        self.assertIsNone(s["per_hemisphere_tag_eff"]["0.3"])
+        self.assertEqual(s["event_tag_eff"]["0.3"], 0.0)
+
+    def test_hemi_grid_matches_btagcal(self):
+        try:
+            import btagcal
+        except ImportError:
+            self.skipTest("analysis/btagcal.py not on the path")
+        self.assertEqual(tuple(sigana.HEMI_WP), tuple(btagcal.WPS))
+
+    def test_rho_d(self):
+        self.assertAlmostEqual(sigana.rho_d(0.30, 0.40), 0.75)
+        self.assertIsNone(sigana.rho_d(None, 0.4))
+        self.assertIsNone(sigana.rho_d(0.3, 0.0))
 
 
 if __name__ == "__main__":

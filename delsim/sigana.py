@@ -9,6 +9,17 @@ short-DST events written by MV2's SKELANA USER02 (mv2user02s.car), and measures:
   - impact parameters of prompt signal muons.
 Everything here is simulation, so no blinding applies.
 
+0.2.0 (PLAN v0.10, section 4e): the signal's b-tag efficiency is now also measured with the
+SAME hemisphere tag that analysis/dimusel.py uses in btag_mode "hemi" (an event is tagged if
+min(QBTPRP(1), QBTPRP(2)) < w over hemispheres with a valid probability in [0, 1]), on the
+working-point grid of analysis/btagcal.py. Test B (PLAN 5e) needs exactly this number: rho_D =
+(signal event tag efficiency at w) / (data Z -> b bbar event tag efficiency at w). The per-
+hemisphere rate is reported too, for comparison with btagcal's hemisphere efficiency e_b. The
+0.1.0 numbers based on the event probability QBTPRP(3) are kept unchanged.
+Also new: eff_track_all, whose denominator is every in-acceptance signal muon of the simulated
+events, so events in which both muons were lost (never aligned) count as losses; eff_track
+(aligned events only) is kept and is biased upward by those events.
+
 MV2 of Munim, Inc. (mv2@munimtech.com). Made with AI agents. Apache-2.0.
 """
 import argparse
@@ -23,6 +34,7 @@ import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
+VERSION = "mv2 sigana 0.2.0"
 MMU = 0.1056584
 SIG_IDS = (32, 35, 36)
 NEUTRINOS = (12, 14, 16)
@@ -34,6 +46,10 @@ E_INT = ("run", "evt", "ihad4", "nctr4", "nctrk", "nvecp", "nlep")
 P_INT = ["run", "evt", "i", "q", "lock", "kmu1", "kmu3", "kel1", "kel2", "vdrphi", "vdz"]
 P_REAL = ["px", "py", "pz", "e", "mchi2", "qt4", "qt5", "d0", "z0", "d0bs"]
 BTAG_WP = (0.1, 0.03, 0.01, 0.003, 0.001)
+# hemisphere working points: the grid of analysis/btagcal.py (WPS), so rho_D exists at every
+# point btagcal can choose
+HEMI_WP = (0.3, 0.1, 0.03, 0.01, 0.003, 0.001, 3e-4, 1e-4, 3e-5, 1e-5)
+THRUST_COS_MAX = 0.866   # dimusel DEFAULTS thrust_cos_max
 P_BINS = (2.5, 5.0, 10.0, 15.0, 20.0, 30.0, 46.0)
 
 
@@ -208,17 +224,54 @@ def frac(a, b):
     return None if not b else round(a / b, 4)
 
 
-def best_os_pair(tracks, level="any", lo=15.0, hi=50.0):
-    """All opposite-sign muon-tagged pairs in acceptance with mass in [lo, hi]."""
-    mus = [t for t in tracks if t["q"] != 0 and in_acc(t) and is_muon(t, level)]
-    pairs = []
-    for i in range(len(mus)):
-        for j in range(i + 1, len(mus)):
-            if mus[i]["q"] * mus[j]["q"] < 0:
-                m = pair_mass(mus[i], mus[j])
-                if lo <= m <= hi:
-                    pairs.append((m, mus[i], mus[j]))
-    return pairs
+def binom_err(a, b):
+    if not b:
+        return None
+    p = a / b
+    return round(math.sqrt(max(p * (1.0 - p), 0.0) / b), 4)
+
+
+def valid_hemis(e):
+    """Hemisphere lifetime probabilities usable for tagging (same rule as dimusel._hemis)."""
+    return [x for x in (e["btp1"], e["btp2"]) if 0.0 <= x <= 1.0]
+
+
+def hemi_tagged(e, wp):
+    """dimusel btag_mode 'hemi': at least one valid hemisphere with probability below wp."""
+    h = valid_hemis(e)
+    return bool(h) and min(h) < wp
+
+
+def hemi_tag_summary(selected_e, wps=HEMI_WP):
+    """Event-level and per-hemisphere tag rates of the selected signal events."""
+    n = len(selected_e)
+    hemis = [x for e in selected_e for x in valid_hemis(e)]
+    ev, ev_err, per_h = {}, {}, {}
+    for wp in wps:
+        k = sum(1 for e in selected_e if hemi_tagged(e, wp))
+        ev[str(wp)] = frac(k, n)
+        ev_err[str(wp)] = binom_err(k, n)
+        per_h[str(wp)] = frac(sum(1 for x in hemis if x < wp), len(hemis))
+    return {"n_selected": n,
+            "n_selected_no_valid_hemisphere": sum(1 for e in selected_e if not valid_hemis(e)),
+            "n_valid_hemispheres": len(hemis),
+            "event_tag_eff": ev, "event_tag_eff_err": ev_err,
+            "per_hemisphere_tag_eff": per_h}
+
+
+def thrust_ok(e, cos_max=THRUST_COS_MAX):
+    """dimusel's hadronic thrust-axis cut (QBTTHR within 30-150 degrees), which btagcal's data
+    efficiency eps also passes; an empty axis fails, as in dimusel."""
+    n = math.sqrt(e["thx"] ** 2 + e["thy"] ** 2 + e["thz"] ** 2)
+    return n > 0 and abs(e["thz"]) / n <= cos_max
+
+
+def rho_d(sig_event_eff, data_event_eff):
+    """PLAN 5e: rho_D = signal event tag efficiency / data Z->bb event tag efficiency at the same
+    hemisphere working point; test B then uses rho = max(1, rho_D)."""
+    if sig_event_eff is None or not data_event_eff:
+        return None
+    return sig_event_eff / data_event_eff
 
 
 # ------------------------------------------------------------------ analysis
@@ -247,10 +300,11 @@ def analyse(reco, truth, nsim):
 
     # muon-level efficiencies (truth muons in acceptance, in aligned events)
     n_acc = n_trk = n_any = n_std = 0
+    n_trk_used = 0
     dinv = {i: [] for i in range(len(P_BINS) - 1)}
     d0, z0, mchi2 = [], [], []
     dm, dm_rel, m_reco_matched, m_true_matched = [], [], [], []
-    for ev, tr in pairs:
+    for (ev, tr), j in zip(pairs, [j for j in al if j is not None]):
         m = match_muons(tr, ev["tracks"])
         for mu, t in zip(tr["mus"], m):
             if not in_acc(mu):
@@ -259,6 +313,8 @@ def analyse(reco, truth, nsim):
             if t is None:
                 continue
             n_trk += 1
+            if j < n_used:
+                n_trk_used += 1
             n_any += is_muon(t)
             n_std += is_muon(t, "standard")
             d0.append(abs(t["d0"]))
@@ -275,7 +331,10 @@ def analyse(reco, truth, nsim):
             dm_rel.append((mr - mt) / mt)
             m_reco_matched.append(mr)
             m_true_matched.append(mt)
+    n_acc_all = sum(1 for t in truth[:n_used] for mu in t["mus"] if in_acc(mu))
     r["muon_level"] = {"n_truth_mu_in_acc": n_acc, "eff_track": frac(n_trk, n_acc),
+                       "n_truth_mu_in_acc_all_simulated": n_acc_all,
+                       "eff_track_all": frac(n_trk_used, n_acc_all),
                        "eff_mutag_any_given_track": frac(n_any, n_trk),
                        "eff_mutag_standard_given_track": frac(n_std, n_trk),
                        "abs_d0_cm_q50_90": [round(float(v), 4) for v in np.percentile(d0, [50, 90])] if d0 else None,
@@ -305,6 +364,7 @@ def analyse(reco, truth, nsim):
     btag = {wp: 0 for wp in BTAG_WP}
     btp3 = []
     reco_m = []
+    selected_e = []
     for ev, tr in pairs:
         e = ev["e"]
         cuts["aligned"] += 1
@@ -324,6 +384,7 @@ def analyse(reco, truth, nsim):
         if math.sqrt(sx * sx + sy * sy + sz * sz) >= 18.0:
             continue
         cuts["pmiss_lt18"] += 1
+        selected_e.append(e)
         m = match_muons(tr, ev["tracks"])
         ids = {id(x) for x in m if x is not None}
         if len(ids) == 2 and any({id(a), id(b)} == ids for (_, a, b) in pp):
@@ -340,9 +401,26 @@ def analyse(reco, truth, nsim):
     r["btag_eff_after_selection"] = {str(wp): frac(v, cuts["pmiss_lt18"]) for wp, v in btag.items()}
     r["btag_eff_vs_simulated"] = {str(wp): frac(v, n_used) for wp, v in btag.items()}
     r["btp3_q10_50_90_selected"] = [round(float(v), 6) for v in np.percentile(btp3, [10, 50, 90])] if btp3 else None
+    r["hemi_btag_after_selection"] = hemi_tag_summary(selected_e)
+    # the sample whose event tag efficiency is the numerator of rho_D (PLAN 5e): the same
+    # hadronic definition as btagcal's eps, i.e. with the thrust-axis cut
+    r["hemi_btag_after_selection_thrust"] = hemi_tag_summary([e for e in selected_e if thrust_ok(e)])
     r["hist_reco_os_mumu_15_50_0p5"] = np.histogram(reco_m, bins=70, range=(15, 50))[0].tolist() if reco_m else []
     r["delsim_used_input"] = bool(len(dm) >= 0.3 * max(1, len(reco)))
     return r
+
+
+def best_os_pair(tracks, level="any", lo=15.0, hi=50.0):
+    """All opposite-sign muon-tagged pairs in acceptance with mass in [lo, hi]."""
+    mus = [t for t in tracks if t["q"] != 0 and in_acc(t) and is_muon(t, level)]
+    pairs = []
+    for i in range(len(mus)):
+        for j in range(i + 1, len(mus)):
+            if mus[i]["q"] * mus[j]["q"] < 0:
+                m = pair_mass(mus[i], mus[j])
+                if lo <= m <= hi:
+                    pairs.append((m, mus[i], mus[j]))
+    return pairs
 
 
 def main():
@@ -355,7 +433,7 @@ def main():
     a = ap.parse_args()
     truth = read_truth(a.fadgen)
     reco = read_ntuple(a.ev, a.pa)
-    res = {"tool": "mv2 sigana 0.1.0", "made_by": "MV2 of Munim, Inc. (made with AI agents)"}
+    res = {"tool": VERSION, "made_by": "MV2 of Munim, Inc. (made with AI agents)"}
     res.update(analyse(reco, truth, a.nsim))
     with open(a.out, "w") as fh:
         json.dump(res, fh, indent=1)
