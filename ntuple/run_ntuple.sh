@@ -1,5 +1,5 @@
 #!/bin/bash
-# mv2dimu-ntuple 0.2.0 -- build a SKELANA job with MV2's USER02 (mv2user02.car) inside the
+# mv2dimu-ntuple 0.3.0 -- build a SKELANA job with MV2's USER02 (mv2user02.car) inside the
 # DELPHI container and run it on DELPHI short-DST data and Z->qq simulation files, for the
 # open DELPHI test of the ALEPH 30 GeV dimuon excess.
 # MV2 of Munim, Inc. (mv2@munimtech.com). Made with AI agents. Apache-2.0.
@@ -10,14 +10,20 @@
 # 0.2.0: production slices through environment switches. With no switches set it behaves
 # exactly like 0.1.0 (every 40th file of Y13709, 6 data files, 4 simulation files).
 #   DATA_DIRS   space-separated EOS run directories, in order (default "Y13709";
-#               1994 = "Y13709 Y13710", 1995 = "Y13716")
+#               1992 = "Y13723", 1993 = "Y12340", 1994 = "Y13709 Y13710", 1995 = "Y13716")
 #   DATA_STRIDE take every n-th file of the concatenated, number-sorted list (default 40)
 #   DATA_START  1-based position in that list of the first file (default 1)
 #   NDATA       number of data files (default 6; 0 = none)
-#   MC_VERSION  KK2f detector version (default: first of v94c v94c2 v94 found)
+#   MC_VERSION  KK2f detector version (default: first of v94c v94c2 v94 found;
+#               set v92e for 1992, v93d for 1993)
 #   MC_STRIDE / MC_START / NMC  the same for simulation files (defaults 20 / 1 / 4)
 #   SLICE       label for this job's outputs (default "val")
 #   KEEP_GZ     1 keeps the per-file ntuples in $OUT/ntuple (default 1)
+# 0.3.0 (plan v0.8):
+#   PERIOD      data-taking period label (y92, y93, y94, y95), passed to dimusel and btagcal
+#               as --period (default empty: no label, as 0.2.0)
+#   configs/    if /work/configs/*.json exist, dimusel also writes one blinded spectrum per
+#               config, $R/spectra_$SLICE_<config name>.json (the pre-declared grid of plan 4h)
 # If dimusel.py and btagcal.py sit next to this script, the job also writes
 # $R/spectra_$SLICE.json (blinded) and $R/btagcal_$SLICE.json (event-level words only).
 set -u
@@ -35,9 +41,12 @@ MC_START=${MC_START:-1}
 NMC=${NMC:-4}
 SLICE=${SLICE:-val}
 KEEP_GZ=${KEEP_GZ:-1}
+PERIOD=${PERIOD:-}
+PERARG=""
+[ -n "$PERIOD" ] && PERARG="--period $PERIOD"
 log(){ echo; echo "==== $(date -u +%H:%M:%S) $*"; }
 EOS=root://eospublic.cern.ch/
-echo "DATA_DIRS='$DATA_DIRS' DATA_STRIDE=$DATA_STRIDE DATA_START=$DATA_START NDATA=$NDATA MC_VERSION='$MC_VERSION' MC_STRIDE=$MC_STRIDE MC_START=$MC_START NMC=$NMC SLICE=$SLICE"
+echo "DATA_DIRS='$DATA_DIRS' DATA_STRIDE=$DATA_STRIDE DATA_START=$DATA_START NDATA=$NDATA MC_VERSION='$MC_VERSION' MC_STRIDE=$MC_STRIDE MC_START=$MC_START NMC=$NMC SLICE=$SLICE PERIOD='$PERIOD'"
 
 log "environment"
 id
@@ -173,9 +182,15 @@ if command -v python3 >/dev/null; then
   if [ -f /work/dimusel.py ] && [ -f /work/btagcal.py ]; then
     log "blinded spectra and b-tag calibration counts"
     (cd /work && PY -m unittest test_dimusel test_btagcal 2>&1 | tail -4)
-    PY /work/dimusel.py --dir $R --out $R/spectra_$SLICE.json
-    PY /work/btagcal.py --dir $R --out $R/btagcal_$SLICE.json
-    [ "$NMC" -gt 0 ] && PY /work/btagcal.py --dir $R --sample mc --out $R/btagcal_mc_$SLICE.json
+    PY /work/dimusel.py --dir $R $PERARG --out $R/spectra_$SLICE.json
+    for cf in /work/configs/*.json; do
+      [ -f "$cf" ] || continue
+      cn=$(basename "$cf" .json)
+      echo "config $cn: $(tr -d '\n' < "$cf")"
+      PY /work/dimusel.py --dir $R $PERARG --config "$cf" --out $R/spectra_${SLICE}_$cn.json > /dev/null
+    done
+    [ "$NDATA" -gt 0 ] && PY /work/btagcal.py --dir $R $PERARG --out $R/btagcal_$SLICE.json
+    [ "$NMC" -gt 0 ] && PY /work/btagcal.py --dir $R $PERARG --sample mc --out $R/btagcal_mc_$SLICE.json
   fi
 else
   echo "python3 missing: ntuples kept, no validation"

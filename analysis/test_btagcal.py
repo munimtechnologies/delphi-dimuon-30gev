@@ -115,6 +115,45 @@ class TestCounting(unittest.TestCase):
         self.assertEqual(t["cutflow"]["events"], 4000)   # mc files are not counted as data
         self.assertEqual(t["solution"][repr(0.01)]["rho_0"]["e_b"],
                          a["solution"][repr(0.01)]["rho_0"]["e_b"])
+        self.assertEqual(t["n_input_files"], 2)          # 0.1.0 kept only the first input's count
+        self.assertEqual(t["n_combined"], 2)
+
+
+class TestPeriods(unittest.TestCase):
+    """0.2.0 (plan v0.8): one calibration per period; data and simulation never added."""
+
+    def test_combine_refusals(self):
+        lines = synth(600, seed=5)
+        with tempfile.TemporaryDirectory() as d:
+            with gzip.open(os.path.join(d, "data_Y.1.al.ev.txt.gz"), "wt") as fh:
+                fh.write("\n".join(lines[:300]) + "\n")
+            with gzip.open(os.path.join(d, "mc_Z.1.ev.txt.gz"), "wt") as fh:
+                fh.write("\n".join(lines[300:]) + "\n")
+            outs = {}
+            for name, args in (("d93", ["--period", "y93"]), ("d94", ["--period", "y94"]),
+                               ("d94b", ["--period", "y94"]),
+                               ("m94", ["--period", "y94", "--sample", "mc"])):
+                outs[name] = os.path.join(d, name + ".json")
+                B.main(["--dir", d, "--out", outs[name]] + args)
+            js = {}
+            for name, p in outs.items():
+                with open(p) as fh:
+                    js[name] = json.load(fh)
+            with self.assertRaises(SystemExit):
+                B.main(["--dir", d, "--period", "y/94", "--out", os.path.join(d, "x.json")])
+            with self.assertRaises(SystemExit):
+                B.main(["--combine", outs["d94"], "--period", "y94", "--out", os.path.join(d, "x.json")])
+        self.assertEqual(js["d93"]["period"], "y93")
+        self.assertEqual(js["m94"]["sample"], "mc")
+        self.assertEqual(js["d94"]["cutflow"]["events"], 300)
+        self.assertEqual(js["m94"]["cutflow"]["events"], 300)
+        t = B.combine([js["d94"], js["d94b"]])
+        self.assertEqual(t["period"], "y94")
+        self.assertEqual(t["cutflow"]["events"], 600)
+        with self.assertRaises(ValueError):
+            B.combine([js["d93"], js["d94"]])          # different periods
+        with self.assertRaises(ValueError):
+            B.combine([js["d94"], js["m94"]])          # data + simulation
 
 
 if __name__ == "__main__":

@@ -1,25 +1,30 @@
-# Analysis plan v0.7: does DELPHI see ALEPH's 30 GeV dimuon excess?
+# Analysis plan v0.8: does DELPHI see ALEPH's 30 GeV dimuon excess?
 
 MV2 of Munim, Inc. (mv2@munimtech.com). v0.1 written 2026-11-17 06:58 UTC; v0.2 08:30 UTC;
-v0.3 09:45 UTC; v0.4 10:50 UTC; v0.5 11:45 UTC; v0.6 12:40 UTC; v0.7 13:40 UTC. Made with AI
-agents working in MV2's name. This is a plan, not a result: as of v0.7, no DELPHI dimuon mass
-from real data has been looked at. Not a DELPHI Collaboration result; DELPHI and CERN do not
-endorse it. Text CC BY 4.0, code Apache-2.0.
+v0.3 09:45 UTC; v0.4 10:50 UTC; v0.5 11:45 UTC; v0.6 12:40 UTC; v0.7 13:40 UTC; v0.8 14:40 UTC.
+Made with AI agents working in MV2's name. This is a plan, not a result: as of v0.8, no DELPHI
+dimuon mass from real data has been looked at. Not a DELPHI Collaboration result; DELPHI and
+CERN do not endorse it. Text CC BY 4.0, code Apache-2.0.
 
-Changes from v0.6:
-- New section **4g**: the b-tag efficiency is measured **in data** by hemisphere double-tagging
-  (the method of the LEP R_b measurements), because the short-DST ntuple carries no generator
-  quark flavour with which to calibrate it on simulation (`analysis/btagcal.py`). The primary
-  b-tag becomes "either thrust hemisphere tagged", the definition that this method calibrates;
-  the event-probability tag of v0.6 stays as a cross-check.
-- New section **4h**: the full-data production plan (1994: `Y13709`, `Y13710`; 1995: `Y13716`,
-  246 files, found 2026-11-17), with expectations P1-P4 written before any production job runs.
-- 4f: `dimusel.py` 0.2.0 adds `--combine` (sums production slices; blinded bins stay null;
-  different selections are refused) and the `btag_mode` switch. A test error in v0.6 was found
-  by review before the test job ran: `test_pair_mass` asked for a 45 GeV pair from two 20 GeV
-  tracks, which cannot exceed 40 GeV. It is fixed, and the test helper now refuses impossible
-  kinematics. Job `dimusel-tests-v2` replaces `dimusel-tests-v1` (which had not run yet).
-- Nothing about the blinding, the statistics or the data scope changed.
+Changes from v0.7:
+- New section **4j**: the 1992 and 1993 data. The rough forecast (sections 2, 5c) says
+  1994-95 alone probably cannot exclude an ALEPH-sized signal, so rule 5d will most likely add
+  1992-93. The inputs are now identified (1992: `short92_e2`, record 81098, `Y13723`; 1993: record
+  81166, `Y12340`; simulation `kk2f4146/v92e` and `v93d`). Before 1994 DELPHI's vertex detector
+  measured only R-phi, not z, so the b-tag working point and the impact-parameter cuts are set
+  **per period** from that period's own calibration and validation, while every other cut is
+  common. A second validation run on 1992-93 (`dimu-val9293-v1`) is filed with expectations
+  W1-W5 written before it runs.
+- `analysis/dimusel.py` 0.3.0: `--period` labels each output; `--combine` refuses to mix
+  periods; new `--merge-periods` sums one output per period and allows only the per-period
+  cuts (b-tag working point, |d0| and |z0| limits) to differ, keeping each period's cut flow
+  for N_exp. `analysis/btagcal.py` 0.2.0: `--period`; `--combine` refuses to add data to
+  simulation counts (0.1.0 did not check this) or different periods, and now sums the file
+  count. New tests for both.
+- 4h: production writes blinded spectra for a pre-declared grid of five hemisphere b-tag working
+  points (`ntuple/configs/`), so the working point chosen from the calibration of 4g does not
+  need a second pass over the data. The final unblinding pass is now spelled out (4i).
+- Nothing about the blinding, the statistics or the primary hypothesis changed.
 
 ## 1. The question
 
@@ -76,10 +81,10 @@ about 1.2 times the ALEPH-sized yield for 1994-95 alone, and about 0.9 for 1992-
   429 files of 41-100 MB, `/eos/opendata/delphi/collision-data/Y13709/` and `Y13710/`);
   `short95_d2` (doi:10.7483/OPENDATA.DELPHI.K4LR.4PQ4; record 81502, 246 files, 21.2 GB,
   3,661,917 events of all classes at 89-94 GeV, `/eos/opendata/delphi/collision-data/Y13716/`);
-  1992-1993 short DSTs (see 5d).
+  1992-1993 short DSTs (section 4j).
 - Simulation: KK2f + PYTHIA Z -> q qbar (`/eos/opendata/delphi/simulated-data/cern/kk2f4146/
-  <detector version>/91.25/kk2f4146_qqpy_91.25_*.sdst`; the 1994 version is picked by the job)
-  and the 1995 equivalent.
+  <detector version>/91.25/kk2f4146_qqpy_91.25_*.sdst`; v94c-type for 1994, the 1995
+  equivalent, `v92e` for 1992 and `v93d` for 1993).
 - Signal simulation (section 4e): events from `xkin/` (section 4b), hadronised with Pythia 8 and
   written in DELSIM's external-generator format (FADGEN, `xkin/fadgen.py`, following the layout
   described for `hepmc2fadgen.cpp` in github.com/delphi-fullDST-edm4hep/delphi-sim-pipeline),
@@ -99,9 +104,11 @@ about 1.2 times the ALEPH-sized yield for 1994-95 alone, and about 0.9 for 1992-
 2. b-tag: DELPHI lifetime b-tag (AABTAG). Primary (since v0.7): an event is b-tagged if either
    thrust hemisphere has probability QBTPRP below a working point chosen **in data** by the
    double-tag method of section 4g, for an event-level b efficiency of 38 %, ALEPH's value.
-   Cross-check: the event probability QBTPRP(3) at the same tagged-event rate.
+   Cross-check: the event probability QBTPRP(3) at the same tagged-event rate. Since v0.8 the
+   working point is chosen per data-taking period (section 4j).
 3. Muons: DELPHI standard muon identification (MUFLAG/MUCAL2, "standard" or "tight"),
-   p > 2.5 GeV, |cos theta| < 0.95, track impact parameters close to the primary vertex.
+   p > 2.5 GeV, |cos theta| < 0.95, track impact parameters close to the primary vertex (limits
+   per period, section 4j).
 4. Pairs: all opposite-sign mu+ mu- pairs, plus the controls: same-sign mumu, opposite-sign
    e-mu, and opposite-sign mumu with the b-tag inverted. Also e+e- as a second channel.
 5. Suppressing semileptonic cascades as ALEPH did (missing momentum below 18 GeV;
@@ -243,9 +250,13 @@ data-measured efficiency of 4g; the signal events' own b-tag response from DELSI
 checks that the signal's b-tag efficiency matches inclusive Z -> b bbar within its statistics.
 If D1 finds no working route, the resolution is taken from DELPHI's measured Z -> mu mu and
 J/psi widths in data (validation 4d) and the efficiency from the KK2f simulation's prompt muons,
-and this is stated as a limitation.
+and this is stated as a limitation. If 1992-93 are added (5d, 4j), N_exp is summed period by
+period: each period's hadronic count, b-tag efficiency (4g, per period) and muon efficiency
+(the 1994 DELSIM value, corrected by the ratio of prompt-muon efficiencies in that period's
+KK2f simulation to 1994's; a DELSIM run with `-VERSION v92e`/`v93d` replaces this if D1 finds
+a working route).
 
-## 4f. From ntuple to mass spectra (`analysis/dimusel.py`, v0.6; 0.2.0 in v0.7)
+## 4f. From ntuple to mass spectra (`analysis/dimusel.py`, v0.6; 0.2.0 in v0.7; 0.3.0 in v0.8)
 
 One pure-Python program (no dependencies) turns the ntuple into everything the fit of 5b and
 the controls need. It reads one DELPHI file's ntuple at a time, so the full 1994-95 production
@@ -258,9 +269,9 @@ fits in about 1 GB of memory.
   (cross-check): QBTPRP(3) below a working point; anti-tag QBTPRP(3) > 0.1. The program's
   default stays "event" until v1.0 fixes the configuration, so earlier jobs are unchanged.
 - **Leptons**: p > 2.5 GeV, |cos theta| < 0.95, |d0| < 0.2 cm and |z0| < 1.0 cm to the primary
-  vertex (placeholders until V5 shows the measured spread). Muons: any MUCAL2 tag (or
-  "standard"); electrons: ELECID "standard" or better and not tagged as a conversion; a track
-  that is both is a muon.
+  vertex (placeholders until V5 and W3-W4 show the measured spread in each period). Muons: any
+  MUCAL2 tag (or "standard"); electrons: ELECID "standard" or better and not tagged as a
+  conversion; a track that is both is a muon.
 - **Cascade veto**: visible missing momentum (all particles of the event) below 18 GeV.
 - **Isolated selection** (secondary, section 4b): e+e- anti-kt jets (R = 0.4, E-scheme, the
   same definition as `xkin/evana.py`) built without the leptons; a lepton is isolated if it is
@@ -274,7 +285,12 @@ fits in about 1 GB of memory.
   b-tagged and anti-tagged event totals that enter N_exp).
 - **Combining** (0.2.0): `--combine` sums the outputs of production slices. A bin that is null
   in any input stays null, a category blinded in any input stays blinded, and inputs made with
-  different selections or binnings are refused.
+  different selections or binnings are refused. Since 0.3.0 it also refuses inputs from
+  different periods.
+- **Periods** (0.3.0): `--period y92|y93|y94|y95` labels an output; `--merge-periods` sums one
+  combined output per period. Only `btag_wp`, `d0_max` and `z0_max` may differ between the
+  inputs; every other cut, the binning and the window must be identical, a period may appear
+  once, and the output keeps each period's cuts and cut flow. Blinded bins stay null.
 
 **Blinding in code (tightened in v0.6).** In real data, every opposite-sign same-flavour
 category is blind in [26, 35) GeV: such a pair is dropped at the single place where masses
@@ -284,11 +300,12 @@ allowed the inverted-b-tag mumu control before unblinding: since the b-tag keeps
 38 % of b events, untagged and anti-tagged Z -> b bbar events would carry most of any real
 signal. Same-sign and e-mu pairs and all simulation stay open. The window opens only when the
 program is given a plan file whose first line reads "Analysis plan v1.x"; that file's SHA-256 is
-written into the output. Tests (`python -m unittest -v test_dimusel`, 19 tests, synthetic
+written into the output. Tests (`python -m unittest -v test_dimusel`, 21 tests, synthetic
 events): the window stays hidden for every blinded category and its edges, sidebands and controls
-stay visible, simulation is open, the unblind gate refuses this v0.7 plan, each cut, both b-tag
-modes and the jet clustering behave as specified, and combining keeps the blinding. They run in
-job `dimusel-tests-v2`.
+stay visible, simulation is open, the unblind gate refuses this v0.8 plan, each cut, both b-tag
+modes and the jet clustering behave as specified, combining keeps the blinding, mixed periods
+are refused by `--combine`, and `--merge-periods` sums periods with different working points
+but refuses any other difference, a repeated period or an unlabelled input.
 
 ## 4g. The b-tag efficiency measured in data: hemisphere double-tag (`analysis/btagcal.py`, new in v0.7)
 
@@ -307,7 +324,9 @@ and rho_b the hemisphere correlation for b events (0 for the central value; +0.0
 systematic). The event-level efficiency of the primary tag ("either hemisphere") is then
 1 - (1 - e_b)^2, and the working point w_h is where it equals 0.38 (log-linear interpolation
 between the ten grid points 0.3 ... 1e-5). Statistical errors come from the multinomial counts
-by the delta method, so the counts of all production slices can simply be added.
+by the delta method, so the counts of all production slices can simply be added. Since v0.8
+this is done separately for each period (`--period`; `--combine` refuses to add periods, or data
+to simulation).
 
 Limitations stated now: charm is lumped with light quarks (for typical lifetime tags, e_c about
 ten times e_uds, this biases e_b by well under 1 %); R_b after the hadronic selection may differ
@@ -318,8 +337,9 @@ only and involves no lepton or mass.
 Tests (`python -m unittest -v test_btagcal`): exact recovery of e_b and e_x from model
 fractions, with and without rho_b; a 100,000-event synthetic sample with known efficiencies
 (e_b(w) = w^0.25, e_x(w) = w) recovered within 4 standard errors; the working-point
-interpolation; the hadronic cut and invalid-hemisphere handling; and combining slice outputs
-equals one pass over all files.
+interpolation; the hadronic cut and invalid-hemisphere handling; combining slice outputs
+equals one pass over all files; and (0.2.0) combining refuses different periods and data plus
+simulation.
 
 **Expectations written before any calibration runs on DELPHI data:**
 - B1: the hemisphere working point w_h for a 38 % event-level b efficiency lies between 1e-4
@@ -328,20 +348,30 @@ equals one pass over all files.
 - B3: e_b from data and from KK2f simulation (same method) agree within 10 % (relative).
 - B4: changing rho_b from 0 to +0.03 changes e_b by less than 3 % (relative).
 
-If B1 or B2 fails, the hemisphere probability words are probably not what section 4c assumes;
-that is checked before anything depends on the tag.
+(B1-B4 are stated for 1994-95; for 1992-93 see W5 and rule 5d.) If B1 or B2 fails, the
+hemisphere probability words are probably not what section 4c assumes; that is checked before
+anything depends on the tag.
 
-## 4h. Full-data production (`ntuple/run_ntuple.sh` 0.2.0, new in v0.7)
+## 4h. Full-data production (`ntuple/run_ntuple.sh` 0.2.0 in v0.7; 0.3.0 in v0.8)
 
 Filed only after V1-V5 (4d) pass or their failures are understood, and after `dimusel-tests-v2`
 passes. The same script runs with environment switches: 1994 = `DATA_DIRS="Y13709 Y13710"`
 (429 files), split into 8 slices of 54 consecutive files (`DATA_STRIDE=1`, `DATA_START` = 1,
 55, ..., 379); 1995 = `DATA_DIRS=Y13716` (246 files) in 5 slices of 50; KK2f 1994 simulation in
-its own slices. 1995 includes the off-peak scan points: they are hadronic Z decays too and are
-used, as ALEPH used all its LEP1 data. Each slice writes the per-file ntuples (kept on MV2's own
-machine, not published while the window is blind), `validation_<slice>.json`,
-`spectra_<slice>.json` (blinded dimusel output) and `btagcal_<slice>.json` (counts only).
-Slices are combined with `dimusel.py --combine` and `btagcal.py --combine`.
+its own slices; `PERIOD=y94` or `y95` on every slice. 1995 includes the off-peak scan points:
+they are hadronic Z decays too and are used, as ALEPH used all its LEP1 data. Each slice writes
+the per-file ntuples (kept on MV2's own machine, not published while the window is blind),
+`validation_<slice>.json`, `spectra_<slice>.json` (blinded dimusel output),
+`btagcal_<slice>.json` (counts only) and, new in v0.8, one blinded spectrum per configuration in
+`ntuple/configs/`: the hemisphere b-tag at working points 1e-2, 3e-3, 1e-3, 3e-4 and 1e-4
+(`spectra_<slice>_hemi_w*.json`). Slices are combined per period with `dimusel.py --combine` and
+`btagcal.py --combine`.
+
+**Choosing the working point without a second pass (fixed now).** Plan v1.0 uses, for each
+period, the grid point closest in log(w) to that period's w_h from 4g, and the b efficiency
+measured by 4g **at that grid point** enters N_exp. The choice uses only event-level b-tag
+counts, never a mass in the window. If d0/z0 limits other than the defaults are needed after V5
+and W3-W4, the grid is re-made with those limits before production is filed.
 
 **Expectations written before any production job runs:**
 - P1: at least 97 % of the input files give rc = 0 and a non-empty event file.
@@ -351,6 +381,65 @@ Slices are combined with `dimusel.py --combine` and `btagcal.py --combine`.
   (chi2 per degree of freedom below 2 around the mean).
 - P4: no blinded category has a non-null bin overlapping 26-35 GeV in any slice output or in
   the combination (checked automatically before any file is published).
+- P5 (new in v0.8, if 1992-93 are produced): the 1992 and 1993 hadronic counts after the
+  selection of 4f are each between 0.4M and 0.8M (DELPHI recorded about 0.7M hadronic Z decays
+  in each of these years; the thrust-axis cut keeps about 80 %).
+
+## 4i. The unblinding pass (spelled out in v0.8)
+
+A compete job cannot read the outputs of an earlier job, and the per-file ntuples are not
+published while the window is blind. So unblinding is one more pass over the data: after plan
+v1.0 is published with the frozen per-period configurations, the production slices are run again
+with a switch that hands `dimusel.py` the published v1.0 plan file (`--unblind`), and the
+unblinded slice outputs are combined per period and merged across periods. The pass is checked
+against the blinded production: outside 26-35 GeV, and in every control category, its spectra
+must equal the blinded spectra bin by bin. Any difference stops the analysis until it is
+explained. Then `stats/dimustat.py` runs the tests of 5b exactly as frozen.
+
+## 4j. The 1992 and 1993 data (new in v0.8)
+
+**Inputs** (found through the CERN Open Data API on 2026-11-17; the newest processing of each
+year, matching the "4th/5th processing, Fix 2" used for 1994-95):
+
+| year | record | DOI | processing | EOS directory | files | events (all classes) | simulation |
+|---|---|---|---|---|---|---|---|
+| 1992 | 81098 `short92_e2` | 10.7483/OPENDATA.DELPHI.J105.9ADK | ANA_E Fix 2 | `collision-data/Y13723` | 172 (17.3 GB) | 2,482,495 | `kk2f4146/v92e/91.25` (record 81026) |
+| 1993 | 81166 | 10.7483/OPENDATA.DELPHI.V1VA.4A1S | ANA_D Fix 2 | `collision-data/Y12340` | 181 (17.6 GB) | 2,766,589 | `kk2f4146/v93d/91.25` (record 81169, 429 files) |
+
+Older processings exist (`short92_d2`, record 81090, `Y10055`; `short93_c1`, record 81172,
+`Y10057`) and are not used.
+
+**What differs from 1994-95.** Until the end of 1993 DELPHI's silicon vertex detector measured
+only R-phi; the 1994 upgrade added z readout. So in 1992-93 the lifetime b-tag uses R-phi impact
+parameters only (lower b efficiency at the same mistag rate), and the z impact parameter of a
+track comes from the outer tracking alone (much coarser). The analysis therefore treats each
+year as its own **period** with its own b-tag working point (4g, chosen by the same 38 % rule)
+and its own |d0| and |z0| limits (set from that period's validation so that the same fraction of
+prompt muons passes as in 1994). Every other cut is common, and only these three may differ
+between periods (enforced by `dimusel.py --merge-periods`).
+
+**Validation run 2 (job `dimu-val9293-v1`, filed 2026-11-17).** The published code
+(`val9293/run_val9293.sh` fetches it and refuses older versions) runs on 3 data files per year
+(every 57th file of Y13723, every 60th of Y12340) and 2 KK2f files per year, with
+`PERIOD=y92`/`y93`, the same blinding as run 1, and the same `validate.py` report. It runs in
+parallel with run 1, so the 1994 numbers it is compared with come from `dimu-ntuple-v1`.
+
+**Expectations written before it runs:**
+- W1 (feasibility): the routine builds and reads the 1992 and 1993 short DSTs and simulation
+  (rc = 0, non-empty event files, b-tag words QBTPRP in [0, 1] for most hadronic events).
+- W2: the V2 and V3 checks of 4d pass in each year (Z -> mu mu median mass 88-94 GeV in
+  low-multiplicity events; a J/psi excess in 3.0-3.2 GeV in hadronic events, statistics
+  permitting).
+- W3: without z readout, the median |z0| of muon candidates in 1992-93 data is at least 3 times
+  the 1994 median from `dimu-ntuple-v1`. (If not, QTRAC(39) is not what 4c assumes, or the
+  1994 z resolution is worse than expected; either is checked before any |z0| cut is set.)
+- W4: the median |d0| of muon candidates is below 0.1 cm in each year (as V5).
+- W5: data and simulation agree within a factor 1.3 on the fraction of hadronic events with
+  QBTPRP(3) < 0.01 in each year (as V4).
+
+The quantitative 1992-93 b-tag condition of rule 5d (b efficiency within a factor 1.3 of
+1994's at the same mistag rate, by the double-tag method) needs full-year statistics and is
+evaluated on the production counts, not on these 3 files.
 
 ## 5. Blinding and pre-registration (commitments made in v0.1, tightened in v0.6)
 
@@ -375,7 +464,9 @@ Slices are combined with `dimusel.py --combine` and `btagcal.py --combine`.
 ## 5b. The statistical procedure, exactly (new in v0.4; code `stats/dimustat.py`)
 
 - **Histogram**: opposite-sign dimuon masses in 15-50 GeV in 700 bins of 50 MeV (at a mass
-  resolution of 0.3-0.75 GeV this is equivalent to the unbinned fit of v0.3).
+  resolution of 0.3-0.75 GeV this is equivalent to the unbinned fit of v0.3). If 1992-93 are
+  used, the histogram is the period merge of 4f (`--merge-periods`), and N_exp is the sum of the
+  per-period expectations.
 - **Signal**: Voigt profile (Breit-Wigner of width Gamma convolved with a Gaussian of width
   sigma), truncated to 15-50 GeV; the yield n_s counts signal events in 15-50 GeV, as ALEPH's
   32.3 does. Primary: m = 30.40 GeV, Gamma = 1.78 GeV, sigma = DELPHI's simulated dimuon mass
@@ -427,16 +518,21 @@ for S2, against N_exp = 21.7. Expectations, written before the job runs:
 
 Caveats: the toys use a generator-level background shape and assume DELPHI's background
 scales like its signal efficiency; ALEPH's fitted yield is the value at the most significant
-point and is more likely to be an overestimate of any true signal than an underestimate.
+point and is more likely to be an overestimate of any true signal than an underestimate. The
+1992-93 b efficiency is likely lower than 1994-95's at the same purity (R-phi-only tag), which
+S4's single r does not capture; the forecast is re-run with per-period r once 4j's production
+counts exist.
 
 ## 5d. Data-scope rule (fixed now, before any DELPHI mass is seen)
 
 If the forecast gives P(EXCLUDED | mu = 0) below 0.5 for 1994-95 in the most likely scenario
-(S2), the analysis is extended to the 1992-1993 short DSTs before unblinding, provided the
-validation checks of 4d pass on them with the older vertex detector (a b-tag efficiency within
-a factor 1.3 of 1994's at the same mistag rate, measured with the double-tag method of 4g). If
-1992-93 fails validation, the analysis proceeds with 1994-95 and the limit is quoted as it comes
-out. This rule is fixed so that the amount of data cannot be chosen after the window is seen.
+(S2), the analysis is extended to the 1992-1993 short DSTs of section 4j before unblinding,
+provided the validation checks of 4d pass on them with the older vertex detector (W1-W5 of 4j,
+and a b-tag efficiency within a factor 1.3 of 1994's at the same mistag rate, measured with the
+double-tag method of 4g on the production counts). If 1992-93 fails validation, the analysis
+proceeds with 1994-95 and the limit is quoted as it comes out. If only one of the two years
+passes, that year is used. This rule is fixed so that the amount of data cannot be chosen
+after the window is seen.
 
 ## 6. Steps and status
 
@@ -448,9 +544,11 @@ out. This rule is fixed so that the amount of data cannot be chosen after the wi
 | skelana ntuple writer (`ntuple/`) + validation run 1 (section 4d) | job `dimu-ntuple-v1` filed 2026-11-17, waiting |
 | statistics code + sensitivity forecast (`stats/`, 5b-5c) | job `dimu-forecast-v1` filed 2026-11-17, waiting |
 | signal through DELSIM: resolution and efficiency (`delsim/`, 4e) | job `delsim-signal-v1` filed 2026-11-17, waiting |
-| analysis stage with blinding in code (`analysis/`, 4f) and b-tag calibration (4g) | job `dimusel-tests-v2` filed 2026-11-17 (replaces v1), waiting |
-| full-data ntuple production (4h; no mass histograms in the window) | script ready (0.2.0); filed after validation |
-| plan v1.0 frozen, then unblinding | later |
+| analysis stage with blinding in code (`analysis/`, 4f) and b-tag calibration (4g) | job `dimusel-tests-v2` filed 2026-11-17, waiting; the repository's test gate passed the v0.7 code before it was committed |
+| 1992-93 inputs identified; per-period cuts in code (4j, dimusel 0.3.0, btagcal 0.2.0) | done 2026-11-17 (v0.8) |
+| validation run 2 on 1992-93 (4j, W1-W5) | job `dimu-val9293-v1` filed 2026-11-17, waiting |
+| full-data ntuple production (4h; no mass histograms in the window) | script ready (0.3.0); filed after validation |
+| plan v1.0 frozen, then the unblinding pass (4i) | later |
 
 ## References
 
@@ -470,7 +568,8 @@ out. This rule is fixed so that the amount of data cannot be chosen after the wi
 - DELPHI open data: opendata.cern.ch/docs/delphi-data-release-2024; analysis guide
   opendata.cern.ch/docs/delphi-guide-analysis; simulation guide
   opendata.cern.ch/docs/delphi-guide-simulation; first physics use: J. Zhang et al.,
-  arXiv:2510.18762.
+  arXiv:2510.18762. Datasets: records 81098 (short92_e2), 81166 (1993 ANA_D Fix 2), 81431
+  (short94_c2), 81502 (short95_d2); simulation records 81026 (v92e), 81169 (v93d).
 - SKELANA common-block meanings as mirrored in github.com/eigen1907/delphi-nanoaod
   (delphi-analysis/include/skelana/*.hpp, GPL-3.0; read, not copied).
 - R. K. Ellis, D. A. Ross, A. E. Terrano, Nucl. Phys. B178 (1981) 421 (massless limit check).

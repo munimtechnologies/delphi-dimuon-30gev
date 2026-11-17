@@ -21,8 +21,13 @@ Only 'E' lines (event-level words) are read: no lepton, no mass, nothing about t
 Outputs per working point the raw counts (additive across files and jobs; combine with
 --combine) and the solved efficiencies with delta-method statistical errors.
 
+0.2.0 (plan v0.8): the b-tag is calibrated separately for each data-taking period (the vertex
+detector measured R-phi only before 1994). --period LABEL records the period; --combine refuses
+to add counts from different periods or from data and simulation, and sums n_input_files.
+
 CLI:
-  python btagcal.py --dir D [--dir D2] --out cal.json          (data files only, as dimusel tags them)
+  python btagcal.py --dir D [--dir D2] [--period y94] --out cal.json   (data files only)
+  python btagcal.py --dir D --sample mc --out cal_mc.json               (simulation files only)
   python btagcal.py --combine a.json b.json --out total.json
 """
 import argparse
@@ -35,6 +40,7 @@ import sys
 
 import dimusel as D
 
+VERSION = "mv2 btagcal 0.2.0"
 RB = 0.21629          # PDG R_b
 TARGET_EVENT_EFF = 0.38   # ALEPH's b efficiency (arXiv:1610.06536)
 WPS = (0.3, 0.1, 0.03, 0.01, 0.003, 0.001, 3e-4, 1e-4, 3e-5, 1e-5)
@@ -149,7 +155,7 @@ class Counter:
                     self.add(e)
 
     def raw(self):
-        return {"tool": "mv2 btagcal 0.1.0", "rb": RB, "config": self.sel.c, "cutflow": self.cf,
+        return {"tool": VERSION, "rb": RB, "config": self.sel.c, "cutflow": self.cf,
                 "n_bad_hemisphere": self.n_bad_hemi, "counts": self.counts}
 
 
@@ -171,20 +177,30 @@ def summarise(raw, rhos=(0.0, 0.03)):
 
 
 def combine(raws):
+    """Add the counts of several runs of ONE period and ONE sample (data or mc)."""
     if not raws:
         raise ValueError("nothing to combine")
     tot = json.loads(json.dumps(raws[0]))
     for r in raws[1:]:
         if set(r["counts"]) != set(tot["counts"]):
             raise ValueError("working-point grids differ")
+        if r.get("sample") != tot.get("sample"):
+            raise ValueError("cannot add %r counts to %r counts" % (r.get("sample"), tot.get("sample")))
+        if r.get("period") != tot.get("period"):
+            raise ValueError("periods differ (%r, %r): calibrate each period on its own"
+                             % (tot.get("period"), r.get("period")))
+        if r.get("config") != tot.get("config"):
+            raise ValueError("hadronic selections differ")
         for k in tot["cutflow"]:
             tot["cutflow"][k] += r["cutflow"][k]
         tot["n_bad_hemisphere"] += r["n_bad_hemisphere"]
         for w, c in r["counts"].items():
             for k in c:
                 tot["counts"][w][k] += c[k]
-    for k in ("solution",):
-        tot.pop(k, None)
+    tot["n_input_files"] = sum(r.get("n_input_files", 0) for r in raws)
+    tot["n_combined"] = len(raws)
+    tot["tool"] = VERSION
+    tot.pop("solution", None)
     tot = {k: v for k, v in tot.items() if not k.startswith("wp_hemisphere")}
     return tot
 
@@ -194,9 +210,12 @@ def main(argv=None):
     ap.add_argument("--dir", action="append", default=[])
     ap.add_argument("--combine", nargs="+")
     ap.add_argument("--sample", choices=("data", "mc"), default="data")
+    ap.add_argument("--period", help="data-taking period label, e.g. y94 (with --dir)")
     ap.add_argument("--out", required=True)
     a = ap.parse_args(argv)
     if a.combine:
+        if a.dir or a.period:
+            ap.error("--combine takes no --dir or --period")
         raws = []
         for p in a.combine:
             with open(p) as fh:
@@ -205,6 +224,8 @@ def main(argv=None):
     else:
         if not a.dir:
             ap.error("--dir or --combine is required")
+        if a.period is not None and not D.PERIOD_RE.match(a.period):
+            ap.error("--period must be 1-32 characters of [A-Za-z0-9_-]")
         cnt = Counter()
         files = sorted(set(f for d in a.dir for f in glob.glob(os.path.join(d, "**", "*.ev.txt.gz"),
                                                                 recursive=True)))
@@ -215,6 +236,7 @@ def main(argv=None):
         raw = cnt.raw()
         raw["n_input_files"] = len(files)
         raw["sample"] = a.sample
+        raw["period"] = a.period
     res = summarise(raw)
     with open(a.out, "w") as fh:
         json.dump(res, fh, indent=1)

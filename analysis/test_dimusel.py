@@ -1,4 +1,4 @@
-"""Tests for dimusel (blinding, categories, cuts, jets, unblind gate, combine).
+"""Tests for dimusel (blinding, categories, cuts, jets, unblind gate, combine, periods).
 MV2 of Munim, Inc. (mv2@munimtech.com). Made with AI agents. Apache-2.0."""
 import gzip
 import json
@@ -148,7 +148,7 @@ class TestBlinding(Base):
         with tempfile.TemporaryDirectory() as d:
             p = os.path.join(d, "PLAN.md")
             with open(p, "w") as fh:
-                fh.write("# Analysis plan v0.7: does DELPHI see ALEPH's 30 GeV dimuon excess?\n")
+                fh.write("# Analysis plan v0.8: does DELPHI see ALEPH's 30 GeV dimuon excess?\n")
             with self.assertRaises(SystemExit):
                 D.check_unblind_plan(p)
             with open(p, "w") as fh:
@@ -253,6 +253,7 @@ class TestEndToEnd(unittest.TestCase):
             self.assertEqual(mc[fine_bin(30.42)], 1)
             self.assertEqual(res["samples"]["data"]["files"], 1)
             self.assertFalse(res["unblinded"])
+            self.assertIsNone(res["period"])
 
     def test_combine(self):
         with tempfile.TemporaryDirectory() as d:
@@ -294,6 +295,83 @@ class TestEndToEnd(unittest.TestCase):
             D.combine_results([r0, rx])
         with self.assertRaises(SystemExit):
             D.main(["--combine", "a.json", "--dir", "x", "--out", "y.json"])
+
+
+class TestPeriods(unittest.TestCase):
+    """0.3.0 (plan 4j): per-period cuts, --combine within a period, --merge-periods across."""
+
+    def make(self, d, name, period, ms, cfg=None, run=1000):
+        sub = os.path.join(d, name)
+        os.mkdir(sub)
+        write_pair(sub, "data", run, ms)
+        write_pair(sub, "mc", -run, ms)
+        out = os.path.join(d, name + ".json")
+        args = ["--dir", sub, "--out", out]
+        if period is not None:
+            args += ["--period", period]
+        if cfg is not None:
+            cp = os.path.join(d, name + "_cfg.json")
+            with open(cp, "w") as fh:
+                json.dump(cfg, fh)
+            args += ["--config", cp]
+        D.main(args)
+        with open(out) as fh:
+            return out, json.load(fh)
+
+    def test_combine_refuses_mixed_periods(self):
+        with tempfile.TemporaryDirectory() as d:
+            pa, ra = self.make(d, "a", "y94", [18.02], run=1001)
+            pb, rb = self.make(d, "b", "y94", [38.02], run=1002)
+            pc, rc = self.make(d, "c", "y95", [18.02], run=1003)
+            t = D.combine_results([ra, rb])
+            self.assertEqual(t["period"], "y94")
+            self.assertEqual(ra["period"], "y94")
+            with self.assertRaises(ValueError):
+                D.combine_results([ra, rc])
+            with self.assertRaises(SystemExit):
+                D.main(["--dir", d, "--out", os.path.join(d, "bad.json"), "--period", "y 94"])
+            with self.assertRaises(ValueError):
+                D.Selector(period="1994/95")
+
+    def test_merge_periods(self):
+        p93 = {"btag_wp": 0.003, "z0_max": 2.0}
+        with tempfile.TemporaryDirectory() as d:
+            f93, r93 = self.make(d, "p93", "y93", [30.42, 18.02], cfg=p93, run=2001)
+            f94, r94 = self.make(d, "p94", "y94", [18.02, 38.02], run=2002)
+            tot = os.path.join(d, "merged.json")
+            D.main(["--merge-periods", f93, f94, "--out", tot])
+            with open(tot) as fh:
+                t = json.load(fh)
+            # same non-period cuts required: a different p_min is refused
+            fpx, rpx = self.make(d, "px", "y95", [18.02], cfg={"p_min": 3.0}, run=2003)
+        dat = t["samples"]["data"]["categories"]["os_mumu_btag"]
+        self.assertTrue(dat["blinded"])
+        self.assertNotIn("n_15_50", dat)
+        self.assertIsNone(dat["fine"][fine_bin(30.42)])
+        self.assertEqual(dat["fine"][fine_bin(18.02)], 2)
+        self.assertEqual(dat["fine"][fine_bin(38.02)], 1)
+        self.assertEqual(t["samples"]["mc"]["categories"]["os_mumu_btag"]["n_15_50"], 4)
+        self.assertEqual(t["periods"], ["y93", "y94"])
+        self.assertEqual(t["period_configs"]["y93"], {"btag_wp": 0.003, "d0_max": 0.2, "z0_max": 2.0})
+        self.assertEqual(t["period_configs"]["y94"]["btag_wp"], 0.01)
+        self.assertNotIn("btag_wp", t["config"])
+        self.assertEqual(t["config"]["p_min"], 2.5)
+        self.assertEqual(t["per_period_cutflow"]["y93"]["data"]["events"], 2)
+        self.assertEqual(t["per_period_cutflow"]["y94"]["mc"]["hadronic"], 2)
+        self.assertEqual(t["samples"]["data"]["cutflow"]["events"], 4)
+        self.assertFalse(t["unblinded"])
+        with self.assertRaises(ValueError):
+            D.merge_periods([r93, rpx])            # p_min differs
+        with self.assertRaises(ValueError):
+            D.merge_periods([r93, r93])            # same period twice
+        unl = json.loads(json.dumps(r94))
+        unl["period"] = None
+        with self.assertRaises(ValueError):
+            D.merge_periods([r93, unl])            # unlabelled input
+        with self.assertRaises(ValueError):
+            D.merge_periods([r93])                 # one period is not a merge
+        with self.assertRaises(SystemExit):
+            D.main(["--merge-periods", "a.json", "--period", "y94", "--out", "y.json"])
 
 
 if __name__ == "__main__":

@@ -25,6 +25,15 @@ Controls (same-sign mumu and all e-mu pairs) and simulation are never blinded.
 
 0.2.0 (plan v0.7): --combine sums the outputs of several runs (production slices). A bin that
 is null in any input stays null; inputs made with different selections are refused.
+
+0.3.0 (plan v0.8): data-taking periods. DELPHI's vertex detector measured only R-phi before
+1994 (R-phi and z from 1994), so the b-tag working point and the impact-parameter cuts are set
+per period (1992, 1993, 1994, 1995) from that period's own calibration and validation.
+--period LABEL records the period in the output; --combine refuses to mix periods;
+--merge-periods sums one combined output per period into the 1992-95 spectrum. Inputs to a
+merge may differ ONLY in the per-period keys (btag_wp, d0_max, z0_max); every other cut must
+be identical, each period may appear once, and each period's cut flow and cuts are kept so
+that N_exp can be summed period by period.
 """
 import argparse
 import glob
@@ -36,7 +45,7 @@ import os
 import re
 import sys
 
-VERSION = "mv2 dimusel 0.2.0"
+VERSION = "mv2 dimusel 0.3.0"
 MMU = 0.1056584
 MEL = 0.000511
 WIN_LO, WIN_HI = 26.0, 35.0
@@ -74,6 +83,9 @@ DEFAULTS = dict(
     iso_deg=20.0,           # isolated selection: both leptons > iso_deg from every jet
     iso_jet_emin=3.0,       # ... with E > iso_jet_emin, anti-kt R = 0.4, leptons removed
 )
+# The only cuts allowed to differ between data-taking periods in --merge-periods (plan 4j).
+PERIOD_KEYS = ("btag_wp", "d0_max", "z0_max")
+PERIOD_RE = re.compile(r"^[A-Za-z0-9_-]{1,32}$")
 
 # Stricter than the plan's letter: the plan allows the inverted-b-tag mumu control before
 # unblinding, but untagged and anti-tagged Z -> b bbar events would still carry most of a
@@ -204,8 +216,14 @@ def _blind_bins(h, lo, bw, n):
     return out
 
 
+def check_period(label):
+    if label is not None and not PERIOD_RE.match(str(label)):
+        raise ValueError("period label must be 1-32 characters of [A-Za-z0-9_-]: %r" % (label,))
+    return label
+
+
 class Selector:
-    def __init__(self, cfg=None, unblind=False):
+    def __init__(self, cfg=None, unblind=False, period=None):
         self.c = dict(DEFAULTS)
         if cfg:
             unknown = set(cfg) - set(DEFAULTS)
@@ -215,6 +233,7 @@ class Selector:
         if self.c["btag_mode"] not in ("event", "hemi"):
             raise ValueError("btag_mode must be 'event' or 'hemi'")
         self.unblind = unblind
+        self.period = check_period(period)
         self.samples = {}
 
     def _sample(self, kind):
@@ -356,6 +375,7 @@ class Selector:
 
     def result(self):
         out = {"tool": VERSION, "config": self.c, "unblinded": self.unblind,
+               "period": self.period,
                "window_gev": [WIN_LO, WIN_HI], "blinded_categories": list(BLINDED),
                "fine_bins": [FINE_LO, FINE_HI, FINE_BW], "coarse_bins": [COARSE_LO, COARSE_HI, COARSE_BW],
                "samples": {}}
@@ -380,23 +400,9 @@ def _sum_lists(a, b):
     return [None if (x is None or y is None) else x + y for x, y in zip(a, b)]
 
 
-def combine_results(results):
-    """Sum dimusel outputs (e.g. one per production slice). Refuses different selections or
-    binnings; a bin that is null (blinded) in any input stays null."""
-    if not results:
-        raise ValueError("nothing to combine")
-    ref = results[0]
-    for r in results[1:]:
-        for k in ("config", "window_gev", "fine_bins", "coarse_bins"):
-            if r[k] != ref[k]:
-                raise ValueError("inputs differ in %s" % k)
-    shas = {r.get("unblind_plan_sha256") for r in results}
-    out = {k: ref[k] for k in ("config", "window_gev", "blinded_categories", "fine_bins", "coarse_bins")}
-    out["tool"] = VERSION
-    out["unblinded"] = all(r["unblinded"] for r in results)
-    out["unblind_plan_sha256"] = shas.pop() if len(shas) == 1 else None
-    out["n_input_files"] = sum(r.get("n_input_files", 0) for r in results)
-    out["n_combined"] = len(results)
+def _sum_samples(results):
+    """Add the samples of several outputs. A bin null in any input stays null; a category
+    blinded in any input stays blinded and carries no total."""
     samples = {}
     for r in results:
         for kind, s in r["samples"].items():
@@ -419,7 +425,68 @@ def combine_results(results):
                 c.pop("n_15_50", None)
             else:
                 c["n_15_50"] = sum(c["fine"])
-    out["samples"] = samples
+    return samples
+
+
+def _common(results, out):
+    shas = {r.get("unblind_plan_sha256") for r in results}
+    out["tool"] = VERSION
+    out["unblinded"] = all(r["unblinded"] for r in results)
+    out["unblind_plan_sha256"] = shas.pop() if len(shas) == 1 else None
+    out["n_input_files"] = sum(r.get("n_input_files", 0) for r in results)
+    out["n_combined"] = len(results)
+    return out
+
+
+def combine_results(results):
+    """Sum dimusel outputs of ONE period (e.g. one per production slice). Refuses different
+    selections, binnings or periods; a bin that is null (blinded) in any input stays null."""
+    if not results:
+        raise ValueError("nothing to combine")
+    ref = results[0]
+    for r in results[1:]:
+        for k in ("config", "window_gev", "fine_bins", "coarse_bins"):
+            if r[k] != ref[k]:
+                raise ValueError("inputs differ in %s" % k)
+        if r.get("period") != ref.get("period"):
+            raise ValueError("inputs come from different periods (%r, %r): use --merge-periods"
+                             % (ref.get("period"), r.get("period")))
+    out = {k: ref[k] for k in ("config", "window_gev", "blinded_categories", "fine_bins", "coarse_bins")}
+    out["period"] = ref.get("period")
+    _common(results, out)
+    out["samples"] = _sum_samples(results)
+    return out
+
+
+def merge_periods(results):
+    """Sum one output per data-taking period (plan 4j). The inputs may differ only in the
+    per-period cuts PERIOD_KEYS; every other cut, the binning and the window must agree. Each
+    input needs its own period label, and a period may appear only once."""
+    if len(results) < 2:
+        raise ValueError("merge-periods needs at least two periods")
+    periods = [r.get("period") for r in results]
+    if any(p is None for p in periods):
+        raise ValueError("every input to merge-periods needs a period label")
+    if len(set(periods)) != len(periods):
+        raise ValueError("a period appears more than once: %s" % periods)
+    ref = results[0]
+    common_ref = {k: v for k, v in ref["config"].items() if k not in PERIOD_KEYS}
+    for r in results[1:]:
+        for k in ("window_gev", "fine_bins", "coarse_bins"):
+            if r[k] != ref[k]:
+                raise ValueError("inputs differ in %s" % k)
+        common = {k: v for k, v in r["config"].items() if k not in PERIOD_KEYS}
+        if common != common_ref:
+            diff = sorted(k for k in set(common) | set(common_ref) if common.get(k) != common_ref.get(k))
+            raise ValueError("inputs differ in non-period cuts: %s" % diff)
+    out = {"config": common_ref, "window_gev": ref["window_gev"],
+           "blinded_categories": ref["blinded_categories"], "fine_bins": ref["fine_bins"],
+           "coarse_bins": ref["coarse_bins"], "periods": periods,
+           "period_configs": {r["period"]: {k: r["config"][k] for k in PERIOD_KEYS} for r in results},
+           "per_period_cutflow": {r["period"]: {kind: s["cutflow"] for kind, s in r["samples"].items()}
+                                  for r in results}}
+    _common(results, out)
+    out["samples"] = _sum_samples(results)
     return out
 
 
@@ -437,31 +504,41 @@ def check_unblind_plan(path):
     return hashlib.sha256(raw).hexdigest()
 
 
+def _load(paths):
+    rs = []
+    for p in paths:
+        with open(p) as fh:
+            rs.append(json.load(fh))
+    return rs
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--dir", action="append", default=[], help="ntuple folder (repeatable)")
-    ap.add_argument("--combine", nargs="+", help="dimusel output JSON files to sum")
+    ap.add_argument("--combine", nargs="+", help="dimusel outputs of one period to sum")
+    ap.add_argument("--merge-periods", nargs="+", help="one combined output per period to sum")
     ap.add_argument("--out", required=True)
     ap.add_argument("--config", help="JSON file with selection overrides")
+    ap.add_argument("--period", help="data-taking period label, e.g. y94 (with --dir)")
     ap.add_argument("--unblind", metavar="PLAN_MD")
     a = ap.parse_args(argv)
-    if a.combine:
-        if a.dir or a.config or a.unblind:
-            ap.error("--combine takes no --dir, --config or --unblind")
-        rs = []
-        for p in a.combine:
-            with open(p) as fh:
-                rs.append(json.load(fh))
-        res = combine_results(rs)
+    if a.combine and a.merge_periods:
+        ap.error("use --combine or --merge-periods, not both")
+    if a.combine or a.merge_periods:
+        if a.dir or a.config or a.unblind or a.period:
+            ap.error("--combine/--merge-periods take no --dir, --config, --period or --unblind")
+        res = combine_results(_load(a.combine)) if a.combine else merge_periods(_load(a.merge_periods))
     else:
         if not a.dir:
-            ap.error("--dir or --combine is required")
+            ap.error("--dir, --combine or --merge-periods is required")
+        if a.period is not None and not PERIOD_RE.match(a.period):
+            ap.error("--period must be 1-32 characters of [A-Za-z0-9_-]")
         cfg = None
         if a.config:
             with open(a.config) as fh:
                 cfg = json.load(fh)
         sha = check_unblind_plan(a.unblind) if a.unblind else None
-        sel = Selector(cfg, unblind=bool(sha))
+        sel = Selector(cfg, unblind=bool(sha), period=a.period)
         files = sorted(set(f for d in a.dir for f in glob.glob(os.path.join(d, "**", "*.ev.txt.gz"),
                                                                   recursive=True)))
         for f in files:
