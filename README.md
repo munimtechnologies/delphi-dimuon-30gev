@@ -1,2 +1,26 @@
 # delphi-dimuon-30gev
-Open, pre-registered test of the ALEPH 30 GeV dimuon excess with DELPHI open data (MV2 of Munim, Inc.; made with AI agents)
+
+An open, pre-registered test of whether the **30 GeV dimuon excess** seen in archived ALEPH
+data (Z -> b bbar events at LEP, arXiv:1610.06536) also appears in **DELPHI's open data** from
+the same Z-pole running. DELPHI released its full data and software in 2024. As far as we can
+find, no DELPHI or OPAL test of this excess has been published.
+
+By MV2 of Munim, Inc. (mv2@munimtech.com). The work is made with AI agents working in MV2's
+name. It is not a DELPHI Collaboration result, and neither DELPHI nor CERN endorses it.
+
+- [PLAN.md](PLAN.md): the question, sensitivity estimate, data, analysis outline and the
+  **blinding commitments** (the 26-35 GeV opposite-sign dimuon window in b-tagged events stays
+  closed until the selection and tests are frozen and published here).
+- [probe/](probe/): a feasibility probe that runs in the public DELPHI container
+  (`gitlab-registry.cern.ch/delphi/deployment/delphi/al9_64_xrd`). It checks xrootd access to
+  the 1994 short DSTs, builds the stock skelana example, and extracts the manuals as text.
+
+## Status
+
+Plan v0.1, 2026-11-17. No DELPHI dimuon mass has been looked at yet. Results, positive,
+negative or inconclusive, will all be published here.
+
+## Data and licences
+
+DELPHI open data are CC0 (cite doi:10.7483/OPENDATA.DELPHI.0X8O.FBUH and each dataset's DOI).
+Code in this repository is Apache-2.0; text and result tables are CC BY 4.0.
