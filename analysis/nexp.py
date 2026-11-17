@@ -22,22 +22,37 @@ cut (|cos theta_T| <= 0.866) that keeps only about 85 % of hadronic Z decays, so
 count is NOT the number of Z decays it produced. Plan v0.10 multiplied DELPHI's hadronic count by
 an efficiency ratio and so mixed these normalisations (review 2026-11-17-nexp-normalisation.md).
 
+ALEPH's hadronic selection applied to the SIGNAL events (at least five good tracks, charged energy
+above 15 % of sqrt(s)) is taken as fully efficient once A_gen's own cuts (at least 5 charged, both
+muons p > 2.5 GeV, abs(cos theta) < 0.95, dimuon mass 15-50 GeV) are passed. If it were h < 1, R_A
+would be too small by the factor h and mu = 1 slightly smaller than ALEPH-sized, which can only
+make EXCLUDED harder to reach (review 2026-11-17-forecast-k-r.md).
+
 ALEPH normalisation ambiguity: arXiv:1610.06536 reports about 1.9M hadronic events after its
 selection where about 2.2M were expected ("has to be double checked with ALEPH experts"). If the
 shortfall is a loss that ordinary hadronic events suffer but the signal does not, R_A is too large
 by 2.2/1.9. Both readings are computed: "nominal" (N_had,A = 1.9M) and "low" (2.2M). A result
 is labelled EXCLUDED or COMPATIBLE only if it holds under both readings (combined_label).
+
+New in 0.2.0: forecast_kr gives the k and r that stats/forecast.py and stats/combcast.py (PLAN 5c,
+5e) must use when they are re-run with measured inputs, so that their N_exp = 32.31 k r equals
+this module's nominal N_T exactly. k is a ratio of SELECTED hadronic counts (ALEPH's 1457
+background pairs were found among its 1.9M selected events), and r is then the ratio of signal
+efficiencies per selected hadronic event:
+    r = (eff_sel,D * eps_D / eff_had,D) / (eff_sig,A / eff_had,A)
+(N_had-weighted over periods). The forecast's background, 1457 k r, then carries exactly one
+assumption: that DELPHI's background efficiency relative to ALEPH's equals r.
 """
 import argparse
 import json
 import sys
 
-VERSION = "mv2 nexp 0.1.0"
+VERSION = "mv2 nexp 0.2.0"
 
 ALEPH_N_SIG = 32.31            # arXiv:1610.06536 v9, fitted signal events (15-50 GeV, b-tagged)
 ALEPH_N_SIG_ERR = 10.87
-ALEPH_N_HAD = {"nominal": 1.9e6,   # hadronic events after ALEPH's selection (sec. 3)
-               "low": 2.2e6}       # the number the paper says was expected (footnote)
+ALEPH_N_HAD = {"nominal": 1.9e6,   # hadronic events after ALEPH's selection (sec. 2.2)
+               "low": 2.2e6}       # the number the paper says was expected (footnote 1)
 ALEPH_EFF_HAD = 0.9748         # ALEPH charged-track hadronic selection (hep-ex/9904007 table 1)
 ALEPH_EFF_MU = 0.86            # average muon identification efficiency (1610.06536)
 ALEPH_EFF_B = 0.38             # b efficiency of ALEPH's tag (1610.06536 sec. 3.2)
@@ -108,6 +123,28 @@ def totals(periods, a_gen, rho=1.0, readings=READINGS, **aleph):
     return out
 
 
+def forecast_kr(periods, a_gen):
+    """k and r for stats/forecast.py and stats/combcast.py (PLAN 5c, 5e) re-run with measured
+    inputs. k = sum of DELPHI's selected hadronic counts / ALEPH's 1.9M selected events (the sample
+    in which ALEPH's 1457 background pairs were found); r = nominal N_T / (32.31 k), so that the
+    forecast's N_exp = 32.31 k r equals N_T exactly. Under the "low" reading the forecast limits
+    are multiplied by mu_low_from_nominal(1), as in 5f; k is NOT changed (the background lives in
+    the selected sample either way)."""
+    t = totals(periods, a_gen, readings=("nominal",))
+    n_had = sum(float(p["n_had_data"]) for p in periods.values())
+    if n_had <= 0:
+        raise ValueError("no selected hadronic events")
+    k = n_had / ALEPH_N_HAD["nominal"]
+    n_t = t["readings"]["nominal"]["n_t"]
+    r = n_t / (ALEPH_N_SIG * k)
+    per_r = {}
+    for lab, p in sorted(periods.items()):
+        _, eff_had = n_z_delphi(p["n_had_data"], p["n_had_mc"], p["n_events_mc"])
+        per_r[lab] = ((p["eff_sel"] * p["eps"] / eff_had) /
+                      (aleph_eff_sig(a_gen) / ALEPH_EFF_HAD))
+    return {"k": k, "r": r, "n_t_nominal": n_t, "r_per_period": per_r}
+
+
 def mu_low_from_nominal(mu_nominal):
     """mu = 1 under the "low" reading is a smaller signal, so the same fitted number of events is
     a larger mu: mu_low = mu_nominal * N_had,A(low) / N_had,A(nominal)."""
@@ -139,6 +176,7 @@ def main(argv=None):
     with open(a.inputs) as fh:
         inp = json.load(fh)
     res = totals(inp["periods"], inp["a_gen"], inp.get("rho", 1.0))
+    res["forecast_kr"] = forecast_kr(inp["periods"], inp["a_gen"])
     with open(a.out, "w") as fh:
         json.dump(res, fh, indent=1)
     print(json.dumps(res, indent=1))

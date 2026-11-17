@@ -97,6 +97,30 @@ class TestNexp(unittest.TestCase):
         old_thrust = nexp.old_v010_formula(a_gen, P94["n_had_data"], 0.35)
         self.assertAlmostEqual(old_thrust / true_s, 0.85 / 0.9748, places=6)
 
+    def test_forecast_kr_single_period(self):
+        kr = nexp.forecast_kr({"y94": P94}, 0.3)
+        self.assertAlmostEqual(kr["k"], 1.19 / 1.9, places=12)
+        # the forecast's N_exp = 32.31 k r reproduces 5f's nominal N_T exactly
+        self.assertAlmostEqual(nexp.ALEPH_N_SIG * kr["k"] * kr["r"], kr["n_t_nominal"], places=9)
+        n_t = nexp.totals({"y94": P94}, 0.3)["readings"]["nominal"]["n_t"]
+        self.assertAlmostEqual(kr["n_t_nominal"], n_t, places=12)
+        # closed form: signal efficiency per selected hadronic event, DELPHI over ALEPH
+        closed = (0.35 * 0.38 / 0.85) / (nexp.aleph_eff_sig(0.3) / 0.9748)
+        self.assertAlmostEqual(kr["r"], closed, places=9)
+        self.assertAlmostEqual(kr["r_per_period"]["y94"], closed, places=12)
+        with self.assertRaises(ValueError):
+            nexp.forecast_kr({}, 0.3)
+
+    def test_forecast_kr_two_periods_weighted(self):
+        p95 = dict(P94, n_had_data=0.6e6, eps=0.30)
+        kr = nexp.forecast_kr({"y94": P94, "y95": p95}, 0.3)
+        self.assertAlmostEqual(kr["k"], 1.79 / 1.9, places=12)
+        r94, r95 = kr["r_per_period"]["y94"], kr["r_per_period"]["y95"]
+        self.assertAlmostEqual(r95 / r94, 0.30 / 0.38, places=12)
+        # r is the selected-hadronic-count-weighted mean of the per-period r
+        self.assertAlmostEqual(kr["r"], (1.19 * r94 + 0.6 * r95) / 1.79, places=9)
+        self.assertAlmostEqual(nexp.ALEPH_N_SIG * kr["k"] * kr["r"], kr["n_t_nominal"], places=9)
+
     def test_cli(self):
         d = tempfile.mkdtemp()
         inp, out = os.path.join(d, "in.json"), os.path.join(d, "out.json")
@@ -109,6 +133,7 @@ class TestNexp(unittest.TestCase):
         self.assertEqual(set(r["readings"]), {"nominal", "low"})
         self.assertAlmostEqual(r["readings"]["low"]["n_t"] / r["readings"]["nominal"]["n_t"],
                                1.9 / 2.2, places=12)
+        self.assertAlmostEqual(r["forecast_kr"]["k"], 1.19 / 1.9, places=12)
 
 
 if __name__ == "__main__":
