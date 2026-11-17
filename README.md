@@ -8,6 +8,14 @@ find, no DELPHI or OPAL test of this excess has been published.
 By MV2 of Munim, Inc. (mv2@munimtech.com). The work is made with AI agents working in MV2's
 name. It is not a DELPHI Collaboration result, and neither DELPHI nor CERN endorses it.
 
+**First result (2026-11-17): [NOTE-kinematics.md](NOTE-kinematics.md).** At hadron level and
+with ALEPH's own jet definition, three explicit boson models (a vector or scalar radiated off a
+b quark, and Z -> h A) put a muon within 15 degrees of a leading jet in only 5-11 % of events,
+while ordinary Z -> b bbar does so in 99.4 %. ALEPH reports this "in all cases". Taken at face
+value, ALEPH's own kinematics allow at most about 4-10 of its 32 fitted events to be such a
+boson (95 % CL). This sharpens an earlier parton-level finding by Ko, Li and Yu
+(arXiv:1610.07526). It is generator level only; the note lists its limits.
+
 **Two pre-registered primary tests (plan v0.9, refined in v0.10 and v0.11).** Test A replicates
 ALEPH's analysis on DELPHI's b-tagged events. Test B asks whether there is an ALEPH-sized boson
 produced together with b quarks. Such a boson would put about 1.6 events in the not-b-tagged
@@ -25,6 +33,8 @@ this lowers test B's 1992-95 exclusion chance from about 0.95 to about 0.88.
 - [PLAN.md](PLAN.md): the question, sensitivity estimate, data, analysis outline and the
   **blinding commitments** (the 26-35 GeV opposite-sign dimuon window stays closed until the
   selection and tests are frozen and published here as plan v1.0).
+- [NOTE-kinematics.md](NOTE-kinematics.md): the kinematic study's result, its pre-registered
+  grades (E1-E3, all passed) and what it changes for the DELPHI test.
 - [probe/](probe/): a feasibility probe that runs in the public DELPHI container
   (`gitlab-registry.cern.ch/delphi/deployment/delphi/al9_64_xrd`). It checks xrootd access to
   the 1994 short DSTs, builds the stock skelana example, and extracts the manuals as text.
@@ -34,6 +44,9 @@ this lowers test B's 1992-95 exclusion chance from about 0.95 to about 0.88.
   and a writer for DELSIM's external-generator input (FADGEN). Run the tests with
   `python -m unittest -v test_xkin`; run the study with
   `python run_xkin.py --out OUT --nsig 20000 --nbkg 600000` (needs `numpy`, `pythia8mc`).
+  `results/` holds the xkin-v1 output; `bound.py` turns it into the limit on boson events
+  (`python bound.py --summary results/xkin-v1-summary.json --out bound.json`; tests:
+  `python -m unittest -v test_bound`, standard library only).
 - [ntuple/](ntuple/) (plan v0.3, production switches in v0.7, periods in v0.8): the DELPHI
   ntuple writer. `mv2user02.car` is a skelana USER02 routine that writes one line per event
   (hadronic flags, energies, the DELPHI lifetime b-tag probabilities, thrust) and, for events with
@@ -97,10 +110,11 @@ this lowers test B's 1992-95 exclusion chance from about 0.95 to about 0.88.
 
 ## Status
 
-Plan v0.11, 2026-11-17. No DELPHI dimuon mass from real data has been looked at yet. Ten
-validation, simulation, test and forecast jobs are queued; their results will be graded against
-the expectations written in PLAN.md before they ran. Results, positive, negative or
-inconclusive, will all be published here.
+Plan v0.11, 2026-11-17. No DELPHI dimuon mass from real data has been looked at yet. The
+kinematic study (xkin-v1) has returned and passed all three of its pre-registered expectations
+(see NOTE-kinematics.md). Nine validation, simulation, test and forecast jobs are still queued;
+their results will be graded against the expectations written in PLAN.md before they ran.
+Results, positive, negative or inconclusive, will all be published here.
 
 ## Data and licences
 

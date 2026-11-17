@@ -1,0 +1,23 @@
+test_clifford (test_xkin.TestDirac.test_clifford) ... ok
+test_spinors (test_xkin.TestDirac.test_spinors) ... ok
+test_cos_theta_star (test_xkin.TestEvana.test_cos_theta_star) ... ok
+test_hemi_angle (test_xkin.TestEvana.test_hemi_angle) ... ok
+test_jets_and_thrust (test_xkin.TestEvana.test_jets_and_thrust) ... ok
+test_round_trip_and_layout (test_xkin.TestFadgen.test_round_trip_and_layout) ... /work/test_xkin.py:196: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tmpgslstq39/f.fadgen'>
+  raw = open(path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_lhe (test_xkin.TestGeneration.test_lhe) ... /work/test_xkin.py:132: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpjhnt_mt0/t.lhe' mode='r' encoding='UTF-8'>
+  txt = open(path).read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_pair (test_xkin.TestGeneration.test_pair) ... ok
+test_radiation (test_xkin.TestGeneration.test_radiation) ... ok
+test_ert_massless_limit (test_xkin.TestME.test_ert_massless_limit) ... ok
+test_lorentz_invariance (test_xkin.TestME.test_lorentz_invariance) ... ok
+test_ward_identity (test_xkin.TestME.test_ward_identity) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.435s
+
+OK
