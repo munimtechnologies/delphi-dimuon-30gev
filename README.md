@@ -8,12 +8,19 @@ find, no DELPHI or OPAL test of this excess has been published.
 By MV2 of Munim, Inc. (mv2@munimtech.com). The work is made with AI agents working in MV2's
 name. It is not a DELPHI Collaboration result, and neither DELPHI nor CERN endorses it.
 
-**Two pre-registered primary tests (plan v0.9, refined in v0.10).** Test A replicates ALEPH's analysis on
-DELPHI's b-tagged events. Test B asks whether there is an ALEPH-sized boson produced together
-with b quarks. Such a boson would put about 1.6 events in the not-b-tagged sample for every
-tagged one, so test B fits both samples at once. A hand forecast says test B raises the
-chance of excluding an ALEPH-sized signal that is not there from about 40 % to about 70 % with
-DELPHI's 1994-95 data, and to about 95 % with 1992-95 data. A forecast job checks this before any DELPHI mass is seen.
+**Two pre-registered primary tests (plan v0.9, refined in v0.10 and v0.11).** Test A replicates
+ALEPH's analysis on DELPHI's b-tagged events. Test B asks whether there is an ALEPH-sized boson
+produced together with b quarks. Such a boson would put about 1.6 events in the not-b-tagged
+sample for every tagged one, so test B fits both samples at once. A hand forecast says test B
+raises the chance of excluding an ALEPH-sized signal that is not there from about 40 % to about
+70 % with DELPHI's 1994-95 data, and to about 95 % with 1992-95 data. A forecast job checks
+this before any DELPHI mass is seen.
+
+**What "ALEPH-sized" means (plan v0.11, section 5f).** The expected signal is one written
+formula in produced Z decays (`analysis/nexp.py`). ALEPH's paper itself leaves its hadronic
+event count open (about 1.9M selected where about 2.2M were expected), so every result is
+computed under both readings, and EXCLUDED or COMPATIBLE is claimed only if both agree. By hand
+this lowers test B's 1992-95 exclusion chance from about 0.95 to about 0.88.
 
 - [PLAN.md](PLAN.md): the question, sensitivity estimate, data, analysis outline and the
   **blinding commitments** (the 26-35 GeV opposite-sign dimuon window stays closed until the
@@ -58,17 +65,18 @@ DELPHI's 1994-95 data, and to about 95 % with 1992-95 data. A forecast job check
   against test A on paired toys. Tests: `python -m unittest -v test_dimustat test_dimucomb`;
   run: `python forecast.py --out OUT` (needs `numpy`, `scipy`, `pythia8mc`),
   `python combcast.py --out OUT` (needs `numpy`, `scipy`).
-- [delsim/](delsim/) (plan v0.5; sigana 0.2.0 in v0.10): the signal through DELPHI's own
-  detector simulation. `run_delsim.sh` (DELPHI container) generates 30.4 GeV vector-boson signal
-  events with `xkin/`, finds a working route to DELPHI's condition database, simulates and
-  reconstructs the events for the 1994 detector with `runsim -gext`, and runs the ntuple routine
-  on them (`mv2user02s.car`, which keeps every simulated event). `sigana.py` reports DELPHI's
-  dimuon mass resolution at 30 GeV, muon-tag and selection efficiencies, and the b-tag response
-  to signal. Since 0.2.0 that b-tag response uses the same hemisphere tag and thrust-axis cut as
-  `analysis/`, which gives the ratio rho_D that test B needs. Tests: `python -m unittest -v
+- [delsim/](delsim/) (plan v0.5; sigana 0.2.0 in v0.10, 0.3.0 in v0.11): the signal through
+  DELPHI's own detector simulation. `run_delsim.sh` (DELPHI container) generates 30.4 GeV
+  vector-boson signal events with `xkin/`, finds a working route to DELPHI's condition database,
+  simulates and reconstructs the events for the 1994 detector with `runsim -gext`, and runs the
+  ntuple routine on them (`mv2user02s.car`, which keeps every simulated event). `sigana.py`
+  reports DELPHI's dimuon mass resolution at 30 GeV, muon-tag and selection efficiencies, and
+  the b-tag response to signal. Since 0.3.0 the signal efficiency that enters N_exp is measured
+  with `analysis/dimusel.py`'s own code and cuts (`dimusel_exact`), and the tag efficiency of
+  those events gives the ratio rho_D that test B needs. Tests: `python -m unittest -v
   test_sigana` (needs `numpy`; `fadgen.py` from `xkin/`; `dimusel.py` and `btagcal.py` from
-  `analysis/` for two cross-checks).
-- [analysis/](analysis/) (plan v0.6-v0.8): `dimusel.py` turns the ntuples into the mass
+  `analysis/`).
+- [analysis/](analysis/) (plan v0.6-v0.8, v0.11): `dimusel.py` turns the ntuples into the mass
   spectra the fit uses: hadronic and b-tag selection, muon and electron identification, the
   cascade veto, an isolated-lepton selection with anti-kt jets, and the signal and control
   categories, in the 50 MeV binning of `stats/`. **The blinding is enforced in the code**: in
@@ -79,15 +87,17 @@ DELPHI's 1994-95 data, and to about 95 % with 1992-95 data. A forecast job check
   only the per-period b-tag working point and impact-parameter limits to differ. `btagcal.py`
   measures DELPHI's b-tag efficiency in data with the hemisphere double-tag method of the LEP
   R_b measurements, from event-level words only, per period, and finds the working point with
-  ALEPH's 38 % b efficiency. Pure Python, no dependencies. Tests:
-  `python -m unittest -v test_dimusel test_btagcal`; run:
+  ALEPH's 38 % b efficiency. `nexp.py` (v0.11) computes the expected ALEPH-sized signal in the
+  tagged and untagged categories under both readings of ALEPH's hadronic count. Pure Python, no
+  dependencies. Tests: `python -m unittest -v test_dimusel test_btagcal test_nexp`; run:
   `python dimusel.py --dir NTUPLES --period y94 --out spectra.json [--config cuts.json]`,
-  `python btagcal.py --dir NTUPLES --period y94 --out btagcal.json`.
+  `python btagcal.py --dir NTUPLES --period y94 --out btagcal.json`,
+  `python nexp.py --inputs nexp_inputs.json --out nexp.json`.
 - [reviews/](reviews/): hand reviews of the code, with what was found and fixed.
 
 ## Status
 
-Plan v0.10, 2026-11-17. No DELPHI dimuon mass from real data has been looked at yet. Nine
+Plan v0.11, 2026-11-17. No DELPHI dimuon mass from real data has been looked at yet. Ten
 validation, simulation, test and forecast jobs are queued; their results will be graded against
 the expectations written in PLAN.md before they ran. Results, positive, negative or
 inconclusive, will all be published here.

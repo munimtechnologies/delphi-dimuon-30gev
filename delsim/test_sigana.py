@@ -224,6 +224,101 @@ class TestAnalysis(unittest.TestCase):
         self.assertIsNone(sigana.rho_d(None, 0.4))
         self.assertIsNone(sigana.rho_d(0.3, 0.0))
 
+    # ---- 0.3.0: dimusel_exact (PLAN v0.11, 4e step 7)
+    def _dimusel(self):
+        try:
+            import dimusel
+        except ImportError:
+            self.skipTest("analysis/dimusel.py not on the path")
+        return dimusel
+
+    def _four_with_axes(self, axes):
+        reco = [self.reco_for(j, j + 1) for j in range(len(axes))]
+        for ev, (x, y, z) in zip(reco, axes):
+            ev["e"].update(thx=x, thy=y, thz=z)
+        return reco
+
+    def test_dimusel_exact_all_selected(self):
+        self._dimusel()
+        reco = self._four_with_axes([(0.0, 1.0, 0.0)] * 4)
+        hem = [(0.002, 0.5), (0.5, 0.02), (-1.0, 0.5), (0.5, 0.5)]
+        for ev, (h1, h2) in zip(reco, hem):
+            ev["e"].update(btp1=h1, btp2=h2)
+        x = sigana.analyse(reco, self.truth, 4)["dimusel_exact"]
+        self.assertEqual(x["counts"]["aligned_simulated"], 4)
+        self.assertEqual(x["counts"]["hadronic"], 4)
+        self.assertEqual(x["counts"]["pair_selected"], 4)
+        self.assertAlmostEqual(x["eff_sel"], 1.0)
+        self.assertEqual(x["n_T"]["0.003"], 1)
+        self.assertAlmostEqual(x["eff_T"]["0.003"], 0.25)
+        self.assertAlmostEqual(x["eff_U"]["0.003"], 0.75)
+        self.assertAlmostEqual(x["tag_eff_selected"]["0.03"], 0.5)
+        self.assertEqual(x["n_T"]["0.001"], 0)
+        self.assertEqual(x["config"]["btag_mode"], "hemi")
+        self.assertAlmostEqual(x["ratio_to_0p1_selection"], 1.0)
+
+    def test_dimusel_exact_thrust_and_d0z0(self):
+        self._dimusel()
+        # ev0 passes; ev1 thrust along the beam; ev2 one muon with |d0| = 0.5 cm; ev3 empty axis
+        reco = self._four_with_axes([(0.0, 1.0, 0.0), (0.0, 0.0, 1.0), (0.0, 1.0, 0.0), (0.0, 0.0, 0.0)])
+        reco[2]["tracks"][0]["d0"] = 0.5
+        x = sigana.analyse(reco, self.truth, 4)["dimusel_exact"]
+        c = x["counts"]
+        self.assertEqual(c["hadronic"], 2)
+        self.assertEqual(c["hadronic_no_thrust"], 4)
+        self.assertEqual(c["pair_selected"], 1)
+        self.assertEqual(c["pair_selected_no_thrust"], 3)
+        self.assertEqual(c["pair_selected_no_d0z0"], 2)
+        self.assertAlmostEqual(x["eff_sel"], 0.25)
+        self.assertAlmostEqual(x["eff_sel_no_thrust"], 0.75)
+        self.assertAlmostEqual(x["thrust_pass_given_rest"], round(1 / 3, 4))
+        self.assertAlmostEqual(x["d0z0_pass_given_rest"], 0.5)
+        # hemisphere words left at 0 are valid and below every working point: tagged
+        self.assertAlmostEqual(x["eff_T"]["0.3"], 0.25)
+        self.assertAlmostEqual(x["eff_U"]["0.3"], 0.0)
+
+    def test_dimusel_exact_agrees_with_dimusel_selector(self):
+        ds = self._dimusel()
+        setup = [((0.002, 0.5), (0.0, 1.0, 0.0)),    # selected, tagged at 0.01
+                 ((0.5, 0.02), (0.0, 1.0, 0.0)),     # selected, untagged
+                 ((-1.0, 2.0), (0.0, 1.0, 0.0)),     # selected, no valid hemisphere: untagged
+                 ((0.002, 0.5), (0.0, 0.0, 1.0)),    # fails the thrust-axis cut
+                 ((0.001, 0.5), (0.0, 1.0, 0.0))]    # one muon with |z0| = 2 cm
+        reco = self._four_with_axes([s[1] for s in setup])
+        for ev, ((h1, h2), _) in zip(reco, setup):
+            ev["e"].update(btp1=h1, btp2=h2)
+        reco[4]["tracks"][1]["z0"] = 2.0
+        x = sigana.analyse(reco, self.truth, 5)["dimusel_exact"]
+        s = ds.Selector({"btag_mode": "hemi", "btag_wp": 0.01})
+        for ev in reco:
+            s.process_event(ev["e"], [sigana.as_dimusel_track(t) for t in ev["tracks"]], False)
+        mc = s.result()["samples"]["mc"]
+        n_btag = sum(mc["categories"]["os_mumu_btag"]["fine"])
+        n_untag = sum(mc["categories"]["os_mumu_untagged"]["fine"])
+        self.assertEqual(mc["cutflow"]["hadronic"], x["counts"]["hadronic"])
+        self.assertEqual(n_btag, x["n_T"]["0.01"])
+        self.assertEqual(n_btag + n_untag, x["counts"]["pair_selected"])
+        self.assertEqual((n_btag, n_untag), (1, 2))
+
+    def test_dimusel_exact_config_override_and_unknown_key(self):
+        self._dimusel()
+        reco = self._four_with_axes([(0.0, 1.0, 0.0), (0.0, 0.0, 1.0), (0.0, 1.0, 0.0), (0.0, 0.0, 0.0)])
+        reco[2]["tracks"][0]["d0"] = 0.5
+        x = sigana.analyse(reco, self.truth, 4, {"d0_max": 1.0, "btag_mode": "event"})["dimusel_exact"]
+        self.assertEqual(x["counts"]["pair_selected"], 2)
+        self.assertEqual(x["config"]["btag_mode"], "hemi")
+        self.assertAlmostEqual(x["config"]["d0_max"], 1.0)
+        with self.assertRaises(ValueError):
+            sigana.dimusel_exact([], 0, {"bogus": 1})
+
+    def test_dimusel_exact_respects_nsim(self):
+        self._dimusel()
+        reco = self._four_with_axes([(0.0, 1.0, 0.0)] * 4)
+        x = sigana.analyse(reco, self.truth, 2)["dimusel_exact"]
+        self.assertEqual(x["n_simulated"], 2)
+        self.assertEqual(x["counts"]["aligned_simulated"], 2)
+        self.assertAlmostEqual(x["eff_sel"], 1.0)
+
 
 if __name__ == "__main__":
     unittest.main()

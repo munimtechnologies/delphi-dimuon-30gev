@@ -12,17 +12,27 @@ Everything here is simulation, so no blinding applies.
 0.2.0 (PLAN v0.10, section 4e): the signal's b-tag efficiency is now also measured with the
 SAME hemisphere tag that analysis/dimusel.py uses in btag_mode "hemi" (an event is tagged if
 min(QBTPRP(1), QBTPRP(2)) < w over hemispheres with a valid probability in [0, 1]), on the
-working-point grid of analysis/btagcal.py. Test B (PLAN 5e) needs exactly this number: rho_D =
-(signal event tag efficiency at w) / (data Z -> b bbar event tag efficiency at w). The per-
-hemisphere rate is reported too, for comparison with btagcal's hemisphere efficiency e_b. The
-0.1.0 numbers based on the event probability QBTPRP(3) are kept unchanged.
+working-point grid of analysis/btagcal.py. The per-hemisphere rate is reported too, for
+comparison with btagcal's hemisphere efficiency e_b. The 0.1.0 numbers based on the event
+probability QBTPRP(3) are kept unchanged.
 Also new: eff_track_all, whose denominator is every in-acceptance signal muon of the simulated
 events, so events in which both muons were lost (never aligned) count as losses; eff_track
 (aligned events only) is kept and is biased upward by those events.
 
+0.3.0 (PLAN v0.11, section 4e step 7 and 5f): "dimusel_exact". The signal efficiency that enters
+N_exp is now measured with analysis/dimusel.py's OWN code and configuration (imported, not
+re-implemented): its hadronic selection including the thrust-axis cut, its missing-momentum
+cut over all particles, its lepton cuts including |d0| and |z0|, its muon tag and its pair-mass
+range. 0.1.0/0.2.0's selection had no thrust-axis and no d0/z0 cut, so it was not the selection
+the data pass. The block gives, per hemisphere working point, the fraction of simulated signal
+events whose signal pair lands in os_mumu_btag (eff_T) and in os_mumu_untagged (eff_U), and the
+tag efficiency of the selected signal events, which is the rho_D numerator from v0.11. dimusel
+is looked for next to this file, then in ../analysis (the repository layout).
+
 MV2 of Munim, Inc. (mv2@munimtech.com). Made with AI agents. Apache-2.0.
 """
 import argparse
+import collections
 import gzip
 import json
 import math
@@ -33,8 +43,11 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+_ANALYSIS = os.path.join(os.path.dirname(HERE), "analysis")
+if os.path.isdir(_ANALYSIS) and _ANALYSIS not in sys.path:
+    sys.path.append(_ANALYSIS)
 
-VERSION = "mv2 sigana 0.2.0"
+VERSION = "mv2 sigana 0.3.0"
 MMU = 0.1056584
 SIG_IDS = (32, 35, 36)
 NEUTRINOS = (12, 14, 16)
@@ -274,6 +287,102 @@ def rho_d(sig_event_eff, data_event_eff):
     return sig_event_eff / data_event_eff
 
 
+# ------------------------------------------------------------------ dimusel-exact (0.3.0)
+def _dimusel():
+    try:
+        import dimusel
+    except ImportError:
+        return None
+    return dimusel
+
+
+def as_dimusel_track(t):
+    """A sigana track with the extra key dimusel's lepton cuts read (cos theta)."""
+    d = dict(t)
+    d["cth"] = t["pz"] / t["p"] if t["p"] > 0 else 0.0
+    return d
+
+
+def dimusel_exact(triples, n_used, cfg=None, wps=HEMI_WP):
+    """PLAN 4e step 7 (v0.11): efficiency of dimusel's OWN selection for the signal pair.
+
+    triples: (reconstructed event, truth record, generated-event index) of aligned events; the
+    denominator is the n_used simulated events. A simulated event is "selected" when, with
+    dimusel's code and configuration (btag_mode forced to "hemi"): it passes dimusel's hadronic
+    selection (IHAD4, NCTR4, thrust axis); the missing momentum of all its particles is below
+    pmiss_max; both generated signal muons are matched to tracks that pass dimusel's lepton cuts
+    (p, |cos theta|, |d0|, |z0|) and muon tag at mu_level; the two have opposite charge; and
+    their mass lies in dimusel's histogram range [15, 50) GeV. A selected event's signal pair is
+    then the entry dimusel puts in os_mumu_btag (tagged at w) or os_mumu_untagged (not tagged).
+    Variants without the thrust-axis cut and without the d0/z0 cuts show what each cut costs.
+    """
+    ds = _dimusel()
+    if ds is None:
+        return {"error": "analysis/dimusel.py not importable"}
+    c = dict(cfg or {})
+    c["btag_mode"] = "hemi"
+    sel = ds.Selector(c)                                  # refuses unknown keys
+    sel_nothrust = ds.Selector(dict(c, thrust_cos_max=1.0))
+    c_nod0z0 = dict(sel.c, d0_max=1e9, z0_max=1e9)
+    scratch = collections.Counter()
+    n = {"aligned_simulated": 0, "hadronic": 0, "hadronic_no_thrust": 0,
+         "pair_selected": 0, "pair_selected_no_thrust": 0, "pair_selected_no_d0z0": 0}
+    n_t = {w: 0 for w in wps}
+    for ev, tr, j in triples:
+        if j is None or j >= n_used:
+            continue
+        n["aligned_simulated"] += 1
+        e = ev["e"]
+        had = sel._hadronic(e, scratch)
+        had_nt = sel_nothrust._hadronic(e, scratch)
+        n["hadronic"] += int(had)
+        n["hadronic_no_thrust"] += int(had_nt)
+        parts = ev["tracks"]
+        if not had_nt or not parts or len(tr["mus"]) != 2:
+            continue
+        sx = sum(t["px"] for t in parts)
+        sy = sum(t["py"] for t in parts)
+        sz = sum(t["pz"] for t in parts)
+        if math.sqrt(sx * sx + sy * sy + sz * sz) >= sel.c["pmiss_max"]:
+            continue
+        m = match_muons(tr, parts)
+        if m[0] is None or m[1] is None:
+            continue
+        a, b = as_dimusel_track(m[0]), as_dimusel_track(m[1])
+        if a["q"] * b["q"] >= 0:
+            continue
+        if not all(ds.is_muon(t, sel.c["mu_level"]) and ds.lepton_ok(t, c_nod0z0) for t in (a, b)):
+            continue
+        mass = ds.pair_mass(a, b, ds.MMU, ds.MMU)
+        if not ds.FINE_LO <= mass < ds.FINE_HI:
+            continue
+        d0z0 = all(ds.lepton_ok(t, sel.c) for t in (a, b))
+        n["pair_selected_no_d0z0"] += int(had)
+        n["pair_selected_no_thrust"] += int(d0z0)
+        if not (had and d0z0):
+            continue
+        n["pair_selected"] += 1
+        h = sel._hemis(e)
+        for w in wps:
+            if h and min(h) < w:
+                n_t[w] += 1
+    k = n["pair_selected"]
+    out = {"dimusel_version": ds.VERSION, "config": sel.c, "n_simulated": n_used, "counts": n,
+           "eff_sel": frac(k, n_used), "eff_sel_err": binom_err(k, n_used),
+           "eff_sel_no_thrust": frac(n["pair_selected_no_thrust"], n_used),
+           "thrust_pass_given_rest": frac(k, n["pair_selected_no_thrust"]),
+           "d0z0_pass_given_rest": frac(k, n["pair_selected_no_d0z0"]),
+           "n_T": {}, "eff_T": {}, "eff_U": {}, "tag_eff_selected": {},
+           "tag_eff_selected_err": {}}
+    for w in wps:
+        out["n_T"][str(w)] = n_t[w]
+        out["eff_T"][str(w)] = frac(n_t[w], n_used)
+        out["eff_U"][str(w)] = frac(k - n_t[w], n_used)
+        out["tag_eff_selected"][str(w)] = frac(n_t[w], k)
+        out["tag_eff_selected_err"][str(w)] = binom_err(n_t[w], k)
+    return out
+
+
 # ------------------------------------------------------------------ analysis
 def gen_level(truth):
     n = len(truth)
@@ -289,7 +398,7 @@ def gen_level(truth):
                 [pair_mass(t["mus"][0], t["mus"][1]) for t in two], [10, 50, 90])] if two else None}
 
 
-def analyse(reco, truth, nsim):
+def analyse(reco, truth, nsim, cfg=None):
     n_used = min(nsim, len(truth)) if nsim else len(truth)
     r = {"n_truth_events": len(truth), "n_simulated_requested": n_used, "n_reco_events": len(reco)}
     r["generator_level"] = gen_level(truth[:n_used])
@@ -402,10 +511,16 @@ def analyse(reco, truth, nsim):
     r["btag_eff_vs_simulated"] = {str(wp): frac(v, n_used) for wp, v in btag.items()}
     r["btp3_q10_50_90_selected"] = [round(float(v), 6) for v in np.percentile(btp3, [10, 50, 90])] if btp3 else None
     r["hemi_btag_after_selection"] = hemi_tag_summary(selected_e)
-    # the sample whose event tag efficiency is the numerator of rho_D (PLAN 5e): the same
-    # hadronic definition as btagcal's eps, i.e. with the thrust-axis cut
+    # v0.10's rho_D numerator, kept as a cross-check of 0.3.0's dimusel_exact tag efficiency
     r["hemi_btag_after_selection_thrust"] = hemi_tag_summary([e for e in selected_e if thrust_ok(e)])
     r["hist_reco_os_mumu_15_50_0p5"] = np.histogram(reco_m, bins=70, range=(15, 50))[0].tolist() if reco_m else []
+    # 0.3.0: the selection the data pass (PLAN 4e step 7); eff_sel enters N_exp (5f) and
+    # tag_eff_selected is the rho_D numerator (5e)
+    triples = [(ev, truth[j], j) for ev, j in zip(reco, al) if j is not None]
+    r["dimusel_exact"] = dimusel_exact(triples, n_used, cfg)
+    if "eff_sel" in r["dimusel_exact"]:
+        r["dimusel_exact"]["ratio_to_0p1_selection"] = frac(r["dimusel_exact"]["counts"]["pair_selected"],
+                                                            cuts["pmiss_lt18"])
     r["delsim_used_input"] = bool(len(dm) >= 0.3 * max(1, len(reco)))
     return r
 
@@ -429,12 +544,17 @@ def main():
     ap.add_argument("--ev", required=True)
     ap.add_argument("--pa", required=True)
     ap.add_argument("--nsim", type=int, default=0)
+    ap.add_argument("--config", help="JSON file of dimusel selection overrides (per period)")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
+    cfg = None
+    if a.config:
+        with open(a.config) as fh:
+            cfg = json.load(fh)
     truth = read_truth(a.fadgen)
     reco = read_ntuple(a.ev, a.pa)
     res = {"tool": VERSION, "made_by": "MV2 of Munim, Inc. (made with AI agents)"}
-    res.update(analyse(reco, truth, a.nsim))
+    res.update(analyse(reco, truth, a.nsim, cfg))
     with open(a.out, "w") as fh:
         json.dump(res, fh, indent=1)
     print("SIGANA_JSON_BEGIN")

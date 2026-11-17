@@ -1,27 +1,38 @@
-# Analysis plan v0.10: does DELPHI see ALEPH's 30 GeV dimuon excess?
+# Analysis plan v0.11: does DELPHI see ALEPH's 30 GeV dimuon excess?
 
 MV2 of Munim, Inc. (mv2@munimtech.com). v0.1 written 2026-11-17 06:58 UTC; v0.2 08:30 UTC;
 v0.3 09:45 UTC; v0.4 10:50 UTC; v0.5 11:45 UTC; v0.6 12:40 UTC; v0.7 13:40 UTC; v0.8 14:40 UTC;
-v0.9 16:40 UTC; v0.10 17:40 UTC. Made with AI agents working in MV2's name. This is a plan, not
-a result: as of v0.10, no DELPHI dimuon mass from real data has been looked at. Not a DELPHI
-Collaboration result; DELPHI and CERN do not endorse it. Text CC BY 4.0, code Apache-2.0.
+v0.9 16:40 UTC; v0.10 17:40 UTC; v0.11 18:40 UTC. Made with AI agents working in MV2's name. This
+is a plan, not a result: as of v0.11, no DELPHI dimuon mass from real data has been looked at.
+Not a DELPHI Collaboration result; DELPHI and CERN do not endorse it. Text CC BY 4.0, code
+Apache-2.0.
 
-Changes from v0.9:
-- **The signal's b-tag efficiency is now measured with the tag the analysis uses.** Test B (5e)
-  needs rho_D = (signal event tag efficiency) / (data Z -> b bbar event tag efficiency eps) at
-  the chosen working point. Since v0.7 the primary tag is the hemisphere tag (either thrust
-  hemisphere with QBTPRP below w), and eps comes from the double-tag method of 4g on events
-  that pass dimusel's hadronic selection, including the thrust-axis cut. `delsim/sigana.py`
-  0.1.0 measured only the event probability QBTPRP(3) and applied no thrust-axis cut, so it
-  could not give rho_D. `sigana.py` 0.2.0 also reports the hemisphere-tag efficiency of the
-  selected signal events, with and without the thrust-axis cut, on btagcal's working-point grid.
-  The thrust-cut number is the rho_D numerator (section 4e, step 6; expectation D7). The
-  queued job `delsim-signal-v1` runs 0.1.0; section 4e says how 0.2.0 reaches its output.
-- `sigana.py` 0.2.0 also reports `eff_track_all`, whose denominator counts every in-acceptance
-  signal muon of the simulated events. 0.1.0's `eff_track` counted only aligned events and so
-  missed events in which both muons were lost (a small upward bias). Both numbers are reported.
-- Tests: `test_sigana.py` grows from 8 to 16 tests (job `sigana-tests-v1`).
-- Nothing about the blinding, tests A and B, the data-scope rule (5d) or the selection changed.
+Changes from v0.10:
+- **"ALEPH-sized" is now one exact formula (new section 5f, code `analysis/nexp.py`).** v0.10
+  scaled ALEPH's rate per hadronic event by DELPHI's hadronic count and an efficiency ratio. But
+  DELPHI's hadronic selection includes a thrust-axis cut that keeps only about 85 % of hadronic
+  Z decays, and neither experiment's hadronic-selection efficiency was divided out. The bias
+  depended on which simulated efficiency was plugged in: from about +3 % to about -13 %, with no
+  fixed sign. 5f now converts both experiments to produced Z decays (DELPHI's hadronic efficiency
+  is measured on KK2f simulation through the same selection) and fixes every input.
+- **ALEPH's own normalisation question is now part of the test.** ALEPH's paper selected about
+  1.9M hadronic events where about 2.2M were expected, a gap the author says "has to be double
+  checked with ALEPH experts". v0.10 ignored it. Both readings are now computed, and a result is
+  labelled EXCLUDED or COMPATIBLE only if it holds under both (5f). Forecast effect: test B's
+  chance of excluding an absent ALEPH-sized boson with 1992-95 falls from about 0.95 to about
+  0.88 (hand estimate).
+- **The signal efficiency is measured with the analysis's own code.** `delsim/sigana.py` 0.3.0
+  (`dimusel_exact`) imports `analysis/dimusel.py` and applies its configuration to the
+  simulated signal: the thrust-axis cut, the missing-momentum cut, the lepton cuts including
+  |d0| and |z0|, the muon tag and the 15-50 GeV range. sigana 0.1.0/0.2.0 had no thrust-axis or
+  d0/z0 cut. Its `eff_sel` enters 5f. Its tag efficiency of the selected signal events becomes
+  the rho_D numerator of test B (v0.10's number stays as a cross-check). New expectation D8,
+  written before any DELSIM output exists. Tests: `test_sigana.py` 16 -> 21, including one that
+  runs dimusel's own Selector on the same events and requires identical T and U counts;
+  `test_nexp.py` 10 tests, including closure on a synthetic world.
+- New production expectations P6-P7 (DELPHI's hadronic efficiency and produced-Z count in 1994).
+- Nothing about the blinding, the selection cuts, the fits, the data-scope rule (5d) or the
+  outcome definitions of tests A and B changed, apart from the two-reading rule of 5f.
 
 ## 1. The question
 
@@ -73,7 +84,8 @@ three-layer single-sided vertex detector (arXiv:2510.18762 sec. 4); adding 1992-
 doubles the sample. A hand estimate (section 5c) gives a median expected 95 % CLs limit of
 about 1.2 times the ALEPH-sized yield for 1994-95 alone, and about 0.9 for 1992-95, using
 b-tagged events only (test A). Using the untagged events as well (test B, section 5e) brings
-these to about 0.8 and 0.6.
+these to about 0.8 and 0.6. (These rough numbers use the "nominal" ALEPH reading of 5f; under
+the "low" reading every limit is 1.16 times larger.)
 
 ## 3. Data and software (public, CC0, cite the DOIs)
 
@@ -198,7 +210,7 @@ A failed V-check means the word mapping or the selection is wrong. It will be fi
 validation repeated before any further step. With 6 files (about 1-2 % of 1994), V3 and V4 may
 be limited by statistics; this will be reported as such.
 
-## 4e. Signal through DELPHI's detector simulation (job `delsim-signal-v1`, v0.5; sigana 0.2.0 in v0.10)
+## 4e. Signal through DELPHI's detector simulation (job `delsim-signal-v1`, v0.5; sigana 0.2.0 in v0.10; 0.3.0 in v0.11)
 
 `delsim/run_delsim.sh` runs in the same public DELPHI container. It:
 
@@ -224,26 +236,38 @@ be limited by statistics; this will be reported as such.
    resolution (reconstructed minus generated pair mass, Gaussian-equivalent width from the
    interquartile range); and the 1/p resolution in bins of p. Tests: `python -m unittest -v
    test_sigana` (run inside the job before anything else).
-6. (new in v0.10, `sigana.py` 0.2.0) the **hemisphere-tag** efficiency of the selected signal
+6. (v0.10, `sigana.py` 0.2.0) the **hemisphere-tag** efficiency of the selected signal
    events, with exactly the rule of `analysis/dimusel.py` in `btag_mode` "hemi" (tagged if
    min(QBTPRP(1), QBTPRP(2)) < w over hemispheres with a probability in [0, 1]; none valid =
    untagged), at the ten working points of `analysis/btagcal.py` (0.3 ... 1e-5), with binomial
    errors; also the per-hemisphere rate, for comparison with btagcal's e_b. It is reported for
    all selected signal events and for those that also pass dimusel's thrust-axis cut
-   (|cos theta_thrust| <= 0.866; an empty axis fails). **The thrust-cut number is the numerator
-   of rho_D** (5e), because eps, the data efficiency of 4g, is measured on events that pass the
-   same hadronic selection. Also new: `eff_track_all` (denominator: every in-acceptance signal
-   muon of the simulated events). Tests (16): the earlier 8, plus the hemisphere rule on
-   hand-made events, the thrust sample, invalid hemispheres, the working-point grid equal to
-   btagcal's, the thrust cut equal to dimusel's, rho_D, and `eff_track_all` with lost events
-   and with fewer simulated than generated events.
+   (|cos theta_thrust| <= 0.866; an empty axis fails). Since v0.11 this is a cross-check of
+   step 7's tag efficiency. Also `eff_track_all` (denominator: every in-acceptance signal muon
+   of the simulated events).
+7. (new in v0.11, `sigana.py` 0.3.0) **`dimusel_exact`: the analysis's own selection applied to
+   the signal.** sigana imports `analysis/dimusel.py` and uses its code and configuration
+   (`--config`, the same JSON overrides dimusel takes; `btag_mode` is forced to "hemi"). A
+   simulated signal event counts as selected if it passes dimusel's hadronic selection (IHAD4,
+   NCTR4 >= 5, thrust axis), the missing momentum of all its particles is below 18 GeV, and both
+   generated signal muons are matched to tracks that pass dimusel's lepton cuts (p, |cos theta|,
+   |d0|, |z0|) and muon tag, with opposite charge and a pair mass in [15, 50) GeV. Its signal
+   pair is then exactly the entry dimusel puts in `os_mumu_btag` (tagged at w) or
+   `os_mumu_untagged`. Reported, with the n simulated events as denominator: `eff_sel` (enters
+   N_exp, 5f), `eff_T` and `eff_U` per working point, `tag_eff_selected` (the tag efficiency
+   of the selected signal events: **the rho_D numerator since v0.11**, 5e), and what the
+   thrust-axis and d0/z0 cuts cost (`thrust_pass_given_rest`, `d0z0_pass_given_rest`).
+   Tests (21 in all): the earlier 16, plus the selection on hand-made events, the thrust and
+   d0/z0 variants, configuration overrides and refusal of unknown keys, the simulated-event
+   denominator, and a test that runs dimusel's own `Selector` on the same events and requires
+   the same tagged and untagged counts.
 
-**How 0.2.0 reaches the simulation.** The queued job `delsim-signal-v1` runs sigana 0.1.0, and a
+**How 0.3.0 reaches the simulation.** The queued job `delsim-signal-v1` runs sigana 0.1.0, and a
 job cannot read another job's output. Its simulated ntuple and FADGEN files (simulation only, so
 no blinding applies; about 400 events) are therefore published to `delsim/results/` when they
-return, and a short job fetches them and the published `sigana.py` 0.2.0 and reruns step 5-6. If
-those files cannot be published, `delsim-signal-v2` is filed with 0.2.0, ideally with more
-events to reduce the error on rho_D.
+return, and a short job fetches them, the published `sigana.py` 0.3.0 and `analysis/dimusel.py`,
+and reruns steps 5-7. If those files cannot be published, `delsim-signal-v2` is filed with
+0.3.0, ideally with more events to reduce the error on rho_D.
 
 This is simulation only: no real-data dimuon mass is involved, so blinding does not apply.
 
@@ -262,29 +286,36 @@ This is simulation only: no real-data dimuon mass is involved, so blinding does 
   muon pair in acceptance with mass 15-50 GeV and missing momentum < 18 GeV is between 0.35
   and 0.70.
 - D6: the 1/p resolution for 15-20 GeV muons is between 0.0005 and 0.0015 GeV^-1.
-- D7 (new in v0.10, written before any DELSIM output exists): at the 1994 working point chosen
-  by 4h, rho_D (thrust-cut signal event tag efficiency over the 1994 data eps of 4g) lies
-  between 0.60 and 1.05. Reason: in Z -> b bbar X the boson takes at least 30 GeV of the 91, so
-  the b hadrons are softer, fly less far and give fewer displaced tracks than in ordinary
-  Z -> b bbar; the prompt signal muons only dilute the hemisphere probability. With about 200
-  selected signal events the statistical error on rho_D is about 0.09, so D7 is a coarse check.
-  If rho_D < 1, test B uses rho = 1 (5e), which understates N_U, so test B is conservative. If
-  rho_D > 1.05, the signal's tag or the hemisphere words are checked before v1.0.
+- D7 (v0.10, written before any DELSIM output exists; numerator moved to step 7 in v0.11): at
+  the 1994 working point chosen by 4h, rho_D (`dimusel_exact.tag_eff_selected` over the 1994
+  data eps of 4g) lies between 0.60 and 1.05. Reason: in Z -> b bbar X the boson takes at least
+  30 GeV of the 91, so the b hadrons are softer, fly less far and give fewer displaced tracks
+  than in ordinary Z -> b bbar; the prompt signal muons only dilute the hemisphere probability.
+  With about 200 selected signal events the statistical error on rho_D is about 0.09, so D7 is a
+  coarse check. If rho_D < 1, test B uses rho = 1 (5e), which understates N_U, so test B is
+  conservative. If rho_D > 1.05, the signal's tag or the hemisphere words are checked before
+  v1.0.
+- D8 (new in v0.11, written before any DELSIM output exists), with dimusel's default cuts:
+  (a) `thrust_pass_given_rest` is between 0.78 and 0.95 (a 1 + cos^2 thrust-axis distribution
+  loses about 19 % to |cos theta_T| > 0.866; requiring both muons within |cos theta| < 0.95
+  removes part of the forward events first); (b) `d0z0_pass_given_rest` is at least 0.95 (the
+  signal muons are prompt; V5 expects a median |d0| below 0.1 cm); (c) `ratio_to_0p1_selection`
+  (eff_sel over sigana 0.1.0's selected fraction) is between 0.70 and 0.97; (d) step 7's
+  `tag_eff_selected` and step 6's thrust-cut event tag efficiency agree within two binomial
+  standard errors at the 1994 working point. A failure of (a) or (b) means the thrust words or
+  the impact parameters of simulated tracks are not what 4c assumes, and is checked before
+  v1.0.
 
-**What happens next.** The measured resolution replaces ALEPH's sigma in the fit of 5b. The
-efficiency, together with the b-tag working point of section 4g, gives N_exp = (ALEPH signal
-rate per hadronic Z) x (DELPHI hadronic count) x (DELPHI efficiency / ALEPH efficiency for the
-same model), with ALEPH's efficiency estimated from the generator-level acceptance of the same
-events times ALEPH's quoted muon (86 % per muon) and b-tag efficiencies. The b-tag factor is the
-data-measured efficiency of 4g; the signal events' own b-tag response from DELSIM (step 6)
-checks that the signal's b-tag efficiency matches inclusive Z -> b bbar within its statistics,
-and gives the ratio rho_D used by test B (5e). If D1 finds no working route, the resolution is
-taken from DELPHI's measured Z -> mu mu and J/psi widths in data (validation 4d) and the
-efficiency from the KK2f simulation's prompt muons, and this is stated as a limitation. If
-1992-93 are added (5d, 4j), N_exp is summed period by period: each period's hadronic count,
-b-tag efficiency (4g, per period) and muon efficiency (the 1994 DELSIM value, corrected by the
-ratio of prompt-muon efficiencies in that period's KK2f simulation to 1994's; a DELSIM run with
-`-VERSION v92e`/`v93d` replaces this if D1 finds a working route).
+**What happens next.** The measured resolution replaces ALEPH's sigma in the fit of 5b.
+`dimusel_exact.eff_sel` and the generator-level acceptance of the same events enter N_exp by
+the formula of section 5f; the b-tag factor is the data-measured efficiency of 4g, and the
+signal's own tag efficiency gives rho_D for test B (5e). If D1 finds no working route, the
+resolution is taken from DELPHI's measured Z -> mu mu and J/psi widths in data (validation 4d)
+and the efficiency from the KK2f simulation's prompt muons, and this is stated as a limitation.
+If 1992-93 are added (5d, 4j), each period's eff_sel is the 1994 DELSIM value corrected by the
+ratio of prompt-muon efficiencies (with that period's d0/z0 limits) in that period's KK2f
+simulation to 1994's; a DELSIM run with `-VERSION v92e`/`v93d` replaces this if D1 finds a
+working route.
 
 ## 4f. From ntuple to mass spectra (`analysis/dimusel.py`, v0.6; 0.2.0 in v0.7; 0.3.0 in v0.8)
 
@@ -313,7 +344,8 @@ fits in about 1 GB of memory.
   opposite-sign (b-tagged, untagged) and same-sign (b-tagged).
 - **Output**: per category, the 700 bins of 50 MeV over 15-50 GeV used by `stats/dimustat.py`
   and 0.5 GeV bins over 0-90 GeV; and the cut flow (event counts after each cut, the hadronic,
-  b-tagged and anti-tagged event totals that enter N_exp).
+  b-tagged and anti-tagged event totals that enter N_exp). For simulation, the cut flow's
+  "events" and "hadronic" give DELPHI's hadronic efficiency eff_had,D of 5f.
 - **Combining** (0.2.0): `--combine` sums the outputs of production slices. A bin that is null
   in any input stays null, a category blinded in any input stays blinded, and inputs made with
   different selections or binnings are refused. Since 0.3.0 it also refuses inputs from
@@ -333,10 +365,10 @@ signal. Same-sign and e-mu pairs and all simulation stay open. The window opens 
 program is given a plan file whose first line reads "Analysis plan v1.x"; that file's SHA-256 is
 written into the output. Tests (`python -m unittest -v test_dimusel`, 21 tests, synthetic
 events): the window stays hidden for every blinded category and its edges, sidebands and controls
-stay visible, simulation is open, the unblind gate refuses this plan (v0.10), each cut, both b-tag
-modes and the jet clustering behave as specified, combining keeps the blinding, mixed periods
-are refused by `--combine`, and `--merge-periods` sums periods with different working points
-but refuses any other difference, a repeated period or an unlabelled input.
+stay visible, simulation is open, the unblind gate refuses a v0.x plan such as this one, each
+cut, both b-tag modes and the jet clustering behave as specified, combining keeps the blinding,
+mixed periods are refused by `--combine`, and `--merge-periods` sums periods with different
+working points but refuses any other difference, a repeated period or an unlabelled input.
 
 ## 4g. The b-tag efficiency measured in data: hemisphere double-tag (`analysis/btagcal.py`, new in v0.7)
 
@@ -355,9 +387,9 @@ and rho_b the hemisphere correlation for b events (0 for the central value; +0.0
 systematic). The event-level efficiency of the primary tag ("either hemisphere") is then
 1 - (1 - e_b)^2, and the working point w_h is where it equals 0.38 (log-linear interpolation
 between the ten grid points 0.3 ... 1e-5). Statistical errors come from the multinomial counts
-by the delta method, so the counts of all production slices can simply be added. Since v0.8
-this is done separately for each period (`--period`; `--combine` refuses to add periods, or data
-to simulation).
+by the delta method, so the counts of all production slices can simply be added. Since v0.8 this
+is done separately for each period (`--period`; `--combine` refuses to add periods, or data to
+simulation).
 
 Limitations stated now: charm is lumped with light quarks (for typical lifetime tags, e_c about
 ten times e_uds, this biases e_b by well under 1 %); R_b after the hadronic selection may differ
@@ -416,6 +448,13 @@ and W3-W4, the grid is re-made with those limits before production is filed.
 - P5 (new in v0.8, if 1992-93 are produced): the 1992 and 1993 hadronic counts after the
   selection of 4f are each between 0.4M and 0.8M (DELPHI recorded about 0.7M hadronic Z decays
   in each of these years; the thrust-axis cut keeps about 80 %).
+- P6 (new in v0.11): the hadronic efficiency eff_had,D of the 1994 KK2f Z -> q qbar simulation
+  through the selection of 4f (cut-flow "hadronic" over "events") is between 0.78 and 0.92
+  (arXiv:2510.18762's 1.2M from 46 pb^-1 implies about 0.86).
+- P7 (new in v0.11): the produced hadronic Z count N_Z,D(1994) = N_had,D / eff_had,D is within
+  12 % of 1.40M (46 pb^-1 times the observed peak hadronic cross-section of about 30.5 nb). If P6
+  or P7 fails, the simulation files may not hold every generated event, or a cut behaves
+  differently in data and simulation; N_exp (5f) is not computed until this is understood.
 
 ## 4i. The unblinding pass (spelled out in v0.8)
 
@@ -427,7 +466,7 @@ unblinded slice outputs are combined per period and merged across periods. The p
 against the blinded production: outside 26-35 GeV, and in every control category, its spectra
 must equal the blinded spectra bin by bin. Any difference stops the analysis until it is
 explained. Then `stats/dimustat.py` (test A) and `stats/dimucomb.py` (test B) run the tests of
-5b and 5e exactly as frozen.
+5b and 5e exactly as frozen, with N_exp from 5f under both ALEPH readings.
 
 ## 4j. The 1992 and 1993 data (new in v0.8)
 
@@ -475,13 +514,13 @@ The quantitative 1992-93 b-tag condition of rule 5d (b efficiency within a facto
 1994's at the same mistag rate, by the double-tag method) needs full-year statistics and is
 evaluated on the production counts, not on these 3 files.
 
-## 5. Blinding and pre-registration (commitments made in v0.1, tightened in v0.6, test B in v0.9)
+## 5. Blinding and pre-registration (commitments made in v0.1, tightened in v0.6, test B in v0.9, N_exp in v0.11)
 
 - The opposite-sign dimuon mass window **26-35 GeV in b-tagged events stays blind** until
   version 1.0 of this plan is published with the frozen selection, background model,
-  simulated signal efficiency, expected signal yield N_exp (ALEPH rate scaled by DELPHI's
-  efficiency) and the statistical tests below. Since v0.6 the same holds for every
-  opposite-sign mumu and ee category in data, whatever its b-tag (section 4f).
+  simulated signal efficiency, expected signal yield N_exp (section 5f) and the statistical
+  tests below. Since v0.6 the same holds for every opposite-sign mumu and ee category in data,
+  whatever its b-tag (section 4f).
 - Allowed before unblinding: same-sign and e-mu control samples, all opposite-sign spectra
   outside 26-35 GeV, simulation, and event counts that do not reveal the window.
 - **Primary test A (ALEPH replica, fixed hypothesis):** extended likelihood fit of the b-tagged
@@ -491,6 +530,10 @@ evaluated on the production counts, not on these 3 files.
   rejected at 2 sigma), or "inconclusive" (anything else).
 - **Primary test B (new in v0.9, section 5e):** the same hypothesis and outcomes for a boson
   produced together with b quarks, fitted in the b-tagged and not-b-tagged spectra at once.
+- **Both ALEPH readings (new in v0.11, section 5f):** each outcome is evaluated with N_exp under
+  the "nominal" and the "low" reading of ALEPH's hadronic count; the reported label is
+  EXCLUDED or COMPATIBLE only if both readings give it, otherwise INCONCLUSIVE. Both readings'
+  numbers are always published.
 - **Secondary:** a 15-50 GeV scan with free mass, local and global significance (for test A and
   for test B); the e+e- channel; the year-by-year consistency; the inverted-b-tag control
   (after unblinding); the event-probability b-tag cross-check (4.2); and (new in v0.2, to be
@@ -502,7 +545,7 @@ evaluated on the production counts, not on these 3 files.
 - **Histogram**: opposite-sign dimuon masses in 15-50 GeV in 700 bins of 50 MeV (at a mass
   resolution of 0.3-0.75 GeV this is equivalent to the unbinned fit of v0.3). If 1992-93 are
   used, the histogram is the period merge of 4f (`--merge-periods`), and N_exp is the sum of the
-  per-period expectations.
+  per-period expectations (5f).
 - **Signal**: Voigt profile (Breit-Wigner of width Gamma convolved with a Gaussian of width
   sigma), truncated to 15-50 GeV; the yield n_s counts signal events in 15-50 GeV, as ALEPH's
   32.3 does. Primary: m = 30.40 GeV, Gamma = 1.78 GeV, sigma = DELPHI's simulated dimuon mass
@@ -557,7 +600,8 @@ scales like its signal efficiency; ALEPH's fitted yield is the value at the most
 point and is more likely to be an overestimate of any true signal than an underestimate. The
 1992-93 b efficiency is likely lower than 1994-95's at the same purity (R-phi-only tag), which
 S4's single r does not capture; the forecast is re-run with per-period r once 4j's production
-counts exist.
+counts exist. F1-F6 were written under the "nominal" ALEPH reading of 5f and are graded as
+written; the "low" reading multiplies every limit by 1.16 (5f).
 
 ## 5d. Data-scope rule (fixed now, before any DELPHI mass is seen)
 
@@ -569,7 +613,8 @@ double-tag method of 4g on the production counts). If 1992-93 fails validation, 
 proceeds with 1994-95 and the limit is quoted as it comes out. If only one of the two years
 passes, that year is used. This rule is fixed so that the amount of data cannot be chosen
 after the window is seen. (v0.9: the rule stays tied to test A's forecast, S2 of 5c. Test B
-does not change it.)
+does not change it. v0.11: the rule reads S2's forecast under the nominal ALEPH reading, as
+written; the two-reading rule of 5f only makes 1992-93 more needed, never less.)
 
 ## 5e. Test B: an ALEPH-sized boson produced with b quarks, in tagged and untagged events (new in v0.9; code `stats/dimucomb.py`)
 
@@ -596,19 +641,21 @@ charm and misidentified hadrons add. Fitting both together is therefore much mor
   normalisation, shape and degree. The degree rule of 5b is applied to each category's own
   sidebands. The signal template s(m) is the same in both (5b; the mass resolution does not
   depend on the tag). One parameter of interest, mu; mu = 1 is an ALEPH-sized boson.
-- Yields at mu = 1: N_T = N_exp of 4e. N_U = N_T (1 - eps rho) / (eps rho), summed over periods
-  if 1992-93 are used. eps is the period's b efficiency measured in data at the chosen working
-  point (4g; close to 0.38 by construction). rho = max(1, rho_D), where rho_D is the DELSIM
-  signal tag efficiency at that working point divided by eps (4e). Since v0.10 the signal tag
-  efficiency is defined exactly: the hemisphere tag of 4f on selected signal events that pass
-  the thrust-axis cut (`hemi_btag_after_selection_thrust` of `sigana.py` 0.2.0, step 6 of 4e).
+- Yields at mu = 1: N_T and N_U from section 5f: N_T = N_exp, and N_U = N_T (1 - eps rho) /
+  (eps rho), summed over periods if 1992-93 are used. eps is the period's b efficiency measured
+  in data at the chosen working point (4g; close to 0.38 by construction). rho = max(1, rho_D),
+  where rho_D is the DELSIM signal tag efficiency at that working point divided by eps (4e).
+  Since v0.11 the signal tag efficiency is `dimusel_exact.tag_eff_selected` of `sigana.py`
+  0.3.0 (4e step 7): the tag efficiency of exactly the simulated signal events whose pair
+  enters T or U. v0.10's `hemi_btag_after_selection_thrust` is reported as a cross-check (D8d).
   A rho below 1 would raise N_U, so rho is never taken below 1 and N_U is never overstated. If
   DELSIM gives no tag efficiency, rho = 1, stated as an assumption. The same rho is assumed for
   ALEPH; with that, N_T does not depend on rho.
 - Statistics: as 5b, with mu in place of n_s. Discovery q0 and Z0; asymptotic CLs upper limit on
   mu, with sigma from the background-only Asimov set of the joint fit; toys if N_T + N_U < 10.
   Outcomes, with the labels of section 5: EXCLUDED (upper limit on mu below 1), COMPATIBLE
-  (2 Delta ln L < 1 at mu = 1 and Z0 >= 2), INCONCLUSIVE (anything else).
+  (2 Delta ln L < 1 at mu = 1 and Z0 >= 2), INCONCLUSIVE (anything else), each under both ALEPH
+  readings (5f).
 
 **How tests A and B are read together (fixed now).** Both are always reported.
 - B EXCLUDED: "an ALEPH-sized boson produced with b quarks is excluded at 95 % CL by DELPHI".
@@ -619,11 +666,12 @@ charm and misidentified hadrons add. Fitting both together is therefore much mor
   confirmation, not as a discovery.
 - A COMPATIBLE and B INCONCLUSIVE: reported as such, with no claim of a new particle.
 
-**Hand forecast (before any job; asymptotic formulas of 5b).** 1994-95, scenario S2 of 5c
-(k = 0.84, r = 0.8): N_T = 21.7, N_U = 35.4; tagged background about 980 pairs in 15-50 GeV.
-With sigma(n_s) about 13 events in T (5c), Z0 for an ALEPH-sized signal is about 1.67 in T alone.
-U has background f_u x 1.63 x T's, where f_u >= 1 counts charm and misidentified hadrons. Then
-sigma_U is about 13 sqrt(1.63 f_u) and the joint Z0 is about sqrt(Z_T^2 + Z_U^2):
+**Hand forecast (before any job; asymptotic formulas of 5b; nominal ALEPH reading).** 1994-95,
+scenario S2 of 5c (k = 0.84, r = 0.8): N_T = 21.7, N_U = 35.4; tagged background about 980 pairs
+in 15-50 GeV. With sigma(n_s) about 13 events in T (5c), Z0 for an ALEPH-sized signal is about
+1.67 in T alone. U has background f_u x 1.63 x T's, where f_u >= 1 counts charm and
+misidentified hadrons. Then sigma_U is about 13 sqrt(1.63 f_u) and the joint Z0 is about
+sqrt(Z_T^2 + Z_U^2):
 
 | scenario | Z0 test A | Z0 test B | median limit A | median limit B | P(EXCLUDED, mu = 0) A | B |
 |---|---|---|---|---|---|---|
@@ -634,7 +682,8 @@ sigma_U is about 13 sqrt(1.63 f_u) and the joint Z0 is about sqrt(Z_T^2 + Z_U^2)
 
 (Median limit = 1.96 / Z0. P(EXCLUDED | mu = 0) is from the asymptotic CLs condition
 1 - Phi(Z0 - u) < 0.05 Phi(u) for u = mu_hat / sigma >= 0, and its q~ > q_A branch for u < 0.)
-If ALEPH's signal is real, test B on 1992-95 would expect about 3.3 sigma.
+If ALEPH's signal is real, test B on 1992-95 would expect about 3.3 sigma. Under the two-reading
+rule of 5f, see the table there.
 
 **Job `dimu-combcast-v1` (filed 2026-11-17).** `stats/test_dimucomb.py` (8 tests: the yield
 rule; single-category equality with `dimustat` for the likelihood, gradient and Asimov sigma;
@@ -648,7 +697,7 @@ shape is a power law m^-1, whose density near 30 GeV (about 27 pairs/GeV in C2's
 category) is close to the Pythia-based 29/GeV of 5c. Its non-b part is a softer m^-3. The
 ratio of B to A, not the absolute level, is what this job is for.
 
-**Expectations written before it runs:**
+**Expectations written before it runs** (nominal reading, graded as written):
 - G1: C2 Asimov median limit ratio (B over A) between 0.60 and 0.80 (hand: 0.69).
 - G2: C2 toys at mu = 0: P(EXCLUDED) for A between 0.25 and 0.55 (hand 0.41); for B between
   0.60 and 0.85 (hand 0.73).
@@ -663,6 +712,75 @@ If G1-G4 hold, test B is the more sensitive primary test, and plan v1.0 states i
 limits next to test A's. If they fail, the cause is found before v1.0 (a code error, or an
 error in the hand estimate) and reported.
 
+## 5f. The expected signal N_exp, exactly (new in v0.11; code `analysis/nexp.py`)
+
+**What mu = 1 means.** The signal rate per produced hadronic Z decay that ALEPH's fitted 32.31
+events imply, given ALEPH's efficiencies, times the number of hadronic Z decays DELPHI
+produced, times DELPHI's efficiency for the same signal model:
+
+    R_A       = N_sig,A / (N_had,A / eff_had,A) / eff_sig,A
+    eff_sig,A = A_gen x eff_mu,A^2 x eff_b,A
+    N_Z,D(p)  = N_had,D(p) / eff_had,D(p)                        for each period p
+    S_D(p)    = R_A x N_Z,D(p) x eff_sel,D(p)                    signal pairs before the tag
+    N_T       = sum_p S_D(p) x eps_D(p)
+    N_U       = sum_p S_D(p) x eps_D(p) x (1 - eps_D(p) rho) / (eps_D(p) rho)
+
+| symbol | value or source |
+|---|---|
+| N_sig,A | 32.31 (arXiv:1610.06536 v9) |
+| N_had,A | 1.9M ("nominal" reading) or 2.2M ("low" reading), see below |
+| eff_had,A | 0.9748, ALEPH's charged-track hadronic selection (hep-ex/9904007, table 1; the archived-data paper uses the "standard ALEPH hadronic criteria") |
+| eff_mu,A, eff_b,A | 0.86 per muon, 0.38 (arXiv:1610.06536) |
+| A_gen | generator-level acceptance of the same simulated signal events: both muons p > 2.5 GeV and abs(cos theta) < 0.95, at least 5 charged, visible missing momentum < 18 GeV, 15-50 GeV (`sigana` `generator_level.f_and_m_15_50`) |
+| N_had,D(p) | the data cut flow's "hadronic" count of `dimusel.py` for period p (production, 4h) |
+| eff_had,D(p) | "hadronic" over "events" in the same program's cut flow on that period's KK2f Z -> q qbar simulation, same configuration (P6) |
+| eff_sel,D(p) | `sigana` 0.3.0 `dimusel_exact.eff_sel` with that period's configuration (4e step 7; 1992-93 as in 4e) |
+| eps_D(p) | `btagcal.py` b efficiency at the chosen grid point (4g, 4h) |
+| rho | max(1, rho_D) (5e) |
+
+**Why v0.10's formula was replaced.** v0.10 wrote N_exp = (ALEPH signal rate per hadronic
+event) x (DELPHI hadronic count) x (DELPHI efficiency / ALEPH efficiency). DELPHI's hadronic
+count comes after a thrust-axis cut that keeps about 85 % of hadronic Z decays, and neither
+experiment's hadronic-selection efficiency was divided out. Relative to the correct value, the
+v0.10 number is off by (eff_had,D / t_sig) / eff_had,A, where t_sig is the signal's own
+thrust-cut pass rate if sigana 0.1.0's efficiency (no thrust cut) is used, or by
+eff_had,D / eff_had,A (about -13 %) if an efficiency with the thrust cut is used. With
+t_sig = eff_had,D the first is +2.6 %. The sign was not fixed in advance, which is not acceptable
+for the number that defines "ALEPH-sized". `test_nexp.py` reproduces both cases on a synthetic
+world in which the true answer is known.
+
+**ALEPH's normalisation question (fixed now).** arXiv:1610.06536 reports "about 1.9 M hadronic
+events" after its selection, and a footnote says about 2.2M were expected, which "has to be
+double checked with ALEPH experts". If the missing events are absent from the archive, or the
+loss hits signal and ordinary hadronic events alike, the nominal reading (1.9M) is right. If
+ordinary hadronic events are lost but the signal is not, ALEPH's rate per produced Z is smaller
+by 1.9/2.2, the "low" reading. Nothing public decides this, so:
+- N_T and N_U are computed under both readings (`nexp.py` does both). The low-reading yields are
+  0.864 times the nominal ones, so the fits are run once with the nominal yields and the low
+  reading is the same fit with mu_low = 1.158 mu_nominal (`nexp.mu_low_from_nominal`): the
+  upper limit is 1.158 times larger, the compatibility check is 2 Delta ln L < 1 at
+  mu_nominal = 0.864, and Z0 does not change.
+- The reported label is `nexp.combined_label`: EXCLUDED or COMPATIBLE only if both readings
+  give it; otherwise INCONCLUSIVE. Both readings' numbers are always published.
+- If ALEPH members or the author resolve the footnote before v1.0, the resolved value is used
+  and the change is recorded in the plan with the source. After v1.0 the rule stands.
+
+**Effect on the hand forecast of 5e (asymptotic, before any job).** EXCLUDED now needs the
+nominal limit below 0.864. Test B: 1994-95 with f_u = 1.5, median limit 0.81 -> 0.94 and
+P(EXCLUDED | mu = 0) 0.73 -> 0.57; 1992-95 with f_u = 1.5, median limit 0.59 -> 0.68 and
+P(EXCLUDED | mu = 0) 0.95 -> 0.88. Test A: median limits 1.17 -> 1.35 (1994-95) and
+0.85 -> 0.98 (1992-95). An ALEPH-sized signal under the low reading would give test B on
+1992-95 about 2.9 sigma instead of 3.3. The two-reading rule costs some power but removes an
+ambiguity that ALEPH's own paper flags; it makes 1992-93 (rule 5d) and test B more important.
+
+**Code.** `analysis/nexp.py` (pure Python): `rate_per_z`, `n_z_delphi`, `period_yields`,
+`totals` (both readings, summed over periods), `mu_low_from_nominal`, `combined_label`, and
+`old_v010_formula`, kept only to document the bias. Tests (`python -m unittest -v test_nexp`,
+10): ALEPH efficiency arithmetic; the ratio of the readings; DELPHI's produced-Z count; closure
+on a synthetic world with known rate, hadronic efficiencies and signal efficiency; rho leaves
+N_T unchanged and lowers N_U, rho < 1 and eps rho >= 1 are refused; period sums; the mu
+conversion; the label rule; the size of v0.10's bias; the command line.
+
 ## 6. Steps and status
 
 | step | status |
@@ -673,7 +791,8 @@ error in the hand estimate) and reported.
 | skelana ntuple writer (`ntuple/`) + validation run 1 (section 4d) | job `dimu-ntuple-v1` filed 2026-11-17, waiting |
 | statistics code + sensitivity forecast (`stats/`, 5b-5c) | job `dimu-forecast-v1` filed 2026-11-17, waiting |
 | signal through DELSIM: resolution and efficiency (`delsim/`, 4e) | job `delsim-signal-v1` filed 2026-11-17, waiting |
-| signal hemisphere-tag efficiency for rho_D (`sigana.py` 0.2.0, 4e step 6, D7) | code published in v0.10; tests in job `sigana-tests-v1`; rerun on the DELSIM output after it returns |
+| signal hemisphere-tag efficiency for rho_D (`sigana.py` 0.2.0, 4e step 6, D7) | code published in v0.10; tests in job `sigana-tests-v1` |
+| signal efficiency with dimusel's own selection (`sigana.py` 0.3.0, 4e step 7, D8) and the exact N_exp (`analysis/nexp.py`, 5f) | code published in v0.11; tests in job `sigana3-tests-v1`; rerun on the DELSIM output after it returns |
 | analysis stage with blinding in code (`analysis/`, 4f) and b-tag calibration (4g) | job `dimusel-tests-v2` filed 2026-11-17, waiting; the repository's test gate passed the v0.7 code before it was committed |
 | 1992-93 inputs identified; per-period cuts in code (4j, dimusel 0.3.0, btagcal 0.2.0) | done 2026-11-17 (v0.8) |
 | validation run 2 on 1992-93 (4j, W1-W5) | job `dimu-val9293-v1` filed 2026-11-17, waiting |
@@ -690,6 +809,9 @@ error in the hand estimate) and reported.
 - CMS Collaboration, JHEP 11 (2018) 161, arXiv:1808.01890.
 - LHCb Collaboration, LHCb-PAPER-2020-013.
 - ATLAS Collaboration, JHEP 06 (2026) 165, arXiv:2601.21361.
+- ALEPH Collaboration, "Electroweak results from the Z resonance cross-sections and leptonic
+  forward-backward asymmetries with the ALEPH detector", hep-ex/9904007 (hadronic selection
+  efficiencies, table 1).
 - G. Cowan, K. Cranmer, E. Gross, O. Vitells, Eur. Phys. J. C 71 (2011) 1554, arXiv:1007.1727.
 - E. Gross, O. Vitells, Eur. Phys. J. C 70 (2010) 525, arXiv:1005.1891.
 - M. Cacciari, G. P. Salam, G. Soyez, JHEP 04 (2008) 063 (anti-kt), arXiv:0802.1189.
