@@ -1,13 +1,14 @@
-# Analysis plan v0.3: does DELPHI see ALEPH's 30 GeV dimuon excess?
+# Analysis plan v0.4: does DELPHI see ALEPH's 30 GeV dimuon excess?
 
 MV2 of Munim, Inc. (mv2@munimtech.com). v0.1 written 2026-11-17 06:58 UTC; v0.2 08:30 UTC;
-v0.3 09:45 UTC. Made with AI agents working in MV2's name. This is a plan, not a result: as of
-v0.3, no DELPHI dimuon mass has been looked at. Not a DELPHI Collaboration result; DELPHI and
-CERN do not endorse it. Text CC BY 4.0, code Apache-2.0.
+v0.3 09:45 UTC; v0.4 10:50 UTC. Made with AI agents working in MV2's name. This is a plan, not a
+result: as of v0.4, no DELPHI dimuon mass has been looked at. Not a DELPHI Collaboration result;
+DELPHI and CERN do not endorse it. Text CC BY 4.0, code Apache-2.0.
 
-Changes from v0.2: section 4c (the ntuple: exactly which DELPHI quantities are written) and
-section 4d (expectations for the first validation run, written before it runs). Section 6
-updated. The blinding in section 5 is unchanged.
+Changes from v0.3: section 5b (the exact statistical procedure, with code in `stats/`), section
+5c (a sensitivity forecast with expectations written before it runs) and section 5d (a data-scope
+rule fixed now: if DELPHI 1994-95 alone is underpowered, 1992-93 joins before unblinding).
+Section 6 updated. The blinding in section 5 is unchanged.
 
 ## 1. The question
 
@@ -46,26 +47,23 @@ muons would be the most important particle-physics result in years. If it sees n
 ALEPH-sized signal is excluded or disfavoured, closing a nine-year-old anomaly with the only
 dataset that can test it directly. Both outcomes are publishable.
 
-## 2. Rough sensitivity (to be replaced by simulation)
+## 2. Rough sensitivity (replaced by the forecast of 5c, then by simulation)
 
 ALEPH's signal rate is 32.3 / 1.9M = 1.7e-5 per hadronic Z after its selection. DELPHI
 1994 (short94_c2, 46 pb^-1, about 1.2M events after a standard hadronic selection) plus 1995
 at the peak (short95_d2, 15.1 pb^-1, about 0.4M) is about 1.6M hadronic events (numbers from
-arXiv:2510.18762). With DELPHI efficiencies equal to ALEPH's this gives about 27 signal
-events; adding 1992-1993 roughly doubles that. ALEPH's background was about 1,457 pairs in
-15-50 GeV, so with a resolution near 0.75 GeV and a 1.8 GeV width a window of about +-2.5 GeV
-holds about 15-20 % of the background. That is roughly 220-290 pairs for ALEPH-sized
-background, giving S/sqrt(B) of about 1.6-1.8 sigma for 1994-95 (27 / sqrt(219 to 291))
-and about 2.2-2.6 sigma with 1992-95 (54 / sqrt(438 to 582)). These numbers are only for
-planning. The real expectation comes from DELPHI's own simulation of a signal sample
-(section 4), and is pre-registered before unblinding.
+arXiv:2510.18762, whose selection includes a thrust-axis cut of 30-150 degrees; 1995 also has
+9.1 and 9.4 pb^-1 off peak). With DELPHI efficiencies equal to ALEPH's this gives about 27
+signal events. The 1991-1993 data are in the open release too, taken with the older
+three-layer single-sided vertex detector (arXiv:2510.18762 sec. 4); adding 1992-1993 roughly
+doubles the sample. A hand estimate (section 5c) gives a median expected 95 % CLs limit of
+about 1.2 times the ALEPH-sized yield for 1994-95 alone, and about 0.9 for 1992-95.
 
 ## 3. Data and software (public, CC0, cite the DOIs)
 
 - Real data: `short94_c2` (doi:10.7483/OPENDATA.DELPHI.0XNE.G96F; CERN Open Data record 81431,
   429 files of 41-100 MB, `/eos/opendata/delphi/collision-data/Y13709/` and `Y13710/`);
-  `short95_d2` (doi:10.7483/OPENDATA.DELPHI.K4LR.4PQ4); 1992-1993 short DSTs if the vertex
-  detector configuration allows a comparable b-tag.
+  `short95_d2` (doi:10.7483/OPENDATA.DELPHI.K4LR.4PQ4); 1992-1993 short DSTs (see 5d).
 - Simulation: KK2f + PYTHIA Z -> q qbar (`/eos/opendata/delphi/simulated-data/cern/kk2f4146/
   <detector version>/91.25/kk2f4146_qqpy_91.25_*.sdst`; the 1994 version is picked by the job)
   and the 1995 equivalent.
@@ -92,9 +90,9 @@ planning. The real expectation comes from DELPHI's own simulation of a signal sa
    e-mu, and opposite-sign mumu with the b-tag inverted. Also e+e- as a second channel.
 5. Suppressing semileptonic cascades as ALEPH did (missing momentum below 18 GeV;
    both muons consistent with the primary vertex).
-6. Background: (a) a data-driven e-mu template corrected for the e/mu efficiency ratio,
-   as ALEPH did; (b) a smooth parametric fit; (c) DELPHI q qbar simulation. The spread
-   between them is taken as a systematic uncertainty.
+6. Background: (a) the smooth parametric fit of section 5b (primary); (b) a data-driven e-mu
+   template corrected for the e/mu efficiency ratio, as ALEPH did; (c) DELPHI q qbar
+   simulation. The spread between them is taken as a systematic uncertainty.
 7. Signal: Breit-Wigner(30.40, 1.78 GeV) convolved with DELPHI's simulated dimuon mass
    resolution.
 
@@ -132,7 +130,7 @@ a second, model-motivated selection with both muons away from jets. There the b 
 is small, so DELPHI could be more sensitive to a real boson than an ALEPH-style replica. Any
 such selection will be fixed in v1.0, before unblinding.
 
-## 4c. The ntuple (`ntuple/`, new in v0.3)
+## 4c. The ntuple (`ntuple/`, v0.3)
 
 A skelana USER02 routine (`ntuple/mv2user02.car`, Fortran, Apache-2.0) writes, after `PSBEG`:
 
@@ -183,7 +181,7 @@ be limited by statistics; this will be reported as such.
   efficiency) and the statistical tests below.
 - Allowed before unblinding: all control samples, the opposite-sign b-tagged spectrum outside
   26-35 GeV, simulation, and event counts that do not reveal the window.
-- **Primary test (fixed hypothesis):** extended unbinned likelihood fit with m = 30.40 GeV and
+- **Primary test (fixed hypothesis):** extended likelihood fit with m = 30.40 GeV and
   Gamma = 1.78 GeV fixed. Report the fitted yield mu_hat and its uncertainty in units of
   N_exp. Outcomes: "ALEPH-sized signal excluded at 95 % CL" (upper limit below N_exp),
   "compatible with ALEPH" (N_exp inside the 68 % interval and background-only rejected at
@@ -193,6 +191,72 @@ be limited by statistics; this will be reported as such.
   the isolated-muon selection of section 4b.
 - Everything is published whatever the outcome, including a null or inconclusive result.
 
+## 5b. The statistical procedure, exactly (new in v0.4; code `stats/dimustat.py`)
+
+- **Histogram**: opposite-sign dimuon masses in 15-50 GeV in 700 bins of 50 MeV (at a mass
+  resolution of 0.3-0.75 GeV this is equivalent to the unbinned fit of v0.3).
+- **Signal**: Voigt profile (Breit-Wigner of width Gamma convolved with a Gaussian of width
+  sigma), truncated to 15-50 GeV; the yield n_s counts signal events in 15-50 GeV, as ALEPH's
+  32.3 does. Primary: m = 30.40 GeV, Gamma = 1.78 GeV, sigma = DELPHI's simulated dimuon mass
+  resolution at 30 GeV (until simulation exists: ALEPH's sigma = sqrt(6e-4) m = 0.745 GeV).
+- **Background**: f(m) proportional to exp(sum_{k=1..n} a_k P_k(t)), with P_k the Legendre
+  polynomials and t = ln m mapped linearly onto [-1, 1] over 15-50 GeV. n = 1 is a pure power
+  law, ALEPH's exp(-c0 ln x) cross-check form.
+- **Degree rule (fixed now)**: fit the background-only model to the sidebands 15-26 and
+  35-50 GeV only, with n = 1, 2, ... 5; take the first n for which adding one more term improves
+  -2 ln L by less than 3.84 (chi2 with one degree of freedom, 95 %). The window is never
+  used to choose n.
+- **Statistics**: extended Poisson likelihood with the background normalisation and shape
+  free. Discovery: q0 (one-sided), Z0 = sqrt(q0). Limits: q~_mu with asymptotic CLs (Cowan,
+  Cranmer, Gross, Vitells, EPJC 71 (2011) 1554, eqs. 65-66), sigma from the background-only
+  Asimov set. 68 % interval for the "compatible" outcome: 2 Delta ln L < 1 at n_s = N_exp.
+  If the final N_exp gives fewer than 10 expected signal events, the limit will also be
+  computed with toys and the toy value is quoted.
+- **Scan**: masses 16-49 GeV in steps of 0.25 GeV, Gamma fixed at 1.78 GeV, sigma = resolution
+  at each mass; global significance from background-only toys and the Gross-Vitells
+  upcrossing formula, both reported.
+
+## 5c. Sensitivity forecast (job `dimu-forecast-v1`): expectations written before it runs
+
+`stats/forecast.py` draws toy data from a generator-level Pythia 8 Z -> b bbar opposite-sign
+dimuon shape (both muons p > 2.5 GeV, |cos theta| < 0.95, at least 5 charged, visible missing
+momentum < 18 GeV, momenta smeared by sigma(1/p) = 0.0006 (+) 0.008/p GeV^-1), scaled to ALEPH's
+1457 background pairs times k r. Here k is DELPHI's hadronic-Z count over ALEPH's 1.9M
+(0.84 for 1994-95 peak data, 1.6 for 1992-95) and r is DELPHI's selection efficiency over
+ALEPH's (0.6, 0.8, 1.0; the background is assumed to scale the same way). Signal toys inject
+mu N_exp events with N_exp = 32.31 k r and mu = 0, 0.66 (ALEPH's yield minus one standard
+deviation) or 1. Every toy goes through the full procedure of 5b, including the degree rule.
+Scenarios: S1-S3 (1994-95, r = 1.0, 0.8, 0.6), S4 (1992-95, r = 0.8), S5 (S2 with a 1.2 %
+mass resolution), S6 (S2 with an exponential background instead of the Pythia shape).
+
+A hand estimate (local background density about 29 pairs/GeV near 30 GeV for S2, Voigt FWHM
+2.9 GeV, 10-20 % inflation from the free background shape) gives sigma(n_s) of about 13 events
+for S2, against N_exp = 21.7. Expectations, written before the job runs:
+
+- F1: S2 median expected CLs limit between 0.9 and 1.6 N_exp; S2 probability of excluding an
+  ALEPH-sized signal when there is none, P(EXCLUDED | mu = 0), between 0.25 and 0.55.
+- F2: S2 Asimov Z0 for an ALEPH-sized signal between 1.2 and 2.2.
+- F3: S4 (1992-95) median limit 0.6-0.85 times S2's (statistics alone give 0.72).
+- F4: for S2, a local Z of 3 at an arbitrary mass corresponds to a global Z between 1.6 and 2.4.
+- F5: the degree chosen most often by the rule has a spurious signal below 0.3 sigma on the
+  Pythia shape.
+- F6: Pythia's opposite-sign pairs in 15-50 GeV per Z -> b bbar event lie below ALEPH's
+  implied 0.93 % per b-tagged event (1457 / (1.9M x 0.216 x 0.38)), since ALEPH's sample also
+  contains misidentified muons; a value above 0.93 % would mean the cuts are not ALEPH-like.
+
+Caveats: the toys use a generator-level background shape and assume DELPHI's background
+scales like its signal efficiency; ALEPH's fitted yield is the value at the most significant
+point and is more likely to be an overestimate of any true signal than an underestimate.
+
+## 5d. Data-scope rule (fixed now, before any DELPHI mass is seen)
+
+If the forecast gives P(EXCLUDED | mu = 0) below 0.5 for 1994-95 in the most likely scenario
+(S2), the analysis is extended to the 1992-1993 short DSTs before unblinding, provided the
+validation checks of 4d pass on them with the older vertex detector (a b-tag efficiency within
+a factor 1.3 of 1994's at the same mistag rate in simulation). If 1992-93 fails validation, the
+analysis proceeds with 1994-95 and the limit is quoted as it comes out. This rule is fixed so
+that the amount of data cannot be chosen after the window is seen.
+
 ## 6. Steps and status
 
 | step | status |
@@ -201,6 +265,7 @@ be limited by statistics; this will be reported as such.
 | feasibility probe (container, xrootd, example build) | job `delphi-probe-v1` filed 2026-11-17, waiting |
 | kinematic study + DELSIM input writer (`xkin/`) | job `xkin-v1` filed 2026-11-17, waiting |
 | skelana ntuple writer (`ntuple/`) + validation run 1 (section 4d) | job `dimu-ntuple-v1` filed 2026-11-17, waiting |
+| statistics code + sensitivity forecast (`stats/`, 5b-5c) | job `dimu-forecast-v1` filed 2026-11-17, waiting |
 | full-data ntuple production (no mass histograms in the window) | after validation |
 | signal simulation through DELSIM | after the probe (needs condition data access) |
 | plan v1.0 frozen, then unblinding | later |
@@ -214,6 +279,8 @@ be limited by statistics; this will be reported as such.
 - CMS Collaboration, JHEP 11 (2018) 161, arXiv:1808.01890.
 - LHCb Collaboration, LHCb-PAPER-2020-013.
 - ATLAS Collaboration, JHEP 06 (2026) 165, arXiv:2601.21361.
+- G. Cowan, K. Cranmer, E. Gross, O. Vitells, Eur. Phys. J. C 71 (2011) 1554, arXiv:1007.1727.
+- E. Gross, O. Vitells, Eur. Phys. J. C 70 (2010) 525, arXiv:1005.1891.
 - DELPHI open data: opendata.cern.ch/docs/delphi-data-release-2024; analysis guide
   opendata.cern.ch/docs/delphi-guide-analysis; first physics use: J. Zhang et al., arXiv:2510.18762.
 - SKELANA common-block meanings as mirrored in github.com/eigen1907/delphi-nanoaod

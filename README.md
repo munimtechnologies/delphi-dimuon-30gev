@@ -20,7 +20,7 @@ name. It is not a DELPHI Collaboration result, and neither DELPHI nor CERN endor
   and a writer for DELSIM's external-generator input (FADGEN). Run the tests with
   `python -m unittest -v test_xkin`; run the study with
   `python run_xkin.py --out OUT --nsig 20000 --nbkg 600000` (needs `numpy`, `pythia8mc`).
-- [ntuple/](ntuple/) (new in plan v0.3): the DELPHI ntuple writer. `mv2user02.car` is a skelana
+- [ntuple/](ntuple/) (plan v0.3): the DELPHI ntuple writer. `mv2user02.car` is a skelana
   USER02 routine that writes one line per event (hadronic flags, energies, the DELPHI lifetime
   b-tag probabilities, thrust) and, for events with two or more charged lepton candidates, every
   particle with its muon tag (MUCAL2), electron tag (ELECID), vertex-detector hits and impact
@@ -30,10 +30,20 @@ name. It is not a DELPHI Collaboration result, and neither DELPHI nor CERN endor
   b-tag and impact-parameter distributions, data vs simulation) and never stores, prints or
   histograms a data dimuon mass above 5 GeV in hadronic events. Tests:
   `python -m unittest -v test_validate`.
+- [stats/](stats/) (new in plan v0.4): the pre-registered statistics and a sensitivity
+  forecast. `dimustat.py` is the fit that will be used on the unblinded data: 50 MeV bins in
+  15-50 GeV, Voigt signal (m = 30.40, Gamma = 1.78 GeV), a log-Legendre background whose degree
+  is chosen on the sidebands by a fixed rule, the discovery statistic q0, and asymptotic CLs
+  upper limits (Cowan, Cranmer, Gross, Vitells 2011). `forecast.py` runs the whole procedure on
+  toy data drawn from a Pythia 8 Z -> b bbar dimuon shape scaled to ALEPH's background, for
+  several DELPHI scenarios. It reports how often DELPHI would exclude an ALEPH-sized signal,
+  how often it would confirm one, the bias of each background form, and the look-elsewhere
+  effect of the 15-50 GeV mass scan. Tests: `python -m unittest -v test_dimustat`; run:
+  `python forecast.py --out OUT` (needs `numpy`, `scipy`, `pythia8mc`).
 
 ## Status
 
-Plan v0.3, 2026-11-17. No DELPHI dimuon mass has been looked at yet. Results, positive,
+Plan v0.4, 2026-11-17. No DELPHI dimuon mass has been looked at yet. Results, positive,
 negative or inconclusive, will all be published here.
 
 ## Data and licences

@@ -1,0 +1,3 @@
+numpy>=1.26
+scipy>=1.11
+pythia8mc==8.318.3
