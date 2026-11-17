@@ -1,13 +1,13 @@
-# Analysis plan v0.2: does DELPHI see ALEPH's 30 GeV dimuon excess?
+# Analysis plan v0.3: does DELPHI see ALEPH's 30 GeV dimuon excess?
 
-MV2 of Munim, Inc. (mv2@munimtech.com). v0.1 written 2026-11-17 06:58 UTC; v0.2 2026-11-17 08:30 UTC.
-Made with AI agents working in MV2's name. This is a plan, not a result: as of v0.2, no
-DELPHI dimuon mass has been looked at. Not a DELPHI Collaboration result; DELPHI and CERN do
-not endorse it. Text CC BY 4.0, code Apache-2.0.
+MV2 of Munim, Inc. (mv2@munimtech.com). v0.1 written 2026-11-17 06:58 UTC; v0.2 08:30 UTC;
+v0.3 09:45 UTC. Made with AI agents working in MV2's name. This is a plan, not a result: as of
+v0.3, no DELPHI dimuon mass has been looked at. Not a DELPHI Collaboration result; DELPHI and
+CERN do not endorse it. Text CC BY 4.0, code Apache-2.0.
 
-Changes from v0.1: new section 4b (a generator-level kinematic study, `xkin/`, with its
-expectations written down before it runs); section 3 now names the route into the DELPHI
-detector simulation; the blinding in section 5 is unchanged.
+Changes from v0.2: section 4c (the ntuple: exactly which DELPHI quantities are written) and
+section 4d (expectations for the first validation run, written before it runs). Section 6
+updated. The blinding in section 5 is unchanged.
 
 ## 1. The question
 
@@ -62,28 +62,32 @@ planning. The real expectation comes from DELPHI's own simulation of a signal sa
 
 ## 3. Data and software (public, CC0, cite the DOIs)
 
-- Real data: `short94_c2` (doi:10.7483/OPENDATA.DELPHI.0XNE.G96F, about 429 files of about 90 MB);
+- Real data: `short94_c2` (doi:10.7483/OPENDATA.DELPHI.0XNE.G96F; CERN Open Data record 81431,
+  429 files of 41-100 MB, `/eos/opendata/delphi/collision-data/Y13709/` and `Y13710/`);
   `short95_d2` (doi:10.7483/OPENDATA.DELPHI.K4LR.4PQ4); 1992-1993 short DSTs if the vertex
   detector configuration allows a comparable b-tag.
-- Simulation: KK2f + PYTHIA Z -> q qbar, `sh_kk2f4146qqpy_e91.25_c94_2l_c2`
-  (doi:10.7483/OPENDATA.DELPHI.P4BN.GFID) and the 1995 equivalent.
+- Simulation: KK2f + PYTHIA Z -> q qbar (`/eos/opendata/delphi/simulated-data/cern/kk2f4146/
+  <detector version>/91.25/kk2f4146_qqpy_91.25_*.sdst`; the 1994 version is picked by the job)
+  and the 1995 equivalent.
 - Signal simulation: events from `xkin/` (section 4b), hadronised with Pythia 8 and written
   in DELSIM's external-generator format (FADGEN, `xkin/fadgen.py`, following the layout of
   `hepmc2fadgen.cpp` in github.com/delphi-fullDST-edm4hep/delphi-sim-pipeline), then passed
   through DELSIM with `runsim -VERSION v94c -EBEAM 45.594 -gext` (two-pass title with
   `LUDECV TRUE` so DELSIM uses the generator's decay vertices).
 - Data policy: doi:10.7483/OPENDATA.DELPHI.0X8O.FBUH.
-- Software: DELPHI container `gitlab-registry.cern.ch/delphi/deployment/delphi/al9_64_xrd`
-  (or the delphi-sim image), skelana, data read over xrootd from eospublic.cern.ch.
+- Software: DELPHI container `gitlab-registry.cern.ch/delphi/deployment/delphi/al9_64_xrd`,
+  skelana built from the stock `dump` example with MV2's USER02 (`ntuple/`), data read over
+  xrootd from eospublic.cern.ch.
 
 ## 4. Analysis outline (selection to be frozen before unblinding)
 
-1. Hadronic Z: DELPHI standard selection (at least 7 good charged tracks, total energy at least
-   half of sqrt(s), thrust axis 30-150 degrees), as in arXiv:2510.18762.
+1. Hadronic Z: DELPHI standard selection (team-4 hadronic tag IHAD4, at least 5-7 good charged
+   tracks, total energy at least half of sqrt(s), thrust axis 30-150 degrees), as in
+   arXiv:2510.18762.
 2. b-tag: DELPHI lifetime b-tag (AABTAG), event or hemisphere probability; working point
    chosen on simulation for about 35-40 % b efficiency, close to ALEPH's.
-3. Muons: DELPHI standard muon identification (MUFLAG, "standard" or "tight"), p > 2.5 GeV,
-   |cos theta| < 0.95, track impact parameters close to the primary vertex.
+3. Muons: DELPHI standard muon identification (MUFLAG/MUCAL2, "standard" or "tight"),
+   p > 2.5 GeV, |cos theta| < 0.95, track impact parameters close to the primary vertex.
 4. Pairs: all opposite-sign mu+ mu- pairs, plus the controls: same-sign mumu, opposite-sign
    e-mu, and opposite-sign mumu with the b-tag inverted. Also e+e- as a second channel.
 5. Suppressing semileptonic cascades as ALEPH did (missing momentum below 18 GeV;
@@ -94,7 +98,7 @@ planning. The real expectation comes from DELPHI's own simulation of a signal sa
 7. Signal: Breit-Wigner(30.40, 1.78 GeV) convolved with DELPHI's simulated dimuon mass
    resolution.
 
-## 4b. Kinematic study: would a real boson look like ALEPH's excess? (xkin, new in v0.2)
+## 4b. Kinematic study: would a real boson look like ALEPH's excess? (xkin, v0.2)
 
 ALEPH reports (arXiv:1610.06536, sec. 4.2) that "in all cases one of the two muons from
 di-muons is closer than 15 degrees to one of the leading jets", that the other muon-jet angle is
@@ -128,6 +132,49 @@ a second, model-motivated selection with both muons away from jets. There the b 
 is small, so DELPHI could be more sensitive to a real boson than an ALEPH-style replica. Any
 such selection will be fixed in v1.0, before unblinding.
 
+## 4c. The ntuple (`ntuple/`, new in v0.3)
+
+A skelana USER02 routine (`ntuple/mv2user02.car`, Fortran, Apache-2.0) writes, after `PSBEG`:
+
+- **Every event** ('E' line): run, event, IHAD4 (team-4 hadronic tag), NCTR4, NCTRK, NVECP,
+  number of lepton candidates; ECMAS, ECHAR, EMNEU, EHNEU; the AABTAG probabilities
+  QBTPRN, QBTPRP, QBTPRS for hemisphere 1, hemisphere 2 and the whole event (negative-, positive-
+  and all-impact-parameter tracks); the b-tag thrust axis and thrust value QBTTHR(1..4).
+- **Events with at least two charged lepton candidates** of p > 2 GeV (any MUCAL2 muon tag
+  KMUID(1) > 0, or ELECID tag KELID(1) >= 3): every particle ('P' lines) with charge, lock word
+  LVLOCK, KMUID(1) and KMUID(3) (tag and hit pattern), QMUID(2) (loose refit chi2), KELID(1..2)
+  (electron and conversion tags), vertex-detector R-phi and z hits KTRAC(32..33), the
+  four-momentum VECP(1..4), the perigee words QTRAC(4..5), and the impact parameters to the
+  primary vertex QTRAC(38..39) and to the beam spot QTRAC(40).
+
+The muon "standard" level is bit 2 of KMUID(1); the electron levels are KELID(1) = 2 very
+loose, 3 loose, 4 standard, 5 tight. The routine computes no masses. These word meanings come
+from the public SKELANA common decks (as mirrored in the delphi-nanoaod headers); the first
+validation run (4d) checks them on data and simulation before anything depends on them.
+
+## 4d. Validation run 1 (job `dimu-ntuple-v1`): expectations written before it runs
+
+The job builds the routine in the DELPHI container and runs it on 6 short94_c2 data files
+(every 40th file of Y13709) and up to 4 KK2f Z -> q qbar simulation files. `ntuple/validate.py`
+then reports detector checks. Blinding is stricter than section 5 requires: in data events
+with 5 or more charged tracks no dimuon mass at or above 5 GeV is stored, printed or
+histogrammed.
+
+- V1: the build succeeds and the 'E' lines show IHAD4 > 0 for most events with NCTR4 >= 5.
+- V2: in low-multiplicity data events (NCTR4 <= 4), opposite-sign pairs of muon-tagged tracks
+  above 15 GeV peak at the Z: median mass within 88-94 GeV.
+- V3: in hadronic data events, opposite-sign muon pairs show a J/psi peak: the 3.0-3.2 GeV
+  bins hold more pairs than the mean of the 2.5-2.9 and 3.3-3.7 GeV bins.
+- V4: data and simulation agree to within a factor 1.3 on the fraction of hadronic events with
+  event b-tag probability QBTPRP(3) below 0.01, and on the number of muon-tagged tracks
+  above 2 GeV per hadronic event.
+- V5: the median |d0| of muon candidates (to the primary vertex) is below 0.1 cm in data and
+  simulation.
+
+A failed V-check means the word mapping or the selection is wrong. It will be fixed and the
+validation repeated before any further step. With 6 files (about 1-2 % of 1994), V3 and V4 may
+be limited by statistics; this will be reported as such.
+
 ## 5. Blinding and pre-registration (commitments made in v0.1, unchanged)
 
 - The opposite-sign dimuon mass window **26-35 GeV in b-tagged events stays blind** until
@@ -153,8 +200,8 @@ such selection will be fixed in v1.0, before unblinding.
 | prior-art search | done 2026-11-17 |
 | feasibility probe (container, xrootd, example build) | job `delphi-probe-v1` filed 2026-11-17, waiting |
 | kinematic study + DELSIM input writer (`xkin/`) | job `xkin-v1` filed 2026-11-17, waiting |
-| skelana ntuple writer (hadronic, b-tag, leptons) + tests on simulation | after the probe |
-| full-data ntuple production (no mass histograms in the window) | after that |
+| skelana ntuple writer (`ntuple/`) + validation run 1 (section 4d) | job `dimu-ntuple-v1` filed 2026-11-17, waiting |
+| full-data ntuple production (no mass histograms in the window) | after validation |
 | signal simulation through DELSIM | after the probe (needs condition data access) |
 | plan v1.0 frozen, then unblinding | later |
 
@@ -167,7 +214,9 @@ such selection will be fixed in v1.0, before unblinding.
 - CMS Collaboration, JHEP 11 (2018) 161, arXiv:1808.01890.
 - LHCb Collaboration, LHCb-PAPER-2020-013.
 - ATLAS Collaboration, JHEP 06 (2026) 165, arXiv:2601.21361.
-- DELPHI open data: opendata.cern.ch/docs/delphi-data-release-2024; first physics use:
-  J. Zhang et al., arXiv:2510.18762.
+- DELPHI open data: opendata.cern.ch/docs/delphi-data-release-2024; analysis guide
+  opendata.cern.ch/docs/delphi-guide-analysis; first physics use: J. Zhang et al., arXiv:2510.18762.
+- SKELANA common-block meanings as mirrored in github.com/eigen1907/delphi-nanoaod
+  (delphi-analysis/include/skelana/*.hpp, GPL-3.0; read, not copied).
 - R. K. Ellis, D. A. Ross, A. E. Terrano, Nucl. Phys. B178 (1981) 421 (massless limit check).
 - DELPHI simulation pipeline: github.com/delphi-fullDST-edm4hep/delphi-sim-pipeline.
