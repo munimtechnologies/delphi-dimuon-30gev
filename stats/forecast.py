@@ -14,6 +14,10 @@ pre-registered procedure of PLAN v0.4 section 5:
 Also: Asimov medians, a spurious-signal table (bias of each background degree on the
 generator shape), and look-elsewhere toys for the 15-50 GeV free-mass scan.
 
+0.1.1 (2026-11-17): fixes a SyntaxError in 0.1.0 (a dict key 'global' was passed as a Python
+keyword argument), which stopped dimu-forecast-v1 before any computation. No logic change:
+scenarios, procedure, seeds and outputs are exactly those of 0.1.0.
+
 MV2 of Munim, Inc. (mv2@munimtech.com). Made with AI agents. Apache-2.0.
 """
 import argparse
@@ -29,6 +33,7 @@ from scipy import stats
 
 import dimustat as ds
 
+VERSION = '0.1.1'
 A = ds.ALEPH
 MUS = (0.0, 0.66, 1.0)  # 0.66 = ALEPH's yield minus one standard deviation (21.4 / 32.3)
 
@@ -156,7 +161,7 @@ def asimov_block(sc, truth):
     sig = ds.signal_template(A['mass'], A['width'], sc['sf'] * A['mass'])
     nu_b = nb * truth
     d, _ = ds.choose_degree(nu_b)
-    md =ds.Model(d, sig=sig)
+    md = ds.Model(d, sig=sig)
     f, tab = ds.make_sigma_fn(md, nu_b, [nexp * x for x in (0.25, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0)])
     bonly, free = ds.fits_free_and_bonly(md, nu_b)
     ul = ds.upper_limit(md, nu_b, f, free, bonly) / nexp
@@ -220,7 +225,7 @@ def main():
     out = os.path.join(a.out, 'forecast')
     os.makedirs(out, exist_ok=True)
     t0 = time.time()
-    res = dict(tool='dimustat forecast 0.1.0', made_by='MV2 of Munim, Inc. (made with AI agents)',
+    res = dict(tool='dimustat forecast ' + VERSION, made_by='MV2 of Munim, Inc. (made with AI agents)',
                aleph_input=A, note='No DELPHI data used. Toys from a generator-level shape.')
 
     # 1. background shape
@@ -302,10 +307,10 @@ def main():
         pg = pl + up1 * math.exp(-(z * z - 1.0) / 2.0)
         gv[str(z)] = dict(p_local=pl, p_global_toys=float(np.mean(zmax >= z)) if lee else None,
                           p_global_gross_vitells=pg, z_global_gv=float(stats.norm.isf(min(pg, 0.5))))
-    res['lee'] = dict(scenario=sc['name'], n_toys=len(lee), mean_upcrossings_z1=float(up1),
-                      zmax_median=float(np.median(zmax)) if lee else None,
-                      zmax_quantiles_50_90_95_99=[float(np.percentile(zmax, q)) for q in (50, 90, 95, 99)] if lee else None,
-                      global=gv)
+    res['lee'] = {'scenario': sc['name'], 'n_toys': len(lee), 'mean_upcrossings_z1': float(up1),
+                  'zmax_median': float(np.median(zmax)) if lee else None,
+                  'zmax_quantiles_50_90_95_99': [float(np.percentile(zmax, q)) for q in (50, 90, 95, 99)] if lee else None,
+                  'global': gv}
     print('LEE', json.dumps(res['lee']), flush=True)
     with open(os.path.join(out, 'lee_toys.json'), 'w') as f:
         json.dump(lee, f)
