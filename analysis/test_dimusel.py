@@ -1,4 +1,4 @@
-"""Tests for dimusel (blinding, categories, cuts, jets, unblind gate).
+"""Tests for dimusel (blinding, categories, cuts, jets, unblind gate, combine).
 MV2 of Munim, Inc. (mv2@munimtech.com). Made with AI agents. Apache-2.0."""
 import gzip
 import json
@@ -13,9 +13,9 @@ MMU = D.MMU
 MEL = D.MEL
 
 
-def e_line(run=1000, evt=1, ihad4=1, nctr4=12, btp3=0.001, thz=0.1):
-    vals = [run, evt, ihad4, nctr4, nctr4, 30, 2, 91.2, 50.0, 20.02,10.0,
-            0.5, 0.5, 0.5, 0.5, 0.5, btp3, 0.5, 0.5, 0.5, 0.9, 0.0, thz, 0.8]
+def e_line(run=1000, evt=1, ihad4=1, nctr4=12, btp3=0.001, thz=0.1, btp1=0.5, btp2=0.5):
+    vals = [run, evt, ihad4, nctr4, nctr4, 30, 2, 91.2, 50.0, 20.02, 10.0,
+            0.5, 0.5, 0.5, btp1, btp2, btp3, 0.5, 0.5, 0.5, 0.9, 0.0, thz, 0.8]
     return "E " + " ".join(str(v) for v in vals)
 
 
@@ -26,11 +26,13 @@ def p_line(run, evt, i, q, px, py, pz, e, kmu1=0, kel1=0, d0=0.01, z0=0.02):
 
 
 def pair_momenta(m, p=20.0, mass=MMU, mass2=None):
-    """Two tracks of momentum p in the x-y plane with invariant mass m."""
+    """Two tracks of momentum p in the x-y plane with invariant mass m (needs m < about 2p)."""
     m2 = mass if mass2 is None else mass2
     e1 = math.sqrt(p * p + mass * mass)
     e2 = math.sqrt(p * p + m2 * m2)
     cth = (mass * mass + m2 * m2 + 2 * e1 * e2 - m * m) / (2 * p * p)
+    if abs(cth) > 1.0:
+        raise ValueError("mass %.3f GeV is not reachable with two %.1f GeV tracks" % (m, p))
     sth = math.sqrt(max(0.0, 1 - cth * cth))
     return (p, 0.0, 0.0), (p * cth, p * sth, 0.0)
 
@@ -81,11 +83,14 @@ class TestParse(unittest.TestCase):
         self.assertIsNone(D.parse_p("P ***"))
 
     def test_pair_mass(self):
-        for m in (3.1, 20.02,30.4, 45.0):
-            a, b = pair_momenta(m)
+        # v0.1 of this test asked for 45 GeV from two 20 GeV tracks (maximum 40 GeV): fixed
+        for m in (3.1, 20.02, 30.4, 45.0):
+            a, b = pair_momenta(m, p=max(20.0, 0.6 * m))
             ta = D.parse_p(p_line(1, 1, 1, 1, *a, 0.0))
             tb = D.parse_p(p_line(1, 1, 2, -1, *b, 0.0))
             self.assertAlmostEqual(D.pair_mass(ta, tb, MMU, MMU), m, places=4)
+        with self.assertRaises(ValueError):
+            pair_momenta(45.0, p=20.0)
 
 
 class TestBlinding(Base):
@@ -143,7 +148,7 @@ class TestBlinding(Base):
         with tempfile.TemporaryDirectory() as d:
             p = os.path.join(d, "PLAN.md")
             with open(p, "w") as fh:
-                fh.write("# Analysis plan v0.5: does DELPHI see ALEPH's 30 GeV dimuon excess?\n")
+                fh.write("# Analysis plan v0.7: does DELPHI see ALEPH's 30 GeV dimuon excess?\n")
             with self.assertRaises(SystemExit):
                 D.check_unblind_plan(p)
             with open(p, "w") as fh:
@@ -153,7 +158,7 @@ class TestBlinding(Base):
 
 class TestCuts(Base):
     def test_pmiss_veto(self):
-        r = self.run_sel([(e_line(), make_event(1000, 1, 20.02,balance=False))])
+        r = self.run_sel([(e_line(), make_event(1000, 1, 20.02, balance=False))])
         self.assertEqual(r["cutflow"]["pmiss_pass"], 0)
         self.assertEqual(r["categories"]["os_mumu_btag"]["fine"][fine_bin(20.02)], 0)
 
@@ -175,12 +180,27 @@ class TestCuts(Base):
         self.assertEqual(r["categories"]["os_mumu_antitag"]["fine"][fine_bin(20.02)], 1)
         self.assertEqual(r["cutflow"]["antitag"], 1)
 
+    def test_hemisphere_btag_mode(self):
+        ev = [(e_line(evt=1, btp3=0.5, btp1=0.001), make_event(1000, 1, 20.02)),
+              (e_line(evt=2, btp3=0.001, btp1=0.5, btp2=-1.0), make_event(1000, 2, 21.02))]
+        r = self.run_sel(ev, cfg={"btag_mode": "hemi"})
+        f = r["categories"]["os_mumu_btag"]["fine"]
+        self.assertEqual(f[fine_bin(20.02)], 1)      # hemisphere 1 tagged
+        self.assertEqual(f[fine_bin(21.02)], 0)      # event word ignored in hemi mode
+        self.assertEqual(r["categories"]["os_mumu_untagged"]["fine"][fine_bin(21.02)], 1)
+        self.assertEqual(r["cutflow"]["antitag"], 0)  # one hemisphere invalid: no anti-tag
+        r2 = self.run_sel(ev)                         # default event mode
+        self.assertEqual(r2["categories"]["os_mumu_btag"]["fine"][fine_bin(21.02)], 1)
+        self.assertEqual(r2["categories"]["os_mumu_btag"]["fine"][fine_bin(20.02)], 0)
+        with self.assertRaises(ValueError):
+            D.Selector({"btag_mode": "jet"})
+
     def test_isolation(self):
         # a 10 GeV neutral 5 degrees from muon 1 (along +x) makes it non-isolated
         ang = math.radians(5)
         near = (10 * math.cos(ang), 0.0, 10 * math.sin(ang))
         r1 = self.run_sel([(e_line(), make_event(1000, 1, 20.02))], is_data=False)
-        r2 = self.run_sel([(e_line(), make_event(1000, 1, 20.02,extra=(near,)))], is_data=False)
+        r2 = self.run_sel([(e_line(), make_event(1000, 1, 20.02, extra=(near,)))], is_data=False)
         self.assertEqual(r1["categories"]["os_mumu_btag_iso"]["fine"][fine_bin(20.02)], 1)
         self.assertEqual(r2["categories"]["os_mumu_btag_iso"]["fine"][fine_bin(20.02)], 0)
         self.assertEqual(r2["categories"]["os_mumu_btag"]["fine"][fine_bin(20.02)], 1)
@@ -206,16 +226,22 @@ class TestJets(unittest.TestCase):
         self.assertEqual(len(jets), 3)
 
 
+def write_pair(d, tag, run, events):
+    ev = [e_line(run=run, evt=k + 1) for k in range(len(events))]
+    pa = []
+    for k, m in enumerate(events):
+        pa += make_event(run, k + 1, m)
+    with gzip.open(os.path.join(d, "%s_X.al.ev.txt.gz" % tag), "wt") as fh:
+        fh.write("\n".join(ev) + "\n")
+    with gzip.open(os.path.join(d, "%s_X.al.pa.txt.gz" % tag), "wt") as fh:
+        fh.write("\n".join(pa) + "\n")
+
+
 class TestEndToEnd(unittest.TestCase):
     def test_main(self):
         with tempfile.TemporaryDirectory() as d:
-            for tag, run in (("data", 1000), ("mc", -1001)):
-                ev = [e_line(run=run, evt=1), e_line(run=run, evt=2)]
-                pa = make_event(run, 1, 30.42) + make_event(run, 2, 18.02)
-                with gzip.open(os.path.join(d, "%s_X.al.ev.txt.gz" % tag), "wt") as fh:
-                    fh.write("\n".join(ev) + "\n")
-                with gzip.open(os.path.join(d, "%s_X.al.pa.txt.gz" % tag), "wt") as fh:
-                    fh.write("\n".join(pa) + "\n")
+            write_pair(d, "data", 1000, [30.42, 18.02])
+            write_pair(d, "mc", -1001, [30.42, 18.02])
             out = os.path.join(d, "o.json")
             D.main(["--dir", d, "--out", out])
             with open(out) as fh:
@@ -227,6 +253,47 @@ class TestEndToEnd(unittest.TestCase):
             self.assertEqual(mc[fine_bin(30.42)], 1)
             self.assertEqual(res["samples"]["data"]["files"], 1)
             self.assertFalse(res["unblinded"])
+
+    def test_combine(self):
+        with tempfile.TemporaryDirectory() as d:
+            outs = []
+            for k, ms in enumerate(([30.42, 18.02], [18.02, 38.02])):
+                sub = os.path.join(d, "s%d" % k)
+                os.mkdir(sub)
+                write_pair(sub, "data", 1000 + k, ms)
+                write_pair(sub, "mc", -1001 - k, ms)
+                outs.append(os.path.join(d, "o%d.json" % k))
+                D.main(["--dir", sub, "--out", outs[-1]])
+            tot = os.path.join(d, "t.json")
+            D.main(["--combine"] + outs + ["--out", tot])
+            with open(tot) as fh:
+                t = json.load(fh)
+            # a different selection must be refused
+            cfg = os.path.join(d, "cfg.json")
+            with open(cfg, "w") as fh:
+                json.dump({"btag_wp": 0.003}, fh)
+            other = os.path.join(d, "x.json")
+            D.main(["--dir", os.path.join(d, "s0"), "--out", other, "--config", cfg])
+            with open(outs[0]) as fh:
+                r0 = json.load(fh)
+            with open(other) as fh:
+                rx = json.load(fh)
+        dat = t["samples"]["data"]["categories"]["os_mumu_btag"]
+        self.assertTrue(dat["blinded"])
+        self.assertNotIn("n_15_50", dat)
+        self.assertIsNone(dat["fine"][fine_bin(30.42)])
+        self.assertEqual(dat["fine"][fine_bin(18.02)], 2)
+        self.assertEqual(dat["fine"][fine_bin(38.02)], 1)
+        mc = t["samples"]["mc"]["categories"]["os_mumu_btag"]
+        self.assertEqual(mc["n_15_50"], 4)
+        self.assertEqual(t["samples"]["data"]["files"], 2)
+        self.assertEqual(t["samples"]["data"]["cutflow"]["events"], 4)
+        self.assertEqual(t["n_combined"], 2)
+        self.assertFalse(t["unblinded"])
+        with self.assertRaises(ValueError):
+            D.combine_results([r0, rx])
+        with self.assertRaises(SystemExit):
+            D.main(["--combine", "a.json", "--dir", "x", "--out", "y.json"])
 
 
 if __name__ == "__main__":

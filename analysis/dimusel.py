@@ -22,6 +22,9 @@ written (the categories carry no "total" for data). The window opens only with
 --unblind <PLAN.md>, where the file's first line must read "# Analysis plan v1.x"; the
 file's SHA-256 is then recorded in the output.
 Controls (same-sign mumu and all e-mu pairs) and simulation are never blinded.
+
+0.2.0 (plan v0.7): --combine sums the outputs of several runs (production slices). A bin that
+is null in any input stays null; inputs made with different selections are refused.
 """
 import argparse
 import glob
@@ -33,6 +36,7 @@ import os
 import re
 import sys
 
+VERSION = "mv2 dimusel 0.2.0"
 MMU = 0.1056584
 MEL = 0.000511
 WIN_LO, WIN_HI = 26.0, 35.0
@@ -55,8 +59,11 @@ DEFAULTS = dict(
     min_nctr4=5,            # >= 5 good charged tracks (plan 4.1)
     need_ihad4=True,        # team-4 hadronic tag (plan 4.1)
     thrust_cos_max=0.866,   # thrust axis 30-150 degrees (plan 4.1, as arXiv:2510.18762)
-    btag_wp=0.01,           # TBD: event b-tag probability QBTPRP(3) below this = b-tagged
-    antitag_min=0.1,        # inverted b-tag control: QBTPRP(3) above this
+    btag_mode="event",      # "event": QBTPRP(3) < btag_wp; "hemi": either hemisphere
+                            # QBTPRP(1 or 2) < btag_wp (the definition btagcal.py calibrates)
+    btag_wp=0.01,           # TBD: b-tag probability below this = b-tagged
+    antitag_min=0.1,        # inverted b-tag control: probability above this (event: QBTPRP(3);
+                            # hemi: both hemispheres)
     mu_level="any",         # "any" MUCAL2 tag (KMUID(1) > 0) or "standard" (bit 2)
     el_min=4,               # ELECID KELID(1) >= 4 ("standard"); KELID(2) != 0 = conversion
     p_min=2.5,              # lepton momentum (GeV)
@@ -205,6 +212,8 @@ class Selector:
             if unknown:
                 raise ValueError("unknown config keys: %s" % sorted(unknown))
             self.c.update(cfg)
+        if self.c["btag_mode"] not in ("event", "hemi"):
+            raise ValueError("btag_mode must be 'event' or 'hemi'")
         self.unblind = unblind
         self.samples = {}
 
@@ -234,10 +243,19 @@ class Selector:
         cf["hadronic"] += 1
         return True
 
+    def _hemis(self, e):
+        return [x for x in (e["btp1"], e["btp2"]) if 0.0 <= x <= 1.0]
+
     def _btag(self, e):
+        if self.c["btag_mode"] == "hemi":
+            h = self._hemis(e)
+            return bool(h) and min(h) < self.c["btag_wp"]
         return 0.0 <= e["btp3"] < self.c["btag_wp"]
 
     def _antitag(self, e):
+        if self.c["btag_mode"] == "hemi":
+            h = self._hemis(e)
+            return len(h) == 2 and min(h) > self.c["antitag_min"]
         return e["btp3"] > self.c["antitag_min"]
 
     def _fill(self, s, cat, m, is_data):
@@ -337,7 +355,7 @@ class Selector:
             self.process_event(e, parts.get((e["run"], e["evt"])), is_data)
 
     def result(self):
-        out = {"tool": "mv2 dimusel 0.1.0", "config": self.c, "unblinded": self.unblind,
+        out = {"tool": VERSION, "config": self.c, "unblinded": self.unblind,
                "window_gev": [WIN_LO, WIN_HI], "blinded_categories": list(BLINDED),
                "fine_bins": [FINE_LO, FINE_HI, FINE_BW], "coarse_bins": [COARSE_LO, COARSE_HI, COARSE_BW],
                "samples": {}}
@@ -356,6 +374,55 @@ class Selector:
         return out
 
 
+def _sum_lists(a, b):
+    if len(a) != len(b):
+        raise ValueError("histogram lengths differ")
+    return [None if (x is None or y is None) else x + y for x, y in zip(a, b)]
+
+
+def combine_results(results):
+    """Sum dimusel outputs (e.g. one per production slice). Refuses different selections or
+    binnings; a bin that is null (blinded) in any input stays null."""
+    if not results:
+        raise ValueError("nothing to combine")
+    ref = results[0]
+    for r in results[1:]:
+        for k in ("config", "window_gev", "fine_bins", "coarse_bins"):
+            if r[k] != ref[k]:
+                raise ValueError("inputs differ in %s" % k)
+    shas = {r.get("unblind_plan_sha256") for r in results}
+    out = {k: ref[k] for k in ("config", "window_gev", "blinded_categories", "fine_bins", "coarse_bins")}
+    out["tool"] = VERSION
+    out["unblinded"] = all(r["unblinded"] for r in results)
+    out["unblind_plan_sha256"] = shas.pop() if len(shas) == 1 else None
+    out["n_input_files"] = sum(r.get("n_input_files", 0) for r in results)
+    out["n_combined"] = len(results)
+    samples = {}
+    for r in results:
+        for kind, s in r["samples"].items():
+            if kind not in samples:
+                samples[kind] = json.loads(json.dumps(s))
+                continue
+            t = samples[kind]
+            t["files"] += s["files"]
+            for k, v in s["cutflow"].items():
+                t["cutflow"][k] = t["cutflow"].get(k, 0) + v
+            for name, c in s["categories"].items():
+                tc = t["categories"][name]
+                tc["blinded"] = tc["blinded"] or c["blinded"]
+                tc["fine"] = _sum_lists(tc["fine"], c["fine"])
+                tc["coarse"] = _sum_lists(tc["coarse"], c["coarse"])
+    for s in samples.values():
+        for c in s["categories"].values():
+            if c["blinded"] or any(x is None for x in c["fine"]):
+                c["blinded"] = True
+                c.pop("n_15_50", None)
+            else:
+                c["n_15_50"] = sum(c["fine"])
+    out["samples"] = samples
+    return out
+
+
 def is_data_tag(path):
     base = os.path.basename(path).lower()
     return not (base.startswith("mc") or base.startswith("sig"))
@@ -372,24 +439,36 @@ def check_unblind_plan(path):
 
 def main(argv=None):
     ap = argparse.ArgumentParser()
-    ap.add_argument("--dir", action="append", required=True, help="ntuple folder (repeatable)")
+    ap.add_argument("--dir", action="append", default=[], help="ntuple folder (repeatable)")
+    ap.add_argument("--combine", nargs="+", help="dimusel output JSON files to sum")
     ap.add_argument("--out", required=True)
     ap.add_argument("--config", help="JSON file with selection overrides")
     ap.add_argument("--unblind", metavar="PLAN_MD")
     a = ap.parse_args(argv)
-    cfg = None
-    if a.config:
-        with open(a.config) as fh:
-            cfg = json.load(fh)
-    sha = check_unblind_plan(a.unblind) if a.unblind else None
-    sel = Selector(cfg, unblind=bool(sha))
-    files = sorted(set(f for d in a.dir for f in glob.glob(os.path.join(d, "**", "*.ev.txt.gz"),
-                                                              recursive=True)))
-    for f in files:
-        sel.process_file(f, is_data_tag(f))
-    res = sel.result()
-    res["unblind_plan_sha256"] = sha
-    res["n_input_files"] = len(files)
+    if a.combine:
+        if a.dir or a.config or a.unblind:
+            ap.error("--combine takes no --dir, --config or --unblind")
+        rs = []
+        for p in a.combine:
+            with open(p) as fh:
+                rs.append(json.load(fh))
+        res = combine_results(rs)
+    else:
+        if not a.dir:
+            ap.error("--dir or --combine is required")
+        cfg = None
+        if a.config:
+            with open(a.config) as fh:
+                cfg = json.load(fh)
+        sha = check_unblind_plan(a.unblind) if a.unblind else None
+        sel = Selector(cfg, unblind=bool(sha))
+        files = sorted(set(f for d in a.dir for f in glob.glob(os.path.join(d, "**", "*.ev.txt.gz"),
+                                                                  recursive=True)))
+        for f in files:
+            sel.process_file(f, is_data_tag(f))
+        res = sel.result()
+        res["unblind_plan_sha256"] = sha
+        res["n_input_files"] = len(files)
     with open(a.out, "w") as fh:
         json.dump(res, fh)
     summ = {k: {"files": v["files"], "cutflow": v["cutflow"]} for k, v in res["samples"].items()}

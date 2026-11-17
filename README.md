@@ -20,13 +20,15 @@ name. It is not a DELPHI Collaboration result, and neither DELPHI nor CERN endor
   and a writer for DELSIM's external-generator input (FADGEN). Run the tests with
   `python -m unittest -v test_xkin`; run the study with
   `python run_xkin.py --out OUT --nsig 20000 --nbkg 600000` (needs `numpy`, `pythia8mc`).
-- [ntuple/](ntuple/) (plan v0.3): the DELPHI ntuple writer. `mv2user02.car` is a skelana
-  USER02 routine that writes one line per event (hadronic flags, energies, the DELPHI lifetime
-  b-tag probabilities, thrust) and, for events with two or more charged lepton candidates, every
-  particle with its muon tag (MUCAL2), electron tag (ELECID), vertex-detector hits and impact
-  parameters. It writes **no masses**. `run_ntuple.sh` builds it inside the DELPHI container
-  from the stock `dump` example and runs it on 1994 data and Z -> q qbar simulation read over
-  xrootd. `validate.py` makes the detector checks (Z -> mu mu, J/psi -> mu mu, tag rates,
+- [ntuple/](ntuple/) (plan v0.3, production switches in v0.7): the DELPHI ntuple writer.
+  `mv2user02.car` is a skelana USER02 routine that writes one line per event (hadronic flags,
+  energies, the DELPHI lifetime b-tag probabilities, thrust) and, for events with two or more
+  charged lepton candidates, every particle with its muon tag (MUCAL2), electron tag (ELECID),
+  vertex-detector hits and impact parameters. It writes **no masses**. `run_ntuple.sh` builds it
+  inside the DELPHI container from the stock `dump` example and runs it on data and Z -> q qbar
+  simulation read over xrootd; environment switches (`DATA_DIRS`, `DATA_START`, `DATA_STRIDE`,
+  `NDATA`, `NMC`, `SLICE`) select a production slice of 1994 (`Y13709 Y13710`) or 1995
+  (`Y13716`). `validate.py` makes the detector checks (Z -> mu mu, J/psi -> mu mu, tag rates,
   b-tag and impact-parameter distributions, data vs simulation) and never stores, prints or
   histograms a data dimuon mass above 5 GeV in hadronic events. Tests:
   `python -m unittest -v test_validate`.
@@ -45,18 +47,23 @@ name. It is not a DELPHI Collaboration result, and neither DELPHI nor CERN endor
   (`mv2user02s.car`, which keeps every simulated event). `sigana.py` reports DELPHI's dimuon
   mass resolution at 30 GeV, muon-tag and selection efficiencies, and the b-tag response to
   signal. Tests: `python -m unittest -v test_sigana` (needs `numpy`; `fadgen.py` from `xkin/`).
-- [analysis/](analysis/) (new in plan v0.6): `dimusel.py` turns the ntuples into the mass
+- [analysis/](analysis/) (plan v0.6, v0.7): `dimusel.py` turns the ntuples into the mass
   spectra the fit uses: hadronic and b-tag selection, muon and electron identification, the
   cascade veto, an isolated-lepton selection with anti-kt jets, and the signal and control
   categories, in the 50 MeV binning of `stats/`. **The blinding is enforced in the code**: in
   real data no opposite-sign same-flavour pair in 26-35 GeV is ever histogrammed or counted,
-  and the window only opens when the program is handed a plan file marked v1.x. Pure Python,
-  no dependencies. Tests: `python -m unittest -v test_dimusel`; run:
-  `python dimusel.py --dir NTUPLES --out spectra.json [--config cuts.json]`.
+  and the window only opens when the program is handed a plan file marked v1.x.
+  `--combine` sums the outputs of production slices (blinded bins stay blinded; different
+  selections are refused). `btagcal.py` (new in v0.7) measures DELPHI's b-tag efficiency in
+  data with the hemisphere double-tag method of the LEP R_b measurements, from event-level
+  words only, and finds the working point with ALEPH's 38 % b efficiency. Pure Python, no
+  dependencies. Tests: `python -m unittest -v test_dimusel test_btagcal`; run:
+  `python dimusel.py --dir NTUPLES --out spectra.json [--config cuts.json]`,
+  `python btagcal.py --dir NTUPLES --out btagcal.json`.
 
 ## Status
 
-Plan v0.6, 2026-11-17. No DELPHI dimuon mass from real data has been looked at yet. Results,
+Plan v0.7, 2026-11-17. No DELPHI dimuon mass from real data has been looked at yet. Results,
 positive, negative or inconclusive, will all be published here.
 
 ## Data and licences

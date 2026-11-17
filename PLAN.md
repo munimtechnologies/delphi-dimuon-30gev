@@ -1,17 +1,25 @@
-# Analysis plan v0.6: does DELPHI see ALEPH's 30 GeV dimuon excess?
+# Analysis plan v0.7: does DELPHI see ALEPH's 30 GeV dimuon excess?
 
 MV2 of Munim, Inc. (mv2@munimtech.com). v0.1 written 2026-11-17 06:58 UTC; v0.2 08:30 UTC;
-v0.3 09:45 UTC; v0.4 10:50 UTC; v0.5 11:45 UTC; v0.6 12:40 UTC. Made with AI agents working in
-MV2's name. This is a plan, not a result: as of v0.6, no DELPHI dimuon mass from real data has
-been looked at. Not a DELPHI Collaboration result; DELPHI and CERN do not endorse it. Text
-CC BY 4.0, code Apache-2.0.
+v0.3 09:45 UTC; v0.4 10:50 UTC; v0.5 11:45 UTC; v0.6 12:40 UTC; v0.7 13:40 UTC. Made with AI
+agents working in MV2's name. This is a plan, not a result: as of v0.7, no DELPHI dimuon mass
+from real data has been looked at. Not a DELPHI Collaboration result; DELPHI and CERN do not
+endorse it. Text CC BY 4.0, code Apache-2.0.
 
-Changes from v0.5: new section 4f, the analysis stage from ntuple to mass spectra
-(`analysis/dimusel.py`, tested by job `dimusel-tests-v1`). It **tightens the blinding** of
-section 5: in real data every opposite-sign same-flavour category (mumu and ee; b-tagged,
-untagged and anti-tagged) is blind in 26-35 GeV, including the inverted-b-tag mumu control
-that v0.1 allowed. The window can only be opened by the code when given a plan file whose first
-line reads "Analysis plan v1.x". Sections 5 and 6 updated accordingly. Nothing else changed.
+Changes from v0.6:
+- New section **4g**: the b-tag efficiency is measured **in data** by hemisphere double-tagging
+  (the method of the LEP R_b measurements), because the short-DST ntuple carries no generator
+  quark flavour with which to calibrate it on simulation (`analysis/btagcal.py`). The primary
+  b-tag becomes "either thrust hemisphere tagged", the definition that this method calibrates;
+  the event-probability tag of v0.6 stays as a cross-check.
+- New section **4h**: the full-data production plan (1994: `Y13709`, `Y13710`; 1995: `Y13716`,
+  246 files, found 2026-11-17), with expectations P1-P4 written before any production job runs.
+- 4f: `dimusel.py` 0.2.0 adds `--combine` (sums production slices; blinded bins stay null;
+  different selections are refused) and the `btag_mode` switch. A test error in v0.6 was found
+  by review before the test job ran: `test_pair_mass` asked for a 45 GeV pair from two 20 GeV
+  tracks, which cannot exceed 40 GeV. It is fixed, and the test helper now refuses impossible
+  kinematics. Job `dimusel-tests-v2` replaces `dimusel-tests-v1` (which had not run yet).
+- Nothing about the blinding, the statistics or the data scope changed.
 
 ## 1. The question
 
@@ -66,7 +74,9 @@ about 1.2 times the ALEPH-sized yield for 1994-95 alone, and about 0.9 for 1992-
 
 - Real data: `short94_c2` (doi:10.7483/OPENDATA.DELPHI.0XNE.G96F; CERN Open Data record 81431,
   429 files of 41-100 MB, `/eos/opendata/delphi/collision-data/Y13709/` and `Y13710/`);
-  `short95_d2` (doi:10.7483/OPENDATA.DELPHI.K4LR.4PQ4); 1992-1993 short DSTs (see 5d).
+  `short95_d2` (doi:10.7483/OPENDATA.DELPHI.K4LR.4PQ4; record 81502, 246 files, 21.2 GB,
+  3,661,917 events of all classes at 89-94 GeV, `/eos/opendata/delphi/collision-data/Y13716/`);
+  1992-1993 short DSTs (see 5d).
 - Simulation: KK2f + PYTHIA Z -> q qbar (`/eos/opendata/delphi/simulated-data/cern/kk2f4146/
   <detector version>/91.25/kk2f4146_qqpy_91.25_*.sdst`; the 1994 version is picked by the job)
   and the 1995 equivalent.
@@ -86,8 +96,10 @@ about 1.2 times the ALEPH-sized yield for 1994-95 alone, and about 0.9 for 1992-
 1. Hadronic Z: DELPHI standard selection (team-4 hadronic tag IHAD4, at least 5-7 good charged
    tracks, total energy at least half of sqrt(s), thrust axis 30-150 degrees), as in
    arXiv:2510.18762.
-2. b-tag: DELPHI lifetime b-tag (AABTAG), event or hemisphere probability; working point
-   chosen on simulation for about 35-40 % b efficiency, close to ALEPH's.
+2. b-tag: DELPHI lifetime b-tag (AABTAG). Primary (since v0.7): an event is b-tagged if either
+   thrust hemisphere has probability QBTPRP below a working point chosen **in data** by the
+   double-tag method of section 4g, for an event-level b efficiency of 38 %, ALEPH's value.
+   Cross-check: the event probability QBTPRP(3) at the same tagged-event rate.
 3. Muons: DELPHI standard muon identification (MUFLAG/MUCAL2, "standard" or "tight"),
    p > 2.5 GeV, |cos theta| < 0.95, track impact parameters close to the primary vertex.
 4. Pairs: all opposite-sign mu+ mu- pairs, plus the controls: same-sign mumu, opposite-sign
@@ -223,15 +235,17 @@ This is simulation only: no real-data dimuon mass is involved, so blinding does 
 - D6: the 1/p resolution for 15-20 GeV muons is between 0.0005 and 0.0015 GeV^-1.
 
 **What happens next.** The measured resolution replaces ALEPH's sigma in the fit of 5b. The
-efficiency, together with the b-tag working point chosen on the KK2f Z -> b bbar simulation for
-about 38 % b efficiency, gives N_exp = (ALEPH signal rate per hadronic Z) x (DELPHI hadronic
-count) x (DELPHI efficiency / ALEPH efficiency for the same model), with ALEPH's efficiency
-estimated from the generator-level acceptance of the same events times ALEPH's quoted muon (86 %
-per muon) and b-tag efficiencies. If D1 finds no working route, the resolution is taken from
-DELPHI's measured Z -> mu mu and J/psi widths in data (validation 4d) and the efficiency from the
-KK2f simulation's prompt muons, and this is stated as a limitation.
+efficiency, together with the b-tag working point of section 4g, gives N_exp = (ALEPH signal
+rate per hadronic Z) x (DELPHI hadronic count) x (DELPHI efficiency / ALEPH efficiency for the
+same model), with ALEPH's efficiency estimated from the generator-level acceptance of the same
+events times ALEPH's quoted muon (86 % per muon) and b-tag efficiencies. The b-tag factor is the
+data-measured efficiency of 4g; the signal events' own b-tag response from DELSIM (4e step 5)
+checks that the signal's b-tag efficiency matches inclusive Z -> b bbar within its statistics.
+If D1 finds no working route, the resolution is taken from DELPHI's measured Z -> mu mu and
+J/psi widths in data (validation 4d) and the efficiency from the KK2f simulation's prompt muons,
+and this is stated as a limitation.
 
-## 4f. From ntuple to mass spectra (`analysis/dimusel.py`, new in v0.6)
+## 4f. From ntuple to mass spectra (`analysis/dimusel.py`, v0.6; 0.2.0 in v0.7)
 
 One pure-Python program (no dependencies) turns the ntuple into everything the fit of 5b and
 the controls need. It reads one DELPHI file's ntuple at a time, so the full 1994-95 production
@@ -239,8 +253,10 @@ fits in about 1 GB of memory.
 
 - **Hadronic events**: IHAD4 > 0, NCTR4 >= 5, b-tag thrust axis (QBTTHR) at 30-150 degrees
   (|cos| < 0.866; the cut can be switched off if validation shows the axis is not filled).
-- **b-tag**: event probability QBTPRP(3) below a working point (placeholder 0.01; fixed in v1.0
-  from KK2f simulation for about 38 % b efficiency). Anti-tag: QBTPRP(3) > 0.1.
+- **b-tag** (`btag_mode`): "hemi" (primary from v0.7): either hemisphere probability
+  QBTPRP(1 or 2) below the working point of 4g; anti-tag: both hemispheres above 0.1. "event"
+  (cross-check): QBTPRP(3) below a working point; anti-tag QBTPRP(3) > 0.1. The program's
+  default stays "event" until v1.0 fixes the configuration, so earlier jobs are unchanged.
 - **Leptons**: p > 2.5 GeV, |cos theta| < 0.95, |d0| < 0.2 cm and |z0| < 1.0 cm to the primary
   vertex (placeholders until V5 shows the measured spread). Muons: any MUCAL2 tag (or
   "standard"); electrons: ELECID "standard" or better and not tagged as a conversion; a track
@@ -256,6 +272,9 @@ fits in about 1 GB of memory.
 - **Output**: per category, the 700 bins of 50 MeV over 15-50 GeV used by `stats/dimustat.py`
   and 0.5 GeV bins over 0-90 GeV; and the cut flow (event counts after each cut, the hadronic,
   b-tagged and anti-tagged event totals that enter N_exp).
+- **Combining** (0.2.0): `--combine` sums the outputs of production slices. A bin that is null
+  in any input stays null, a category blinded in any input stays blinded, and inputs made with
+  different selections or binnings are refused.
 
 **Blinding in code (tightened in v0.6).** In real data, every opposite-sign same-flavour
 category is blind in [26, 35) GeV: such a pair is dropped at the single place where masses
@@ -265,10 +284,73 @@ allowed the inverted-b-tag mumu control before unblinding: since the b-tag keeps
 38 % of b events, untagged and anti-tagged Z -> b bbar events would carry most of any real
 signal. Same-sign and e-mu pairs and all simulation stay open. The window opens only when the
 program is given a plan file whose first line reads "Analysis plan v1.x"; that file's SHA-256 is
-written into the output. Tests (`python -m unittest -v test_dimusel`, 17 tests, synthetic
+written into the output. Tests (`python -m unittest -v test_dimusel`, 19 tests, synthetic
 events): the window stays hidden for every blinded category and its edges, sidebands and controls
-stay visible, simulation is open, the unblind gate refuses this v0.6 plan, and each cut and the
-jet clustering behave as specified. They run in job `dimusel-tests-v1`.
+stay visible, simulation is open, the unblind gate refuses this v0.7 plan, each cut, both b-tag
+modes and the jet clustering behave as specified, and combining keeps the blinding. They run in
+job `dimusel-tests-v2`.
+
+## 4g. The b-tag efficiency measured in data: hemisphere double-tag (`analysis/btagcal.py`, new in v0.7)
+
+N_exp needs DELPHI's b-tag efficiency, and the working point should match ALEPH's 38 %. The
+short-DST ntuple has no generator-level quark flavour, so instead of calibrating on simulation
+the efficiency is measured in the data themselves, as the LEP R_b measurements did. For each
+hadronic event, each thrust hemisphere h = 1, 2 is tagged if 0 <= QBTPRP(h) < w. With N events,
+f_s = (tagged hemispheres) / 2N and f_d = (events with both hemispheres tagged) / N, a two-class
+model (b, and all other flavours "x") gives
+
+    f_s = R_b e_b + (1 - R_b) e_x
+    f_d = R_b e_b^2 (1 + rho_b) + (1 - R_b) e_x^2,
+
+solved in closed form for the hemisphere efficiencies e_b and e_x, with R_b = 0.21629 (PDG)
+and rho_b the hemisphere correlation for b events (0 for the central value; +0.03 as a
+systematic). The event-level efficiency of the primary tag ("either hemisphere") is then
+1 - (1 - e_b)^2, and the working point w_h is where it equals 0.38 (log-linear interpolation
+between the ten grid points 0.3 ... 1e-5). Statistical errors come from the multinomial counts
+by the delta method, so the counts of all production slices can simply be added.
+
+Limitations stated now: charm is lumped with light quarks (for typical lifetime tags, e_c about
+ten times e_uds, this biases e_b by well under 1 %); R_b after the hadronic selection may differ
+slightly from the inclusive value; and the hemisphere correlation is not measured. The same
+solution run on KK2f simulation compares data and simulation. This step reads event-level words
+only and involves no lepton or mass.
+
+Tests (`python -m unittest -v test_btagcal`): exact recovery of e_b and e_x from model
+fractions, with and without rho_b; a 100,000-event synthetic sample with known efficiencies
+(e_b(w) = w^0.25, e_x(w) = w) recovered within 4 standard errors; the working-point
+interpolation; the hadronic cut and invalid-hemisphere handling; and combining slice outputs
+equals one pass over all files.
+
+**Expectations written before any calibration runs on DELPHI data:**
+- B1: the hemisphere working point w_h for a 38 % event-level b efficiency lies between 1e-4
+  and 1e-2.
+- B2: at w_h the single-hemisphere b purity R_b e_b / f_s is at least 0.85.
+- B3: e_b from data and from KK2f simulation (same method) agree within 10 % (relative).
+- B4: changing rho_b from 0 to +0.03 changes e_b by less than 3 % (relative).
+
+If B1 or B2 fails, the hemisphere probability words are probably not what section 4c assumes;
+that is checked before anything depends on the tag.
+
+## 4h. Full-data production (`ntuple/run_ntuple.sh` 0.2.0, new in v0.7)
+
+Filed only after V1-V5 (4d) pass or their failures are understood, and after `dimusel-tests-v2`
+passes. The same script runs with environment switches: 1994 = `DATA_DIRS="Y13709 Y13710"`
+(429 files), split into 8 slices of 54 consecutive files (`DATA_STRIDE=1`, `DATA_START` = 1,
+55, ..., 379); 1995 = `DATA_DIRS=Y13716` (246 files) in 5 slices of 50; KK2f 1994 simulation in
+its own slices. 1995 includes the off-peak scan points: they are hadronic Z decays too and are
+used, as ALEPH used all its LEP1 data. Each slice writes the per-file ntuples (kept on MV2's own
+machine, not published while the window is blind), `validation_<slice>.json`,
+`spectra_<slice>.json` (blinded dimusel output) and `btagcal_<slice>.json` (counts only).
+Slices are combined with `dimusel.py --combine` and `btagcal.py --combine`.
+
+**Expectations written before any production job runs:**
+- P1: at least 97 % of the input files give rc = 0 and a non-empty event file.
+- P2: the 1994 hadronic count after the selection of 4f is within 15 % of 1.2M (arXiv:2510.18762);
+  the 1995 count (all energies) is between 0.45M and 0.65M.
+- P3: the b-tagged fraction of hadronic events is stable across the 1994 slices
+  (chi2 per degree of freedom below 2 around the mean).
+- P4: no blinded category has a non-null bin overlapping 26-35 GeV in any slice output or in
+  the combination (checked automatically before any file is published).
 
 ## 5. Blinding and pre-registration (commitments made in v0.1, tightened in v0.6)
 
@@ -286,7 +368,8 @@ jet clustering behave as specified. They run in job `dimusel-tests-v1`.
   2 sigma), or "inconclusive" (anything else).
 - **Secondary:** a 15-50 GeV scan with free mass, local and global significance; the
   e+e- channel; the year-by-year consistency; the inverted-b-tag control (after unblinding);
-  and (new in v0.2, to be defined exactly in v1.0) the isolated-muon selection of section 4b.
+  the event-probability b-tag cross-check (4.2); and (new in v0.2, to be defined exactly in
+  v1.0) the isolated-muon selection of section 4b.
 - Everything is published whatever the outcome, including a null or inconclusive result.
 
 ## 5b. The statistical procedure, exactly (new in v0.4; code `stats/dimustat.py`)
@@ -351,9 +434,9 @@ point and is more likely to be an overestimate of any true signal than an undere
 If the forecast gives P(EXCLUDED | mu = 0) below 0.5 for 1994-95 in the most likely scenario
 (S2), the analysis is extended to the 1992-1993 short DSTs before unblinding, provided the
 validation checks of 4d pass on them with the older vertex detector (a b-tag efficiency within
-a factor 1.3 of 1994's at the same mistag rate in simulation). If 1992-93 fails validation, the
-analysis proceeds with 1994-95 and the limit is quoted as it comes out. This rule is fixed so
-that the amount of data cannot be chosen after the window is seen.
+a factor 1.3 of 1994's at the same mistag rate, measured with the double-tag method of 4g). If
+1992-93 fails validation, the analysis proceeds with 1994-95 and the limit is quoted as it comes
+out. This rule is fixed so that the amount of data cannot be chosen after the window is seen.
 
 ## 6. Steps and status
 
@@ -365,8 +448,8 @@ that the amount of data cannot be chosen after the window is seen.
 | skelana ntuple writer (`ntuple/`) + validation run 1 (section 4d) | job `dimu-ntuple-v1` filed 2026-11-17, waiting |
 | statistics code + sensitivity forecast (`stats/`, 5b-5c) | job `dimu-forecast-v1` filed 2026-11-17, waiting |
 | signal through DELSIM: resolution and efficiency (`delsim/`, 4e) | job `delsim-signal-v1` filed 2026-11-17, waiting |
-| analysis stage with blinding in code (`analysis/`, 4f) | job `dimusel-tests-v1` filed 2026-11-17, waiting |
-| full-data ntuple production (no mass histograms in the window) | after validation |
+| analysis stage with blinding in code (`analysis/`, 4f) and b-tag calibration (4g) | job `dimusel-tests-v2` filed 2026-11-17 (replaces v1), waiting |
+| full-data ntuple production (4h; no mass histograms in the window) | script ready (0.2.0); filed after validation |
 | plan v1.0 frozen, then unblinding | later |
 
 ## References
@@ -381,6 +464,9 @@ that the amount of data cannot be chosen after the window is seen.
 - G. Cowan, K. Cranmer, E. Gross, O. Vitells, Eur. Phys. J. C 71 (2011) 1554, arXiv:1007.1727.
 - E. Gross, O. Vitells, Eur. Phys. J. C 70 (2010) 525, arXiv:1005.1891.
 - M. Cacciari, G. P. Salam, G. Soyez, JHEP 04 (2008) 063 (anti-kt), arXiv:0802.1189.
+- Hemisphere double-tag measurement of R_b at LEP with DELPHI's lifetime tags: DELPHI
+  Collaboration, "A precise measurement of the partial decay width ratio R_b^0 =
+  Gamma_bb/Gamma_had", Eur. Phys. J. C 10 (1999) 415 (CERN-EP-98-180). R_b = 0.21629 (PDG).
 - DELPHI open data: opendata.cern.ch/docs/delphi-data-release-2024; analysis guide
   opendata.cern.ch/docs/delphi-guide-analysis; simulation guide
   opendata.cern.ch/docs/delphi-guide-simulation; first physics use: J. Zhang et al.,
