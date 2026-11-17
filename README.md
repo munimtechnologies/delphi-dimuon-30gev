@@ -30,7 +30,7 @@ name. It is not a DELPHI Collaboration result, and neither DELPHI nor CERN endor
   b-tag and impact-parameter distributions, data vs simulation) and never stores, prints or
   histograms a data dimuon mass above 5 GeV in hadronic events. Tests:
   `python -m unittest -v test_validate`.
-- [stats/](stats/) (new in plan v0.4): the pre-registered statistics and a sensitivity
+- [stats/](stats/) (plan v0.4): the pre-registered statistics and a sensitivity
   forecast. `dimustat.py` is the fit that will be used on the unblinded data: 50 MeV bins in
   15-50 GeV, Voigt signal (m = 30.40, Gamma = 1.78 GeV), a log-Legendre background whose degree
   is chosen on the sidebands by a fixed rule, the discovery statistic q0, and asymptotic CLs
@@ -40,11 +40,19 @@ name. It is not a DELPHI Collaboration result, and neither DELPHI nor CERN endor
   how often it would confirm one, the bias of each background form, and the look-elsewhere
   effect of the 15-50 GeV mass scan. Tests: `python -m unittest -v test_dimustat`; run:
   `python forecast.py --out OUT` (needs `numpy`, `scipy`, `pythia8mc`).
+- [delsim/](delsim/) (new in plan v0.5): the signal through DELPHI's own detector simulation.
+  `run_delsim.sh` (DELPHI container) generates 30.4 GeV vector-boson signal events with `xkin/`,
+  finds a working route to DELPHI's condition database, simulates and reconstructs the events
+  for the 1994 detector with `runsim -gext`, and runs the ntuple routine on them
+  (`mv2user02s.car`, which keeps every simulated event). `sigana.py` matches reconstructed to
+  generated muons and reports DELPHI's dimuon mass resolution at 30 GeV, muon-tag and
+  selection efficiencies, and the b-tag response to signal. Tests:
+  `python -m unittest -v test_sigana` (needs `numpy`; `fadgen.py` from `xkin/`).
 
 ## Status
 
-Plan v0.4, 2026-11-17. No DELPHI dimuon mass has been looked at yet. Results, positive,
-negative or inconclusive, will all be published here.
+Plan v0.5, 2026-11-17. No DELPHI dimuon mass from real data has been looked at yet. Results,
+positive, negative or inconclusive, will all be published here.
 
 ## Data and licences
 
@@ -52,4 +60,6 @@ DELPHI open data are CC0 (cite doi:10.7483/OPENDATA.DELPHI.0X8O.FBUH and each da
 Code in this repository is Apache-2.0; text and result tables are CC BY 4.0. Pythia 8
 (`pythia8mc`) is GPL-2.0-or-later and is installed separately, not bundled here. The meanings
 of the skelana common-block words were read from the public SKELANA decks and the
-delphi-nanoaod headers (GPL-3.0); no code from those projects is copied here.
+delphi-nanoaod headers (GPL-3.0); no code from those projects is copied here. The DELSIM
+run steps follow the public documentation of the delphi-sim-pipeline project and the CERN Open
+Data simulation guide; no code from that project is copied here.

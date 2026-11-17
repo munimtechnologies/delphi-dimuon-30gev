@@ -1,0 +1,81 @@
++DECK, USER02.
+      SUBROUTINE USER02
+*----------------------------------------------------------------------
+*     MV2DIMU 0.1s - as MV2DIMU 0.1 (ntuple/mv2user02.car), except that
+*     for SIMULATED events (negative run number) the 'P' lines of every
+*     event are written, so that signal efficiencies have a complete
+*     denominator. Real data (positive run numbers) behave exactly as
+*     in 0.1. No pair masses are computed here.
+*     MV2 of Munim, Inc. (mv2@munimtech.com). Made with AI agents.
+*     Apache-2.0.  Variable meanings from the SKELANA common decks.
+*----------------------------------------------------------------------
++CDE, PHCDE.
++CDE, PSCFLG.
++CDE, PSCEVT.
++CDE, PSCVEC.
++CDE, PSCTRA.
++CDE, PSCBTG.
++CDE, PSCMUD.
++CDE, PSCELD.
+      LOGICAL MVFST
+      INTEGER MVI, MVJ, MVNL, MVNE, MVNP, MVMU, MVEL, MVLIM
+      SAVE MVFST, MVNE, MVNP
+      DATA MVFST /.TRUE./
+      DATA MVNE, MVNP /0, 0/
+*
+      IF (MVFST) THEN
+        MVFST = .FALSE.
+        WRITE(*,'(A,6I8)') ' MV2FLG MUO ELE BTG TRA HAD VDH',
+     &    IFLMUO, IFLELE, IFLBTG, IFLTRA, IFLHAD, IFLVDH
+        IF (IFLMUO .EQ. 0) IFLMUO = 1
+        IF (IFLELE .EQ. 0) IFLELE = 1
+        IF (IFLBTG .EQ. 0) IFLBTG = 1
+        IF (IFLTRA .EQ. 0) IFLTRA = 1
+        IF (IFLVDH .EQ. 0) IFLVDH = 1
+        WRITE(*,*) ' MV2MTRACK', MTRACK
+        OPEN (UNIT=81, FILE='mv2ev.txt', STATUS='UNKNOWN')
+        OPEN (UNIT=82, FILE='mv2pa.txt', STATUS='UNKNOWN')
+      ENDIF
+      CALL PSBEG
+      MVNE = MVNE + 1
+*
+      MVLIM = NVECP
+      IF (MTRACK .GT. 0 .AND. MVLIM .GT. MTRACK) MVLIM = MTRACK
+*
+      MVNL = 0
+      DO 10 MVI = 1, MVLIM
+        IF (VECP(7,MVI) .EQ. 0.0) GOTO 10
+        IF (VECP(6,MVI) .LT. 2.0) GOTO 10
+        MVMU = KMUID(1,MVI)
+        MVEL = KELID(1,MVI)
+        IF (MVMU .GT. 0 .OR. MVEL .GE. 3) MVNL = MVNL + 1
+   10 CONTINUE
+*
+      WRITE(81,1001) IIIRUN, IIIEVT, IHAD4, NCTR4, NCTRK, NVECP, MVNL,
+     &  ECMAS, ECHAR, EMNEU, EHNEU, (QBTPRN(MVJ),MVJ=1,3),
+     &  (QBTPRP(MVJ),MVJ=1,3), (QBTPRS(MVJ),MVJ=1,3),
+     &  (QBTTHR(MVJ),MVJ=1,4)
+      IF (MOD(MVNE,200) .EQ. 1) WRITE(*,'(A,4I10)')
+     &  ' MV2EVT', MVNE, MVNP, IIIRUN, IIIEVT
+      IF (MVNL .LT. 2 .AND. IIIRUN .GT. 0) RETURN
+*
+      MVNP = MVNP + 1
+      DO 20 MVI = 1, NVECP
+        IF (VECP(7,MVI) .NE. 0.0 .AND. MVI .LE. MVLIM) THEN
+          WRITE(82,1002) IIIRUN, IIIEVT, MVI, NINT(VECP(7,MVI)),
+     &      LVLOCK(MVI), KMUID(1,MVI), KMUID(3,MVI), KELID(1,MVI),
+     &      KELID(2,MVI), KTRAC(32,MVI), KTRAC(33,MVI),
+     &      (VECP(MVJ,MVI),MVJ=1,4), QMUID(2,MVI),
+     &      QTRAC(4,MVI), QTRAC(5,MVI), QTRAC(38,MVI),
+     &      QTRAC(39,MVI), QTRAC(40,MVI)
+        ELSE
+          WRITE(82,1002) IIIRUN, IIIEVT, MVI, NINT(VECP(7,MVI)),
+     &      LVLOCK(MVI), 0, 0, 0, 0, 0, 0,
+     &      (VECP(MVJ,MVI),MVJ=1,4), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+        ENDIF
+   20 CONTINUE
+*
+ 1001 FORMAT('E',7(1X,I10),17(1X,1PE13.5))
+ 1002 FORMAT('P',11(1X,I11),10(1X,1PE13.5))
+      RETURN
+      END

@@ -1,14 +1,16 @@
-# Analysis plan v0.4: does DELPHI see ALEPH's 30 GeV dimuon excess?
+# Analysis plan v0.5: does DELPHI see ALEPH's 30 GeV dimuon excess?
 
 MV2 of Munim, Inc. (mv2@munimtech.com). v0.1 written 2026-11-17 06:58 UTC; v0.2 08:30 UTC;
-v0.3 09:45 UTC; v0.4 10:50 UTC. Made with AI agents working in MV2's name. This is a plan, not a
-result: as of v0.4, no DELPHI dimuon mass has been looked at. Not a DELPHI Collaboration result;
-DELPHI and CERN do not endorse it. Text CC BY 4.0, code Apache-2.0.
+v0.3 09:45 UTC; v0.4 10:50 UTC; v0.5 11:45 UTC. Made with AI agents working in MV2's name. This
+is a plan, not a result: as of v0.5, no DELPHI dimuon mass from real data has been looked at.
+Not a DELPHI Collaboration result; DELPHI and CERN do not endorse it. Text CC BY 4.0, code
+Apache-2.0.
 
-Changes from v0.3: section 5b (the exact statistical procedure, with code in `stats/`), section
-5c (a sensitivity forecast with expectations written before it runs) and section 5d (a data-scope
-rule fixed now: if DELPHI 1994-95 alone is underpowered, 1992-93 joins before unblinding).
-Section 6 updated. The blinding in section 5 is unchanged.
+Changes from v0.4: new section 4e (signal through DELPHI's detector simulation: job
+`delsim-signal-v1`, code in `delsim/`, with expectations D1-D6 written before it runs). It
+supplies the two numbers the frozen plan needs from simulation: DELPHI's dimuon mass resolution
+at 30 GeV (replacing ALEPH's 0.745 GeV in 5b) and DELPHI's signal efficiency (for N_exp).
+Sections 3 and 6 updated. The blinding in section 5 is unchanged.
 
 ## 1. The question
 
@@ -67,11 +69,12 @@ about 1.2 times the ALEPH-sized yield for 1994-95 alone, and about 0.9 for 1992-
 - Simulation: KK2f + PYTHIA Z -> q qbar (`/eos/opendata/delphi/simulated-data/cern/kk2f4146/
   <detector version>/91.25/kk2f4146_qqpy_91.25_*.sdst`; the 1994 version is picked by the job)
   and the 1995 equivalent.
-- Signal simulation: events from `xkin/` (section 4b), hadronised with Pythia 8 and written
-  in DELSIM's external-generator format (FADGEN, `xkin/fadgen.py`, following the layout of
-  `hepmc2fadgen.cpp` in github.com/delphi-fullDST-edm4hep/delphi-sim-pipeline), then passed
-  through DELSIM with `runsim -VERSION v94c -EBEAM 45.594 -gext` (two-pass title with
-  `LUDECV TRUE` so DELSIM uses the generator's decay vertices).
+- Signal simulation (section 4e): events from `xkin/` (section 4b), hadronised with Pythia 8 and
+  written in DELSIM's external-generator format (FADGEN, `xkin/fadgen.py`, following the layout
+  described for `hepmc2fadgen.cpp` in github.com/delphi-fullDST-edm4hep/delphi-sim-pipeline),
+  then passed through DELSIM, DELANA and the short-DST step with
+  `runsim -VERSION v94c -EBEAM 45.594 -gext` (two-pass title with `LUDECV TRUE`, so DELSIM uses
+  the generator's b-hadron decay vertices).
 - Data policy: doi:10.7483/OPENDATA.DELPHI.0X8O.FBUH.
 - Software: DELPHI container `gitlab-registry.cern.ch/delphi/deployment/delphi/al9_64_xrd`,
   skelana built from the stock `dump` example with MV2's USER02 (`ntuple/`), data read over
@@ -94,7 +97,7 @@ about 1.2 times the ALEPH-sized yield for 1994-95 alone, and about 0.9 for 1992-
    template corrected for the e/mu efficiency ratio, as ALEPH did; (c) DELPHI q qbar
    simulation. The spread between them is taken as a systematic uncertainty.
 7. Signal: Breit-Wigner(30.40, 1.78 GeV) convolved with DELPHI's simulated dimuon mass
-   resolution.
+   resolution (section 4e).
 
 ## 4b. Kinematic study: would a real boson look like ALEPH's excess? (xkin, v0.2)
 
@@ -173,6 +176,60 @@ A failed V-check means the word mapping or the selection is wrong. It will be fi
 validation repeated before any further step. With 6 files (about 1-2 % of 1994), V3 and V4 may
 be limited by statistics; this will be reported as such.
 
+## 4e. Signal through DELPHI's detector simulation (job `delsim-signal-v1`, new in v0.5)
+
+`delsim/run_delsim.sh` runs in the same public DELPHI container. It:
+
+1. generates about 470 events of model V (section 4b; m = 30.40 GeV, Gamma = 1.78 GeV) with the
+   published `xkin/` code and Pythia 8, written as FADGEN (10 % more events than are simulated,
+   as the DELPHI simulation pipeline recommends);
+2. checks how the container reaches DELPHI's condition database
+   (`/eos/opendata/delphi/condition-data`): a 3-event built-in Z -> mu mu run is tried with the
+   default environment, then with the database addressed over xrootd, then (if it is smaller than
+   6 GB) with a local copy. The listing and total size of the database are saved either way;
+3. simulates and reconstructs 400 signal events for the 1994 detector
+   (`runsim -VERSION v94c -LABO CERN -NRUN 1001 -EBEAM 45.594 -gext`; a 5-event pre-run writes the
+   title file, `LUDECV TRUE` is added after its `JSHORT` line, then the main run uses `-STITL`);
+4. runs the ntuple routine on the simulated short DST (`delsim/mv2user02s.car`: identical to
+   `ntuple/mv2user02.car` except that for simulated events, which have negative run numbers,
+   every event's particles are written so that efficiencies have a complete denominator);
+5. `delsim/sigana.py` matches each reconstructed event to its generated event (DELSIM keeps the
+   order but may drop events) and each generated signal muon to a same-charge track within
+   1 degree and 25 % in momentum, then reports: tracking and muon-tag efficiency; the
+   efficiency of each ALEPH-like cut (IHAD4, NCTR4 >= 5, an opposite-sign muon-tagged pair in
+   acceptance with mass 15-50 GeV, visible missing momentum < 18 GeV); the event b-tag
+   probability of selected signal events at working points 0.1 to 0.001; the dimuon mass
+   resolution (reconstructed minus generated pair mass, Gaussian-equivalent width from the
+   interquartile range); and the 1/p resolution in bins of p. Tests: `python -m unittest -v
+   test_sigana` (run inside the job before anything else).
+
+This is simulation only: no real-data dimuon mass is involved, so blinding does not apply.
+
+**Expectations written before the job runs:**
+
+- D1 (feasibility, no prediction): which route, if any, reaches the condition database.
+- D2: DELSIM uses the input events: at least 80 % of reconstructed events are matched to a
+  generated event (at least one signal muon found; `f_reco_aligned`), and for events with both
+  muons matched the median reconstructed pair mass is within 0.3 GeV of the median generated
+  pair mass.
+- D3: the dimuon mass resolution at about 30 GeV (interquartile width / 1.349) is between 0.25
+  and 0.75 GeV (0.8-2.5 % of the mass). ALEPH used 0.745 GeV.
+- D4: for generated signal muons in acceptance that have a matched track, the muon-tag
+  efficiency (any MUCAL2 level) is between 0.70 and 0.95.
+- D5: the fraction of simulated signal events passing IHAD4, NCTR4 >= 5, an opposite-sign
+  muon pair in acceptance with mass 15-50 GeV and missing momentum < 18 GeV is between 0.35
+  and 0.70.
+- D6: the 1/p resolution for 15-20 GeV muons is between 0.0005 and 0.0015 GeV^-1.
+
+**What happens next.** The measured resolution replaces ALEPH's sigma in the fit of 5b. The
+efficiency, together with the b-tag working point chosen on the KK2f Z -> b bbar simulation for
+about 38 % b efficiency, gives N_exp = (ALEPH signal rate per hadronic Z) x (DELPHI hadronic
+count) x (DELPHI efficiency / ALEPH efficiency for the same model), with ALEPH's efficiency
+estimated from the generator-level acceptance of the same events times ALEPH's quoted muon (86 %
+per muon) and b-tag efficiencies. If D1 finds no working route, the resolution is taken from
+DELPHI's measured Z -> mu mu and J/psi widths in data (validation 4d) and the efficiency from the
+KK2f simulation's prompt muons, and this is stated as a limitation.
+
 ## 5. Blinding and pre-registration (commitments made in v0.1, unchanged)
 
 - The opposite-sign dimuon mass window **26-35 GeV in b-tagged events stays blind** until
@@ -198,7 +255,7 @@ be limited by statistics; this will be reported as such.
 - **Signal**: Voigt profile (Breit-Wigner of width Gamma convolved with a Gaussian of width
   sigma), truncated to 15-50 GeV; the yield n_s counts signal events in 15-50 GeV, as ALEPH's
   32.3 does. Primary: m = 30.40 GeV, Gamma = 1.78 GeV, sigma = DELPHI's simulated dimuon mass
-  resolution at 30 GeV (until simulation exists: ALEPH's sigma = sqrt(6e-4) m = 0.745 GeV).
+  resolution at 30 GeV (section 4e; until it exists: ALEPH's sigma = sqrt(6e-4) m = 0.745 GeV).
 - **Background**: f(m) proportional to exp(sum_{k=1..n} a_k P_k(t)), with P_k the Legendre
   polynomials and t = ln m mapped linearly onto [-1, 1] over 15-50 GeV. n = 1 is a pure power
   law, ALEPH's exp(-c0 ln x) cross-check form.
@@ -266,8 +323,8 @@ that the amount of data cannot be chosen after the window is seen.
 | kinematic study + DELSIM input writer (`xkin/`) | job `xkin-v1` filed 2026-11-17, waiting |
 | skelana ntuple writer (`ntuple/`) + validation run 1 (section 4d) | job `dimu-ntuple-v1` filed 2026-11-17, waiting |
 | statistics code + sensitivity forecast (`stats/`, 5b-5c) | job `dimu-forecast-v1` filed 2026-11-17, waiting |
+| signal through DELSIM: resolution and efficiency (`delsim/`, 4e) | job `delsim-signal-v1` filed 2026-11-17, waiting |
 | full-data ntuple production (no mass histograms in the window) | after validation |
-| signal simulation through DELSIM | after the probe (needs condition data access) |
 | plan v1.0 frozen, then unblinding | later |
 
 ## References
@@ -282,8 +339,11 @@ that the amount of data cannot be chosen after the window is seen.
 - G. Cowan, K. Cranmer, E. Gross, O. Vitells, Eur. Phys. J. C 71 (2011) 1554, arXiv:1007.1727.
 - E. Gross, O. Vitells, Eur. Phys. J. C 70 (2010) 525, arXiv:1005.1891.
 - DELPHI open data: opendata.cern.ch/docs/delphi-data-release-2024; analysis guide
-  opendata.cern.ch/docs/delphi-guide-analysis; first physics use: J. Zhang et al., arXiv:2510.18762.
+  opendata.cern.ch/docs/delphi-guide-analysis; simulation guide
+  opendata.cern.ch/docs/delphi-guide-simulation; first physics use: J. Zhang et al.,
+  arXiv:2510.18762.
 - SKELANA common-block meanings as mirrored in github.com/eigen1907/delphi-nanoaod
   (delphi-analysis/include/skelana/*.hpp, GPL-3.0; read, not copied).
 - R. K. Ellis, D. A. Ross, A. E. Terrano, Nucl. Phys. B178 (1981) 421 (massless limit check).
-- DELPHI simulation pipeline: github.com/delphi-fullDST-edm4hep/delphi-sim-pipeline.
+- DELPHI simulation pipeline (documentation read; no code copied):
+  github.com/delphi-fullDST-edm4hep/delphi-sim-pipeline.
