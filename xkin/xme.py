@@ -8,9 +8,17 @@ hypotheses behind the ALEPH 30 GeV dimuon excess (arXiv:1610.06536):
 Massless b quarks and muons in the matrix element (m_b^2/m_X^2 ~ 2.5 %); Pythia 8 restores
 masses when it reads the events. Full spin correlations from explicit helicity spinors.
 
+0.2.0 (review of 2026-11-17): two factors that only shape the generated mass lineshape were
+missing in 0.1.0. S now carries the phi -> mu mu decay factor sum|ubar v|^2 = 4 q1.q2 = 2 m^2
+(V always had it through its muon current). P now keeps events with probability (p*/p*max)^3,
+the P-wave rate of Z -> h A (|M|^2 ~ p*^2 times phase space ~ p*), instead of p*/p*max.
+Angular kinematics at fixed mass are unchanged.
+
 MV2 of Munim, Inc. (mv2@munimtech.com). Made with AI agents. Apache-2.0.
 """
 import numpy as np
+
+VERSION = "mv2 xme 0.2.0"
 
 SQRT_S = 91.1876
 SW2 = 0.23122
@@ -99,6 +107,19 @@ def muon_ops(q1, q2):
         for b in range(2):
             ops.append(slash(current(bar(u[..., a, :]), v[..., b, :])))
     return ops, [1.0] * 4
+
+
+def scalar_decay_sum(q1, q2):
+    """sum over helicities of |ubar(mu-, q1) v(mu+, q2)|^2 from explicit spinors.
+    Equals Tr(q1-slash q2-slash) = 4 q1.q2 = 2 m^2 for massless muons."""
+    u = spinors(q1)
+    v = spinors(q2)
+    tot = np.zeros(np.asarray(q1).shape[:-1])
+    for a in range(2):
+        for b in range(2):
+            s = np.einsum('...i,...i->...', bar(u[..., a, :]), v[..., b, :])
+            tot = tot + np.abs(s) ** 2
+    return tot
 
 
 def quark_amp2(p1, p2, k, zcurs, zw, xops, xw, vb=VB, ab=AB):
@@ -208,14 +229,18 @@ def beams(sqrt_s=SQRT_S):
 
 
 def radiation_weight(model, p1, p2, q1, q2, zc, zw):
+    """|M|^2 of e+e- -> Z -> b bbar X(-> mu mu) without the X propagator (supplied by the
+    Breit-Wigner sampling of m^2). V: the muon current enters the X vertex directly.
+    S: scalar X vertex on the b line times the spin-summed scalar decay factor
+    Tr(q1-slash q2-slash) = 4 q1.q2 = 2 m^2."""
     k = q1 + q2
     if model == 'V':
         xo, xw = muon_ops(q1, q2)
-    elif model == 'S':
-        xo, xw = [ID4], [1.0]
-    else:
-        raise ValueError(model)
-    return quark_amp2(p1, p2, k, zc, zw, xo, xw, VB, AB)
+        return quark_amp2(p1, p2, k, zc, zw, xo, xw, VB, AB)
+    if model == 'S':
+        prod = quark_amp2(p1, p2, k, zc, zw, [ID4], [1.0], VB, AB)
+        return prod * 4.0 * mdot(q1, q2)
+    raise ValueError(model)
 
 
 def generate_radiation(model, n_target, rng, M=30.40, G=1.78, mlo=22.0, mhi=40.0,
@@ -264,22 +289,33 @@ def kallen(a, b, c):
     return a * a + b * b + c * c - 2 * a * b - 2 * a * c - 2 * b * c
 
 
+def pair_pstar(m2, MA, sqrt_s=SQRT_S):
+    """Momentum of h (mass^2 m2) and A (mass MA) in Z -> h A at rest; 0 if closed."""
+    lam = kallen(sqrt_s ** 2, m2, MA ** 2)
+    return np.sqrt(np.where(lam > 0, lam, 0.0)) / (2 * sqrt_s)
+
+
+def pair_accept_prob(pst, pmax):
+    """P-wave Z -> two spin-0 states: rate ~ p*^3 (|M|^2 ~ p*^2, phase space ~ p*)."""
+    return (np.asarray(pst, float) / pmax) ** 3
+
+
 def generate_pair(n_target, rng, M=30.40, G=1.78, MA=30.40, mlo=22.0, mhi=40.0, sqrt_s=SQRT_S):
     """Unweighted e+e- -> Z -> h A events, h -> mu- mu+ (q1,q2), A -> b bbar (p1,p2).
-    Z -> two spin-0 states: dN/dcos(theta) ~ 1 - cos^2(theta) w.r.t. the beam."""
+    Z -> two spin-0 states: dN/dcos(theta) ~ 1 - cos^2(theta) w.r.t. the beam, rate ~ p*^3."""
     s = sqrt_s ** 2
-    pmax = np.sqrt(kallen(s, mlo ** 2, MA ** 2)) / (2 * sqrt_s)
+    pmax = float(pair_pstar(mlo ** 2, MA, sqrt_s))
     out = {'p1': [], 'p2': [], 'q1': [], 'q2': []}
     nacc = 0
     ntried = 0
     while nacc < n_target:
         n = 4 * n_target
         m2 = sample_bw_m2(n, M, G, mlo, mhi, rng)
-        lam = kallen(s, m2, MA ** 2)
-        ok = lam > 0
-        pst = np.sqrt(np.where(ok, lam, 0)) / (2 * sqrt_s)
+        pst = pair_pstar(m2, MA, sqrt_s)
+        ok = pst > 0
         c = rng.uniform(-1, 1, n)
-        keep = ok & (rng.uniform(0, 1, n) < pst / pmax) & (rng.uniform(0, 1, n) < 1 - c * c)
+        keep = (ok & (rng.uniform(0, 1, n) < pair_accept_prob(pst, pmax))
+                & (rng.uniform(0, 1, n) < 1 - c * c))
         ntried += n
         m2 = m2[keep]
         pst = pst[keep]
@@ -328,7 +364,8 @@ def write_lhe(path, model, ev, sqrt_s=SQRT_S):
     E = sqrt_s / 2
     n = len(ev['p1'])
     with open(path, 'w') as f:
-        f.write('<LesHouchesEvents version="1.0">\n<!-- xkin model %s, MV2 of Munim, Inc. -->\n' % model)
+        f.write('<LesHouchesEvents version="1.0">\n<!-- xkin model %s, %s, MV2 of Munim, Inc. -->\n'
+                % (model, VERSION))
         f.write('<init>\n 11 -11 %.6f %.6f 0 0 0 0 3 1\n 1.0 0.0 1.0 1\n</init>\n' % (E, E))
         for i in range(n):
             parts = lhe_particles(model, ev['p1'][i], ev['p2'][i], ev['q1'][i], ev['q2'][i], sqrt_s)

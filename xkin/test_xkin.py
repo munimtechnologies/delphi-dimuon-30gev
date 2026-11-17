@@ -46,6 +46,16 @@ class TestDirac(unittest.TestCase):
         ssum = sum(np.einsum('ni,nj->nij', S[:, h, :], xme.bar(S[:, h, :])) for h in range(2))
         self.assertTrue(np.allclose(ssum, ps, atol=1e-10))
 
+    def test_scalar_decay_sum_is_2m2(self):
+        # independent of the trace identity: explicit spinors, random boosted decays
+        rng = np.random.default_rng(11)
+        m = rng.uniform(20.0, 42.0, 200)
+        d = xme.iso_dirs(200, rng)
+        pk = rng.uniform(0.0, 40.0, 200)[:, None] * d
+        K = np.concatenate([np.sqrt(np.sum(pk ** 2, -1) + m ** 2)[:, None], pk], -1)
+        q1, q2 = xme.decay_massless(K, m, rng)
+        self.assertTrue(np.allclose(xme.scalar_decay_sum(q1, q2), 2.0 * m ** 2, rtol=1e-9))
+
 
 class TestME(unittest.TestCase):
     def test_ward_identity(self):
@@ -92,6 +102,17 @@ class TestME(unittest.TestCase):
             w1 = xme.radiation_weight(model, B(p1), B(p2), B(q1), B(q2), zc2, zw2)
             self.assertTrue(np.allclose(w0, w1, rtol=1e-8), model)
 
+    def test_s_weight_carries_decay_factor(self):
+        # 0.2.0: S = (scalar emission off the b line) x sum|ubar(q1) v(q2)|^2
+        rng = np.random.default_rng(12)
+        p1, p2, k = rand_config(100, 26.0, rng)
+        q1, q2 = xme.decay_massless(k, np.full(len(k), 26.0), rng)
+        zc, zw = xme.beam_currents(*xme.beams())
+        prod = xme.quark_amp2(p1, p2, k, zc, zw, [xme.ID4], [1.0])
+        w = xme.radiation_weight('S', p1, p2, q1, q2, zc, zw)
+        self.assertTrue(np.allclose(w, prod * xme.scalar_decay_sum(q1, q2), rtol=1e-9))
+        self.assertTrue(np.allclose(w / prod, 2.0 * 26.0 ** 2, rtol=1e-9))
+
 
 class TestGeneration(unittest.TestCase):
     def check(self, ev, lo=22.0, hi=40.0):
@@ -123,6 +144,29 @@ class TestGeneration(unittest.TestCase):
         c = h[:, 3] / np.linalg.norm(h[:, 1:], axis=1)
         self.assertLess(abs(np.mean(c ** 2) - 0.2), 0.03)
 
+    def test_pair_accept_prob_is_cubic(self):
+        self.assertAlmostEqual(float(xme.pair_accept_prob(0.5, 1.0)), 0.125, places=12)
+        self.assertAlmostEqual(float(xme.pair_accept_prob(2.0, 2.0)), 1.0, places=12)
+        pmax = float(xme.pair_pstar(22.0 ** 2, 30.4))
+        # Z -> h A momentum at m_h = m_A = 30.4: sqrt(s/4 - m^2)
+        self.assertAlmostEqual(float(xme.pair_pstar(30.4 ** 2, 30.4)),
+                               math.sqrt(xme.SQRT_S ** 2 / 4 - 30.4 ** 2), places=9)
+        self.assertGreater(pmax, float(xme.pair_pstar(30.4 ** 2, 30.4)))
+
+    def test_pair_lineshape_follows_bw_times_pstar_cubed(self):
+        M, G, MA, lo, hi = 30.40, 1.78, 30.40, 22.0, 40.0
+        n_grid = 200000
+        dx = (hi ** 2 - lo ** 2) / n_grid
+        x = lo ** 2 + (np.arange(n_grid) + 0.5) * dx
+        f = xme.pair_pstar(x, MA) ** 3 / ((x - M ** 2) ** 2 + (M * G) ** 2)
+        mean_expected = float(np.sum(np.sqrt(x) * f) / np.sum(f))
+        rng = np.random.default_rng(13)
+        ev = xme.generate_pair(20000, rng, M=M, G=G, MA=MA, mlo=lo, mhi=hi)
+        m = np.sqrt(xme.mdot(ev['q1'] + ev['q2'], ev['q1'] + ev['q2']))
+        se = float(np.std(m)) / math.sqrt(len(m))
+        self.assertLess(abs(float(np.mean(m)) - mean_expected), 4.0 * se,
+                        (float(np.mean(m)), mean_expected, se))
+
     def test_lhe(self):
         rng = np.random.default_rng(7)
         ev = xme.generate_radiation('V', 20, rng, chunk=20000)
@@ -131,6 +175,7 @@ class TestGeneration(unittest.TestCase):
             xme.write_lhe(path, 'V', ev)
             txt = open(path).read()
         self.assertEqual(txt.count('<event>'), 20)
+        self.assertIn(xme.VERSION, txt)
         block = txt.split('<event>')[1].split('</event>')[0].strip().splitlines()
         self.assertEqual(int(block[0].split()[0]), 8)
         fin = [l.split() for l in block[1:] if l.split()[1] == '1']
