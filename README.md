@@ -9,8 +9,8 @@ By MV2 of Munim, Inc. (mv2@munimtech.com). The work is made with AI agents worki
 name. It is not a DELPHI Collaboration result, and neither DELPHI nor CERN endorses it.
 
 - [PLAN.md](PLAN.md): the question, sensitivity estimate, data, analysis outline and the
-  **blinding commitments** (the 26-35 GeV opposite-sign dimuon window in b-tagged events stays
-  closed until the selection and tests are frozen and published here).
+  **blinding commitments** (the 26-35 GeV opposite-sign dimuon window stays closed until the
+  selection and tests are frozen and published here as plan v1.0).
 - [probe/](probe/): a feasibility probe that runs in the public DELPHI container
   (`gitlab-registry.cern.ch/delphi/deployment/delphi/al9_64_xrd`). It checks xrootd access to
   the 1994 short DSTs, builds the stock skelana example, and extracts the manuals as text.
@@ -36,22 +36,27 @@ name. It is not a DELPHI Collaboration result, and neither DELPHI nor CERN endor
   is chosen on the sidebands by a fixed rule, the discovery statistic q0, and asymptotic CLs
   upper limits (Cowan, Cranmer, Gross, Vitells 2011). `forecast.py` runs the whole procedure on
   toy data drawn from a Pythia 8 Z -> b bbar dimuon shape scaled to ALEPH's background, for
-  several DELPHI scenarios. It reports how often DELPHI would exclude an ALEPH-sized signal,
-  how often it would confirm one, the bias of each background form, and the look-elsewhere
-  effect of the 15-50 GeV mass scan. Tests: `python -m unittest -v test_dimustat`; run:
+  several DELPHI scenarios. Tests: `python -m unittest -v test_dimustat`; run:
   `python forecast.py --out OUT` (needs `numpy`, `scipy`, `pythia8mc`).
-- [delsim/](delsim/) (new in plan v0.5): the signal through DELPHI's own detector simulation.
+- [delsim/](delsim/) (plan v0.5): the signal through DELPHI's own detector simulation.
   `run_delsim.sh` (DELPHI container) generates 30.4 GeV vector-boson signal events with `xkin/`,
   finds a working route to DELPHI's condition database, simulates and reconstructs the events
   for the 1994 detector with `runsim -gext`, and runs the ntuple routine on them
-  (`mv2user02s.car`, which keeps every simulated event). `sigana.py` matches reconstructed to
-  generated muons and reports DELPHI's dimuon mass resolution at 30 GeV, muon-tag and
-  selection efficiencies, and the b-tag response to signal. Tests:
-  `python -m unittest -v test_sigana` (needs `numpy`; `fadgen.py` from `xkin/`).
+  (`mv2user02s.car`, which keeps every simulated event). `sigana.py` reports DELPHI's dimuon
+  mass resolution at 30 GeV, muon-tag and selection efficiencies, and the b-tag response to
+  signal. Tests: `python -m unittest -v test_sigana` (needs `numpy`; `fadgen.py` from `xkin/`).
+- [analysis/](analysis/) (new in plan v0.6): `dimusel.py` turns the ntuples into the mass
+  spectra the fit uses: hadronic and b-tag selection, muon and electron identification, the
+  cascade veto, an isolated-lepton selection with anti-kt jets, and the signal and control
+  categories, in the 50 MeV binning of `stats/`. **The blinding is enforced in the code**: in
+  real data no opposite-sign same-flavour pair in 26-35 GeV is ever histogrammed or counted,
+  and the window only opens when the program is handed a plan file marked v1.x. Pure Python,
+  no dependencies. Tests: `python -m unittest -v test_dimusel`; run:
+  `python dimusel.py --dir NTUPLES --out spectra.json [--config cuts.json]`.
 
 ## Status
 
-Plan v0.5, 2026-11-17. No DELPHI dimuon mass from real data has been looked at yet. Results,
+Plan v0.6, 2026-11-17. No DELPHI dimuon mass from real data has been looked at yet. Results,
 positive, negative or inconclusive, will all be published here.
 
 ## Data and licences

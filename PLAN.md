@@ -1,16 +1,17 @@
-# Analysis plan v0.5: does DELPHI see ALEPH's 30 GeV dimuon excess?
+# Analysis plan v0.6: does DELPHI see ALEPH's 30 GeV dimuon excess?
 
 MV2 of Munim, Inc. (mv2@munimtech.com). v0.1 written 2026-11-17 06:58 UTC; v0.2 08:30 UTC;
-v0.3 09:45 UTC; v0.4 10:50 UTC; v0.5 11:45 UTC. Made with AI agents working in MV2's name. This
-is a plan, not a result: as of v0.5, no DELPHI dimuon mass from real data has been looked at.
-Not a DELPHI Collaboration result; DELPHI and CERN do not endorse it. Text CC BY 4.0, code
-Apache-2.0.
+v0.3 09:45 UTC; v0.4 10:50 UTC; v0.5 11:45 UTC; v0.6 12:40 UTC. Made with AI agents working in
+MV2's name. This is a plan, not a result: as of v0.6, no DELPHI dimuon mass from real data has
+been looked at. Not a DELPHI Collaboration result; DELPHI and CERN do not endorse it. Text
+CC BY 4.0, code Apache-2.0.
 
-Changes from v0.4: new section 4e (signal through DELPHI's detector simulation: job
-`delsim-signal-v1`, code in `delsim/`, with expectations D1-D6 written before it runs). It
-supplies the two numbers the frozen plan needs from simulation: DELPHI's dimuon mass resolution
-at 30 GeV (replacing ALEPH's 0.745 GeV in 5b) and DELPHI's signal efficiency (for N_exp).
-Sections 3 and 6 updated. The blinding in section 5 is unchanged.
+Changes from v0.5: new section 4f, the analysis stage from ntuple to mass spectra
+(`analysis/dimusel.py`, tested by job `dimusel-tests-v1`). It **tightens the blinding** of
+section 5: in real data every opposite-sign same-flavour category (mumu and ee; b-tagged,
+untagged and anti-tagged) is blind in 26-35 GeV, including the inverted-b-tag mumu control
+that v0.1 allowed. The window can only be opened by the code when given a plan file whose first
+line reads "Analysis plan v1.x". Sections 5 and 6 updated accordingly. Nothing else changed.
 
 ## 1. The question
 
@@ -40,9 +41,9 @@ and found nothing, but under a different production mode. ATLAS's 2026 Run-2 dim
 
 **What is new here.** DELPHI recorded a Z-pole sample of similar size, with a silicon vertex
 detector, muon chambers and lifetime b-tagging. The collaboration released all of its data
-and software in August 2024 (CERN Open Data, CC0). A prior-art search on 2026-11-17 found no
-DELPHI or OPAL test of the ALEPH excess. DELPHI would be the first test with acceptance
-comparable to ALEPH's, from the same collider, energy and production mode.
+and software in August 2024 (CERN Open Data, CC0). Prior-art searches on 2026-11-17 (repeated
+at 12:20 UTC) found no DELPHI or OPAL test of the ALEPH excess. DELPHI would be the first test
+with acceptance comparable to ALEPH's, from the same collider, energy and production mode.
 
 **Why it matters.** If DELPHI saw a compatible peak, a 30 GeV boson coupling to b quarks and
 muons would be the most important particle-physics result in years. If it sees none, an
@@ -176,7 +177,7 @@ A failed V-check means the word mapping or the selection is wrong. It will be fi
 validation repeated before any further step. With 6 files (about 1-2 % of 1994), V3 and V4 may
 be limited by statistics; this will be reported as such.
 
-## 4e. Signal through DELPHI's detector simulation (job `delsim-signal-v1`, new in v0.5)
+## 4e. Signal through DELPHI's detector simulation (job `delsim-signal-v1`, v0.5)
 
 `delsim/run_delsim.sh` runs in the same public DELPHI container. It:
 
@@ -230,22 +231,62 @@ per muon) and b-tag efficiencies. If D1 finds no working route, the resolution i
 DELPHI's measured Z -> mu mu and J/psi widths in data (validation 4d) and the efficiency from the
 KK2f simulation's prompt muons, and this is stated as a limitation.
 
-## 5. Blinding and pre-registration (commitments made in v0.1, unchanged)
+## 4f. From ntuple to mass spectra (`analysis/dimusel.py`, new in v0.6)
+
+One pure-Python program (no dependencies) turns the ntuple into everything the fit of 5b and
+the controls need. It reads one DELPHI file's ntuple at a time, so the full 1994-95 production
+fits in about 1 GB of memory.
+
+- **Hadronic events**: IHAD4 > 0, NCTR4 >= 5, b-tag thrust axis (QBTTHR) at 30-150 degrees
+  (|cos| < 0.866; the cut can be switched off if validation shows the axis is not filled).
+- **b-tag**: event probability QBTPRP(3) below a working point (placeholder 0.01; fixed in v1.0
+  from KK2f simulation for about 38 % b efficiency). Anti-tag: QBTPRP(3) > 0.1.
+- **Leptons**: p > 2.5 GeV, |cos theta| < 0.95, |d0| < 0.2 cm and |z0| < 1.0 cm to the primary
+  vertex (placeholders until V5 shows the measured spread). Muons: any MUCAL2 tag (or
+  "standard"); electrons: ELECID "standard" or better and not tagged as a conversion; a track
+  that is both is a muon.
+- **Cascade veto**: visible missing momentum (all particles of the event) below 18 GeV.
+- **Isolated selection** (secondary, section 4b): e+e- anti-kt jets (R = 0.4, E-scheme, the
+  same definition as `xkin/evana.py`) built without the leptons; a lepton is isolated if it is
+  more than 20 degrees from every jet above 3 GeV.
+- **Categories** (all pairs in an event are counted, as ALEPH did): opposite-sign mumu b-tagged
+  (primary), isolated b-tagged, untagged and anti-tagged; opposite-sign ee b-tagged, isolated
+  b-tagged and anti-tagged; same-sign mumu (b-tagged, untagged); e-mu opposite-sign (b-tagged,
+  untagged) and same-sign (b-tagged).
+- **Output**: per category, the 700 bins of 50 MeV over 15-50 GeV used by `stats/dimustat.py`
+  and 0.5 GeV bins over 0-90 GeV; and the cut flow (event counts after each cut, the hadronic,
+  b-tagged and anti-tagged event totals that enter N_exp).
+
+**Blinding in code (tightened in v0.6).** In real data, every opposite-sign same-flavour
+category is blind in [26, 35) GeV: such a pair is dropped at the single place where masses
+enter a histogram, the overlapping bins are written as null, and no category total is written
+from which the window could be recovered by subtraction. This is stricter than v0.1, which
+allowed the inverted-b-tag mumu control before unblinding: since the b-tag keeps only about
+38 % of b events, untagged and anti-tagged Z -> b bbar events would carry most of any real
+signal. Same-sign and e-mu pairs and all simulation stay open. The window opens only when the
+program is given a plan file whose first line reads "Analysis plan v1.x"; that file's SHA-256 is
+written into the output. Tests (`python -m unittest -v test_dimusel`, 17 tests, synthetic
+events): the window stays hidden for every blinded category and its edges, sidebands and controls
+stay visible, simulation is open, the unblind gate refuses this v0.6 plan, and each cut and the
+jet clustering behave as specified. They run in job `dimusel-tests-v1`.
+
+## 5. Blinding and pre-registration (commitments made in v0.1, tightened in v0.6)
 
 - The opposite-sign dimuon mass window **26-35 GeV in b-tagged events stays blind** until
   version 1.0 of this plan is published with the frozen selection, background model,
   simulated signal efficiency, expected signal yield N_exp (ALEPH rate scaled by DELPHI's
-  efficiency) and the statistical tests below.
-- Allowed before unblinding: all control samples, the opposite-sign b-tagged spectrum outside
-  26-35 GeV, simulation, and event counts that do not reveal the window.
+  efficiency) and the statistical tests below. Since v0.6 the same holds for every
+  opposite-sign mumu and ee category in data, whatever its b-tag (section 4f).
+- Allowed before unblinding: same-sign and e-mu control samples, all opposite-sign spectra
+  outside 26-35 GeV, simulation, and event counts that do not reveal the window.
 - **Primary test (fixed hypothesis):** extended likelihood fit with m = 30.40 GeV and
   Gamma = 1.78 GeV fixed. Report the fitted yield mu_hat and its uncertainty in units of
   N_exp. Outcomes: "ALEPH-sized signal excluded at 95 % CL" (upper limit below N_exp),
   "compatible with ALEPH" (N_exp inside the 68 % interval and background-only rejected at
   2 sigma), or "inconclusive" (anything else).
 - **Secondary:** a 15-50 GeV scan with free mass, local and global significance; the
-  e+e- channel; the year-by-year consistency; and (new in v0.2, to be defined exactly in v1.0)
-  the isolated-muon selection of section 4b.
+  e+e- channel; the year-by-year consistency; the inverted-b-tag control (after unblinding);
+  and (new in v0.2, to be defined exactly in v1.0) the isolated-muon selection of section 4b.
 - Everything is published whatever the outcome, including a null or inconclusive result.
 
 ## 5b. The statistical procedure, exactly (new in v0.4; code `stats/dimustat.py`)
@@ -318,12 +359,13 @@ that the amount of data cannot be chosen after the window is seen.
 
 | step | status |
 |---|---|
-| prior-art search | done 2026-11-17 |
+| prior-art search | done 2026-11-17 (repeated 12:20 UTC, still none) |
 | feasibility probe (container, xrootd, example build) | job `delphi-probe-v1` filed 2026-11-17, waiting |
 | kinematic study + DELSIM input writer (`xkin/`) | job `xkin-v1` filed 2026-11-17, waiting |
 | skelana ntuple writer (`ntuple/`) + validation run 1 (section 4d) | job `dimu-ntuple-v1` filed 2026-11-17, waiting |
 | statistics code + sensitivity forecast (`stats/`, 5b-5c) | job `dimu-forecast-v1` filed 2026-11-17, waiting |
 | signal through DELSIM: resolution and efficiency (`delsim/`, 4e) | job `delsim-signal-v1` filed 2026-11-17, waiting |
+| analysis stage with blinding in code (`analysis/`, 4f) | job `dimusel-tests-v1` filed 2026-11-17, waiting |
 | full-data ntuple production (no mass histograms in the window) | after validation |
 | plan v1.0 frozen, then unblinding | later |
 
@@ -338,6 +380,7 @@ that the amount of data cannot be chosen after the window is seen.
 - ATLAS Collaboration, JHEP 06 (2026) 165, arXiv:2601.21361.
 - G. Cowan, K. Cranmer, E. Gross, O. Vitells, Eur. Phys. J. C 71 (2011) 1554, arXiv:1007.1727.
 - E. Gross, O. Vitells, Eur. Phys. J. C 70 (2010) 525, arXiv:1005.1891.
+- M. Cacciari, G. P. Salam, G. Soyez, JHEP 04 (2008) 063 (anti-kt), arXiv:0802.1189.
 - DELPHI open data: opendata.cern.ch/docs/delphi-data-release-2024; analysis guide
   opendata.cern.ch/docs/delphi-guide-analysis; simulation guide
   opendata.cern.ch/docs/delphi-guide-simulation; first physics use: J. Zhang et al.,
