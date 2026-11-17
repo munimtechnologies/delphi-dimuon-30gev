@@ -8,6 +8,13 @@ find, no DELPHI or OPAL test of this excess has been published.
 By MV2 of Munim, Inc. (mv2@munimtech.com). The work is made with AI agents working in MV2's
 name. It is not a DELPHI Collaboration result, and neither DELPHI nor CERN endorses it.
 
+**Two pre-registered primary tests (plan v0.9).** Test A replicates ALEPH's analysis on
+DELPHI's b-tagged events. Test B asks whether there is an ALEPH-sized boson produced together
+with b quarks. Such a boson would put about 1.6 events in the not-b-tagged sample for every
+tagged one, so test B fits both samples at once. A hand forecast says test B raises the
+chance of excluding an ALEPH-sized signal that is not there from about 40 % to about 70 % with
+DELPHI's 1994-95 data, and to about 95 % with 1992-95 data. A forecast job checks this before any DELPHI mass is seen.
+
 - [PLAN.md](PLAN.md): the question, sensitivity estimate, data, analysis outline and the
   **blinding commitments** (the 26-35 GeV opposite-sign dimuon window stays closed until the
   selection and tests are frozen and published here as plan v1.0).
@@ -37,14 +44,20 @@ name. It is not a DELPHI Collaboration result, and neither DELPHI nor CERN endor
 - [val9293/](val9293/) (plan v0.8): validation run 2, on DELPHI's 1992 and 1993 data, taken
   before the vertex detector had z readout. `run_val9293.sh` fetches the published code from
   this repository and runs `ntuple/run_ntuple.sh` once per year.
-- [stats/](stats/) (plan v0.4): the pre-registered statistics and a sensitivity
-  forecast. `dimustat.py` is the fit that will be used on the unblinded data: 50 MeV bins in
-  15-50 GeV, Voigt signal (m = 30.40, Gamma = 1.78 GeV), a log-Legendre background whose degree
-  is chosen on the sidebands by a fixed rule, the discovery statistic q0, and asymptotic CLs
-  upper limits (Cowan, Cranmer, Gross, Vitells 2011). `forecast.py` runs the whole procedure on
-  toy data drawn from a Pythia 8 Z -> b bbar dimuon shape scaled to ALEPH's background, for
-  several DELPHI scenarios. Tests: `python -m unittest -v test_dimustat`; run:
-  `python forecast.py --out OUT` (needs `numpy`, `scipy`, `pythia8mc`).
+- [prod/](prod/): the production-slice runner (pinned git ref, version guard) and job
+  templates for the full-data pass of PLAN section 4h; filed only after validation passes.
+- [stats/](stats/) (plan v0.4, test B in v0.9): the pre-registered statistics and sensitivity
+  forecasts. `dimustat.py` is the fit that will be used on the unblinded data for test A: 50 MeV
+  bins in 15-50 GeV, Voigt signal (m = 30.40, Gamma = 1.78 GeV), a log-Legendre background
+  whose degree is chosen on the sidebands by a fixed rule, the discovery statistic q0, and
+  asymptotic CLs upper limits (Cowan, Cranmer, Gross, Vitells 2011). `forecast.py` runs the
+  whole procedure on toy data drawn from a Pythia 8 Z -> b bbar dimuon shape scaled to ALEPH's
+  background, for several DELPHI scenarios. `dimucomb.py` (v0.9) is test B: one signal
+  strength fitted across the b-tagged and not-b-tagged spectra, each with its own background,
+  and the pre-registered rule for the untagged signal yield. `combcast.py` forecasts test B
+  against test A on paired toys. Tests: `python -m unittest -v test_dimustat test_dimucomb`;
+  run: `python forecast.py --out OUT` (needs `numpy`, `scipy`, `pythia8mc`),
+  `python combcast.py --out OUT` (needs `numpy`, `scipy`).
 - [delsim/](delsim/) (plan v0.5): the signal through DELPHI's own detector simulation.
   `run_delsim.sh` (DELPHI container) generates 30.4 GeV vector-boson signal events with `xkin/`,
   finds a working route to DELPHI's condition database, simulates and reconstructs the events
@@ -67,11 +80,14 @@ name. It is not a DELPHI Collaboration result, and neither DELPHI nor CERN endor
   `python -m unittest -v test_dimusel test_btagcal`; run:
   `python dimusel.py --dir NTUPLES --period y94 --out spectra.json [--config cuts.json]`,
   `python btagcal.py --dir NTUPLES --period y94 --out btagcal.json`.
+- [reviews/](reviews/): hand reviews of the code, with what was found and fixed.
 
 ## Status
 
-Plan v0.8, 2026-11-17. No DELPHI dimuon mass from real data has been looked at yet. Results,
-positive, negative or inconclusive, will all be published here.
+Plan v0.9, 2026-11-17. No DELPHI dimuon mass from real data has been looked at yet. Eight
+validation, simulation and forecast jobs are queued; their results will be graded against the
+expectations written in PLAN.md before they ran. Results, positive, negative or inconclusive,
+will all be published here.
 
 ## Data and licences
 

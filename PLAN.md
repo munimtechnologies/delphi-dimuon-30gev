@@ -1,30 +1,28 @@
-# Analysis plan v0.8: does DELPHI see ALEPH's 30 GeV dimuon excess?
+# Analysis plan v0.9: does DELPHI see ALEPH's 30 GeV dimuon excess?
 
 MV2 of Munim, Inc. (mv2@munimtech.com). v0.1 written 2026-11-17 06:58 UTC; v0.2 08:30 UTC;
-v0.3 09:45 UTC; v0.4 10:50 UTC; v0.5 11:45 UTC; v0.6 12:40 UTC; v0.7 13:40 UTC; v0.8 14:40 UTC.
-Made with AI agents working in MV2's name. This is a plan, not a result: as of v0.8, no DELPHI
-dimuon mass from real data has been looked at. Not a DELPHI Collaboration result; DELPHI and
-CERN do not endorse it. Text CC BY 4.0, code Apache-2.0.
+v0.3 09:45 UTC; v0.4 10:50 UTC; v0.5 11:45 UTC; v0.6 12:40 UTC; v0.7 13:40 UTC; v0.8 14:40 UTC;
+v0.9 16:40 UTC. Made with AI agents working in MV2's name. This is a plan, not a result: as of
+v0.9, no DELPHI dimuon mass from real data has been looked at. Not a DELPHI Collaboration
+result; DELPHI and CERN do not endorse it. Text CC BY 4.0, code Apache-2.0.
 
-Changes from v0.7:
-- New section **4j**: the 1992 and 1993 data. The rough forecast (sections 2, 5c) says
-  1994-95 alone probably cannot exclude an ALEPH-sized signal, so rule 5d will most likely add
-  1992-93. The inputs are now identified (1992: `short92_e2`, record 81098, `Y13723`; 1993: record
-  81166, `Y12340`; simulation `kk2f4146/v92e` and `v93d`). Before 1994 DELPHI's vertex detector
-  measured only R-phi, not z, so the b-tag working point and the impact-parameter cuts are set
-  **per period** from that period's own calibration and validation, while every other cut is
-  common. A second validation run on 1992-93 (`dimu-val9293-v1`) is filed with expectations
-  W1-W5 written before it runs.
-- `analysis/dimusel.py` 0.3.0: `--period` labels each output; `--combine` refuses to mix
-  periods; new `--merge-periods` sums one output per period and allows only the per-period
-  cuts (b-tag working point, |d0| and |z0| limits) to differ, keeping each period's cut flow
-  for N_exp. `analysis/btagcal.py` 0.2.0: `--period`; `--combine` refuses to add data to
-  simulation counts (0.1.0 did not check this) or different periods, and now sums the file
-  count. New tests for both.
-- 4h: production writes blinded spectra for a pre-declared grid of five hemisphere b-tag working
-  points (`ntuple/configs/`), so the working point chosen from the calibration of 4g does not
-  need a second pass over the data. The final unblinding pass is now spelled out (4i).
-- Nothing about the blinding, the statistics or the primary hypothesis changed.
+Changes from v0.8:
+- New section **5e** and a second primary test, **test B**. If ALEPH's excess is a boson
+  produced together with b quarks, ALEPH's own 38 % b-tag implies about 1.63 untagged signal
+  events for every tagged one. That is about 53 events among ALEPH's events that fail the tag,
+  where ALEPH reports only that "no excess is visible" (Fig. 24 of arXiv:1610.06536, no fit).
+  The ALEPH-replica test (now called **test A**) uses only DELPHI's tagged events and so
+  discards about 62 % of such a signal. Test B fits DELPHI's b-tagged and not-b-tagged
+  opposite-sign dimuon spectra together with one signal strength. These two disjoint
+  categories are already written by `analysis/dimusel.py` (`os_mumu_btag`, `os_mumu_untagged`),
+  so production does not change. A hand forecast puts the 1994-95 median expected limit at
+  about 0.8 of the ALEPH-sized signal, against about 1.2 for test A. The chance of excluding an
+  ALEPH-sized signal that is not there rises from about 0.4 to about 0.7, and with 1992-95 to
+  about 0.95.
+- New code `stats/dimucomb.py` 0.1.0 (simultaneous fit, the pre-registered untagged-yield rule,
+  q0, CLs; 8 tests) and `stats/combcast.py` (Asimov and toy forecast of test B against test
+  A). The job `dimu-combcast-v1` is filed with expectations G1-G6 written before it runs.
+- Nothing about the blinding, test A, the data scope rule (5d) or the selection changed.
 
 ## 1. The question
 
@@ -73,7 +71,9 @@ arXiv:2510.18762, whose selection includes a thrust-axis cut of 30-150 degrees; 
 signal events. The 1991-1993 data are in the open release too, taken with the older
 three-layer single-sided vertex detector (arXiv:2510.18762 sec. 4); adding 1992-1993 roughly
 doubles the sample. A hand estimate (section 5c) gives a median expected 95 % CLs limit of
-about 1.2 times the ALEPH-sized yield for 1994-95 alone, and about 0.9 for 1992-95.
+about 1.2 times the ALEPH-sized yield for 1994-95 alone, and about 0.9 for 1992-95, using
+b-tagged events only (test A). Using the untagged events as well (test B, section 5e) brings
+these to about 0.8 and 0.6.
 
 ## 3. Data and software (public, CC0, cite the DOIs)
 
@@ -151,7 +151,9 @@ decision):
 decays, not a boson radiated off a b quark or produced in Z -> h A. A DELPHI search can then add
 a second, model-motivated selection with both muons away from jets. There the b bbar background
 is small, so DELPHI could be more sensitive to a real boson than an ALEPH-style replica. Any
-such selection will be fixed in v1.0, before unblinding.
+such selection will be fixed in v1.0, before unblinding. (The job `xkin-v1` runs xme 0.1.0;
+xme 0.2.0, published after a hand review, corrects the S and P mass lineshapes, not the
+angles; see `reviews/`.)
 
 ## 4c. The ntuple (`ntuple/`, v0.3)
 
@@ -247,14 +249,14 @@ rate per hadronic Z) x (DELPHI hadronic count) x (DELPHI efficiency / ALEPH effi
 same model), with ALEPH's efficiency estimated from the generator-level acceptance of the same
 events times ALEPH's quoted muon (86 % per muon) and b-tag efficiencies. The b-tag factor is the
 data-measured efficiency of 4g; the signal events' own b-tag response from DELSIM (4e step 5)
-checks that the signal's b-tag efficiency matches inclusive Z -> b bbar within its statistics.
-If D1 finds no working route, the resolution is taken from DELPHI's measured Z -> mu mu and
-J/psi widths in data (validation 4d) and the efficiency from the KK2f simulation's prompt muons,
-and this is stated as a limitation. If 1992-93 are added (5d, 4j), N_exp is summed period by
-period: each period's hadronic count, b-tag efficiency (4g, per period) and muon efficiency
-(the 1994 DELSIM value, corrected by the ratio of prompt-muon efficiencies in that period's
-KK2f simulation to 1994's; a DELSIM run with `-VERSION v92e`/`v93d` replaces this if D1 finds
-a working route).
+checks that the signal's b-tag efficiency matches inclusive Z -> b bbar within its statistics,
+and gives the ratio rho_D used by test B (5e). If D1 finds no working route, the resolution is
+taken from DELPHI's measured Z -> mu mu and J/psi widths in data (validation 4d) and the
+efficiency from the KK2f simulation's prompt muons, and this is stated as a limitation. If
+1992-93 are added (5d, 4j), N_exp is summed period by period: each period's hadronic count,
+b-tag efficiency (4g, per period) and muon efficiency (the 1994 DELSIM value, corrected by the
+ratio of prompt-muon efficiencies in that period's KK2f simulation to 1994's; a DELSIM run with
+`-VERSION v92e`/`v93d` replaces this if D1 finds a working route).
 
 ## 4f. From ntuple to mass spectra (`analysis/dimusel.py`, v0.6; 0.2.0 in v0.7; 0.3.0 in v0.8)
 
@@ -277,9 +279,10 @@ fits in about 1 GB of memory.
   same definition as `xkin/evana.py`) built without the leptons; a lepton is isolated if it is
   more than 20 degrees from every jet above 3 GeV.
 - **Categories** (all pairs in an event are counted, as ALEPH did): opposite-sign mumu b-tagged
-  (primary), isolated b-tagged, untagged and anti-tagged; opposite-sign ee b-tagged, isolated
-  b-tagged and anti-tagged; same-sign mumu (b-tagged, untagged); e-mu opposite-sign (b-tagged,
-  untagged) and same-sign (b-tagged).
+  (primary, tests A and B), isolated b-tagged, not b-tagged (`os_mumu_untagged`: every hadronic
+  event that passes all cuts but fails the b-tag; test B) and anti-tagged; opposite-sign ee
+  b-tagged, isolated b-tagged and anti-tagged; same-sign mumu (b-tagged, untagged); e-mu
+  opposite-sign (b-tagged, untagged) and same-sign (b-tagged).
 - **Output**: per category, the 700 bins of 50 MeV over 15-50 GeV used by `stats/dimustat.py`
   and 0.5 GeV bins over 0-90 GeV; and the cut flow (event counts after each cut, the hadronic,
   b-tagged and anti-tagged event totals that enter N_exp).
@@ -302,7 +305,7 @@ signal. Same-sign and e-mu pairs and all simulation stay open. The window opens 
 program is given a plan file whose first line reads "Analysis plan v1.x"; that file's SHA-256 is
 written into the output. Tests (`python -m unittest -v test_dimusel`, 21 tests, synthetic
 events): the window stays hidden for every blinded category and its edges, sidebands and controls
-stay visible, simulation is open, the unblind gate refuses this v0.8 plan, each cut, both b-tag
+stay visible, simulation is open, the unblind gate refuses this plan (v0.9), each cut, both b-tag
 modes and the jet clustering behave as specified, combining keeps the blinding, mixed periods
 are refused by `--combine`, and `--merge-periods` sums periods with different working points
 but refuses any other difference, a repeated period or an unlabelled input.
@@ -365,7 +368,8 @@ the per-file ntuples (kept on MV2's own machine, not published while the window 
 `btagcal_<slice>.json` (counts only) and, new in v0.8, one blinded spectrum per configuration in
 `ntuple/configs/`: the hemisphere b-tag at working points 1e-2, 3e-3, 1e-3, 3e-4 and 1e-4
 (`spectra_<slice>_hemi_w*.json`). Slices are combined per period with `dimusel.py --combine` and
-`btagcal.py --combine`.
+`btagcal.py --combine`. The `os_mumu_untagged` histogram of each configuration is the second
+category of test B (5e); nothing extra is produced for it.
 
 **Choosing the working point without a second pass (fixed now).** Plan v1.0 uses, for each
 period, the grid point closest in log(w) to that period's w_h from 4g, and the b efficiency
@@ -394,7 +398,8 @@ with a switch that hands `dimusel.py` the published v1.0 plan file (`--unblind`)
 unblinded slice outputs are combined per period and merged across periods. The pass is checked
 against the blinded production: outside 26-35 GeV, and in every control category, its spectra
 must equal the blinded spectra bin by bin. Any difference stops the analysis until it is
-explained. Then `stats/dimustat.py` runs the tests of 5b exactly as frozen.
+explained. Then `stats/dimustat.py` (test A) and `stats/dimucomb.py` (test B) run the tests of
+5b and 5e exactly as frozen.
 
 ## 4j. The 1992 and 1993 data (new in v0.8)
 
@@ -416,7 +421,8 @@ track comes from the outer tracking alone (much coarser). The analysis therefore
 year as its own **period** with its own b-tag working point (4g, chosen by the same 38 % rule)
 and its own |d0| and |z0| limits (set from that period's validation so that the same fraction of
 prompt muons passes as in 1994). Every other cut is common, and only these three may differ
-between periods (enforced by `dimusel.py --merge-periods`).
+between periods (enforced by `dimusel.py --merge-periods`). A weaker 1992-93 tag matters less
+for test B (5e), which also uses the events that fail the tag.
 
 **Validation run 2 (job `dimu-val9293-v1`, filed 2026-11-17).** The published code
 (`val9293/run_val9293.sh` fetches it and refuses older versions) runs on 3 data files per year
@@ -441,7 +447,7 @@ The quantitative 1992-93 b-tag condition of rule 5d (b efficiency within a facto
 1994's at the same mistag rate, by the double-tag method) needs full-year statistics and is
 evaluated on the production counts, not on these 3 files.
 
-## 5. Blinding and pre-registration (commitments made in v0.1, tightened in v0.6)
+## 5. Blinding and pre-registration (commitments made in v0.1, tightened in v0.6, test B in v0.9)
 
 - The opposite-sign dimuon mass window **26-35 GeV in b-tagged events stays blind** until
   version 1.0 of this plan is published with the frozen selection, background model,
@@ -450,15 +456,17 @@ evaluated on the production counts, not on these 3 files.
   opposite-sign mumu and ee category in data, whatever its b-tag (section 4f).
 - Allowed before unblinding: same-sign and e-mu control samples, all opposite-sign spectra
   outside 26-35 GeV, simulation, and event counts that do not reveal the window.
-- **Primary test (fixed hypothesis):** extended likelihood fit with m = 30.40 GeV and
-  Gamma = 1.78 GeV fixed. Report the fitted yield mu_hat and its uncertainty in units of
-  N_exp. Outcomes: "ALEPH-sized signal excluded at 95 % CL" (upper limit below N_exp),
-  "compatible with ALEPH" (N_exp inside the 68 % interval and background-only rejected at
-  2 sigma), or "inconclusive" (anything else).
-- **Secondary:** a 15-50 GeV scan with free mass, local and global significance; the
-  e+e- channel; the year-by-year consistency; the inverted-b-tag control (after unblinding);
-  the event-probability b-tag cross-check (4.2); and (new in v0.2, to be defined exactly in
-  v1.0) the isolated-muon selection of section 4b.
+- **Primary test A (ALEPH replica, fixed hypothesis):** extended likelihood fit of the b-tagged
+  spectrum with m = 30.40 GeV and Gamma = 1.78 GeV fixed. Report the fitted yield mu_hat and its
+  uncertainty in units of N_exp. Outcomes: "ALEPH-sized signal excluded at 95 % CL" (upper limit
+  below N_exp), "compatible with ALEPH" (N_exp inside the 68 % interval and background-only
+  rejected at 2 sigma), or "inconclusive" (anything else).
+- **Primary test B (new in v0.9, section 5e):** the same hypothesis and outcomes for a boson
+  produced together with b quarks, fitted in the b-tagged and not-b-tagged spectra at once.
+- **Secondary:** a 15-50 GeV scan with free mass, local and global significance (for test A and
+  for test B); the e+e- channel; the year-by-year consistency; the inverted-b-tag control
+  (after unblinding); the event-probability b-tag cross-check (4.2); and (new in v0.2, to be
+  defined exactly in v1.0) the isolated-muon selection of section 4b.
 - Everything is published whatever the outcome, including a null or inconclusive result.
 
 ## 5b. The statistical procedure, exactly (new in v0.4; code `stats/dimustat.py`)
@@ -532,7 +540,98 @@ and a b-tag efficiency within a factor 1.3 of 1994's at the same mistag rate, me
 double-tag method of 4g on the production counts). If 1992-93 fails validation, the analysis
 proceeds with 1994-95 and the limit is quoted as it comes out. If only one of the two years
 passes, that year is used. This rule is fixed so that the amount of data cannot be chosen
-after the window is seen.
+after the window is seen. (v0.9: the rule stays tied to test A's forecast, S2 of 5c. Test B
+does not change it.)
+
+## 5e. Test B: an ALEPH-sized boson produced with b quarks, in tagged and untagged events (new in v0.9; code `stats/dimucomb.py`)
+
+**Why.** ALEPH's tag keeps about 38 % of Z -> b bbar events (arXiv:1610.06536 sec. 3.2). If the
+excess is a boson X produced together with b quarks (X radiated off a b quark, models V and S
+of 4b; or Z -> h A with A -> b bbar, model P), then for each tagged signal event about
+(1 - 0.38) / 0.38 = 1.63 more fail the tag, unless the signal's own tag efficiency is much
+higher than that of ordinary Z -> b bbar events (for softer b jets and prompt muons it should, if
+anything, be lower). ALEPH's tagged yield of 32.3 events then implies about 53 more signal
+events among ALEPH's events that fail the tag (about 35 at the yield minus one standard
+deviation). ALEPH reports for that sample only that "no excess is visible anymore" (Fig. 24;
+no count or fit is given), and Lane and Pritchett (arXiv:1701.07376) read the inverted-tag null
+as one sign that the excess is a fluctuation. For DELPHI, a test that uses only the tagged
+events (test A) throws away most of such a signal. Above 25 GeV, ALEPH's simulation finds only
+semileptonic b bbar decays in the opposite-sign dimuon spectrum (sec. 4.5). So the untagged
+background is roughly (1 - 0.38) / 0.38 times the tagged b bbar background, plus whatever
+charm and misidentified hadrons add. Fitting both together is therefore much more sensitive.
+
+**Test B (fixed now).**
+- Categories: T = `os_mumu_btag` (test A's histogram) and U = `os_mumu_untagged` (the same
+  selection, b-tag failed; disjoint from T). Both come from the production of 4h at the same
+  working point and are period-merged in the same way (4f). No other category enters test B.
+- Model: in each category, signal mu N_c s(m) plus a log-Legendre background with its own
+  normalisation, shape and degree. The degree rule of 5b is applied to each category's own
+  sidebands. The signal template s(m) is the same in both (5b; the mass resolution does not
+  depend on the tag). One parameter of interest, mu; mu = 1 is an ALEPH-sized boson.
+- Yields at mu = 1: N_T = N_exp of 4e. N_U = N_T (1 - eps rho) / (eps rho), summed over periods
+  if 1992-93 are used. eps is the period's b efficiency measured in data at the chosen working
+  point (4g; close to 0.38 by construction). rho = max(1, rho_D), where rho_D is the DELSIM
+  signal tag efficiency at that working point divided by eps (4e). A rho below 1 would raise
+  N_U, so rho is never taken below 1 and N_U is never overstated. If DELSIM gives no tag
+  efficiency, rho = 1, stated as an assumption. The same rho is assumed for ALEPH; with that, N_T
+  does not depend on rho.
+- Statistics: as 5b, with mu in place of n_s. Discovery q0 and Z0; asymptotic CLs upper limit on
+  mu, with sigma from the background-only Asimov set of the joint fit; toys if N_T + N_U < 10.
+  Outcomes, with the labels of section 5: EXCLUDED (upper limit on mu below 1), COMPATIBLE
+  (2 Delta ln L < 1 at mu = 1 and Z0 >= 2), INCONCLUSIVE (anything else).
+
+**How tests A and B are read together (fixed now).** Both are always reported.
+- B EXCLUDED: "an ALEPH-sized boson produced with b quarks is excluded at 95 % CL by DELPHI".
+  If A is COMPATIBLE at the same time, the report says that the tagged excess, if real, does
+  not behave like a boson produced with b quarks.
+- B COMPATIBLE: evidence for such a boson at the stated significance. Then T and U are also
+  fitted separately, period by period, and the result is presented as needing independent
+  confirmation, not as a discovery.
+- A COMPATIBLE and B INCONCLUSIVE: reported as such, with no claim of a new particle.
+
+**Hand forecast (before any job; asymptotic formulas of 5b).** 1994-95, scenario S2 of 5c
+(k = 0.84, r = 0.8): N_T = 21.7, N_U = 35.4; tagged background about 980 pairs in 15-50 GeV.
+With sigma(n_s) about 13 events in T (5c), Z0 for an ALEPH-sized signal is about 1.67 in T alone.
+U has background f_u x 1.63 x T's, where f_u >= 1 counts charm and misidentified hadrons. Then
+sigma_U is about 13 sqrt(1.63 f_u) and the joint Z0 is about sqrt(Z_T^2 + Z_U^2):
+
+| scenario | Z0 test A | Z0 test B | median limit A | median limit B | P(EXCLUDED, mu = 0) A | B |
+|---|---|---|---|---|---|---|
+| 1994-95, f_u = 1 | 1.67 | 2.71 | 1.17 | 0.72 | 0.41 | 0.83 |
+| 1994-95, f_u = 1.5 | 1.67 | 2.41 | 1.17 | 0.81 | 0.41 | 0.73 |
+| 1994-95, f_u = 3 | 1.67 | 2.07 | 1.17 | 0.95 | 0.41 | 0.57 |
+| 1992-95, f_u = 1.5 | 2.30 | 3.33 | 0.85 | 0.59 | 0.68 | 0.95 |
+
+(Median limit = 1.96 / Z0. P(EXCLUDED | mu = 0) is from the asymptotic CLs condition
+1 - Phi(Z0 - u) < 0.05 Phi(u) for u = mu_hat / sigma >= 0, and its q~ > q_A branch for u < 0.)
+If ALEPH's signal is real, test B on 1992-95 would expect about 3.3 sigma.
+
+**Job `dimu-combcast-v1` (filed 2026-11-17).** `stats/test_dimucomb.py` (8 tests: the yield
+rule; single-category equality with `dimustat` for the likelihood, gradient and Asimov sigma;
+analytic gradient; Asimov recovery; sqrt(2) gain for two identical categories; no gain from a
+category without signal; median CLs limit = 1.96 sigma; q0 scaling; the outcome labels). Then
+`stats/combcast.py`: Asimov tests A, U-only and B for eight scenarios (C1-C4: 1994-95 with
+f_u = 1, 1.5, 2, 3; C5: 1992-95, f_u = 1.5; C6: an exponential b bbar shape; C7: the non-b part
+with the same shape as b bbar; C8: 1.2 % mass resolution). It also runs 200 paired toys per
+mu = 0 and 1 for C2 and C5, each analysed by both tests with the full procedure. The background
+shape is a power law m^-1, whose density near 30 GeV (about 27 pairs/GeV in C2's tagged
+category) is close to the Pythia-based 29/GeV of 5c. Its non-b part is a softer m^-3. The
+ratio of B to A, not the absolute level, is what this job is for.
+
+**Expectations written before it runs:**
+- G1: C2 Asimov median limit ratio (B over A) between 0.60 and 0.80 (hand: 0.69).
+- G2: C2 toys at mu = 0: P(EXCLUDED) for A between 0.25 and 0.55 (hand 0.41); for B between
+  0.60 and 0.85 (hand 0.73).
+- G3: C5 toys at mu = 0: P(EXCLUDED) for B at least 0.85 (hand 0.95); C5 Asimov Z0 for B at
+  mu = 1 between 2.8 and 3.8 (hand 3.3).
+- G4: C4 (f_u = 3) ratio below 0.90 (hand 0.81); C1 (f_u = 1) ratio between 0.55 and 0.72
+  (hand 0.62).
+- G5: in the paired C2 toys at mu = 0, A excludes while B does not in at most 10 % of toys.
+- G6: fewer than 1 % of toy fits fail.
+
+If G1-G4 hold, test B is the more sensitive primary test, and plan v1.0 states its expected
+limits next to test A's. If they fail, the cause is found before v1.0 (a code error, or an
+error in the hand estimate) and reported.
 
 ## 6. Steps and status
 
@@ -540,14 +639,15 @@ after the window is seen.
 |---|---|
 | prior-art search | done 2026-11-17 (repeated 12:20 UTC, still none) |
 | feasibility probe (container, xrootd, example build) | job `delphi-probe-v1` filed 2026-11-17, waiting |
-| kinematic study + DELSIM input writer (`xkin/`) | job `xkin-v1` filed 2026-11-17, waiting |
+| kinematic study + DELSIM input writer (`xkin/`) | job `xkin-v1` filed 2026-11-17, waiting; xme 0.2.0 published after review |
 | skelana ntuple writer (`ntuple/`) + validation run 1 (section 4d) | job `dimu-ntuple-v1` filed 2026-11-17, waiting |
 | statistics code + sensitivity forecast (`stats/`, 5b-5c) | job `dimu-forecast-v1` filed 2026-11-17, waiting |
 | signal through DELSIM: resolution and efficiency (`delsim/`, 4e) | job `delsim-signal-v1` filed 2026-11-17, waiting |
 | analysis stage with blinding in code (`analysis/`, 4f) and b-tag calibration (4g) | job `dimusel-tests-v2` filed 2026-11-17, waiting; the repository's test gate passed the v0.7 code before it was committed |
 | 1992-93 inputs identified; per-period cuts in code (4j, dimusel 0.3.0, btagcal 0.2.0) | done 2026-11-17 (v0.8) |
 | validation run 2 on 1992-93 (4j, W1-W5) | job `dimu-val9293-v1` filed 2026-11-17, waiting |
-| full-data ntuple production (4h; no mass histograms in the window) | script ready (0.3.0); filed after validation |
+| test B: tagged + untagged joint fit (`stats/dimucomb.py`, 5e) and its forecast | job `dimu-combcast-v1` filed 2026-11-17, waiting |
+| full-data ntuple production (4h; no mass histograms in the window) | script ready (0.3.0, `prod/`); filed after validation |
 | plan v1.0 frozen, then the unblinding pass (4i) | later |
 
 ## References
