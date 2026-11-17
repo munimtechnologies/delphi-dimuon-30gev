@@ -16,15 +16,17 @@ value, ALEPH's own kinematics allow at most about 4-10 of its 32 fitted events t
 boson (95 % CL). This sharpens an earlier parton-level finding by Ko, Li and Yu
 (arXiv:1610.07526). It is generator level only; the note lists its limits.
 
-**Second result (2026-11-17, not yet checked by a physicist): [NOTE-fourfermion.md](NOTE-fourfermion.md).**
+**Second result (2026-11-17, version 0.2, not yet checked by a physicist): [NOTE-fourfermion.md](NOTE-fourfermion.md).**
 Such a boson's muons are isolated from the jets in 92-95 % of events. That is the signature
 ALEPH, L3 and OPAL selected in the early 1990s to measure e+e- -> mu+ mu- q qbar at the Z pole,
-and their published counts agree with the Standard Model. By hand, OPAL's count (28 seen,
-28 expected) leaves room for an ALEPH-sized boson only if its selection kept fewer than about
-1 in 17 such events. The three counts together require fewer than about 1 in 18. The selections'
-efficiencies for this topology were never published, so this is a bound, not yet an
-exclusion. `analysis/lep4f.py` computes it. As far as we can find, nobody has confronted the
-excess with these measurements before.
+and their published counts agree with the Standard Model. Version 0.2 adds what those papers show
+of the dimuon mass: OPAL has at most one selected mu mu q qbar event between 20 and 40 GeV and
+L3 has none, where an ALEPH-sized boson would have put of order a hundred. By hand, the boson
+survives the OPAL and L3 distributions only if their selections kept fewer than about 1 in 40
+such events (1 in 23 at the weakest reading of ALEPH's numbers). `analysis/eff4f.py` codes the
+three published selections at generator level, and a queued job measures their efficiency for
+the boson models, against expectations written in the note before it runs. As far as we can
+find, nobody has confronted the excess with these measurements before.
 
 **Two pre-registered primary tests (plan v0.9, refined in v0.10 and v0.11).** Test A replicates
 ALEPH's analysis on DELPHI's b-tagged events. Test B asks whether there is an ALEPH-sized boson
@@ -47,8 +49,9 @@ this lowers test B's 1992-95 exclusion chance from about 0.95 to about 0.88.
   selection and tests are frozen and published here as plan v1.0).
 - [NOTE-kinematics.md](NOTE-kinematics.md): the kinematic study's result, its pre-registered
   grades (E1-E3, all passed) and what it changes for the DELPHI test.
-- [NOTE-fourfermion.md](NOTE-fourfermion.md): the bound from the published LEP1
-  mu+ mu- q qbar counts, its inputs and its limits.
+- [NOTE-fourfermion.md](NOTE-fourfermion.md): the bounds from the published LEP1
+  mu+ mu- q qbar counts and dimuon-mass distributions, their inputs, the expectations H1-H5 for
+  the efficiency job, and the limits of the argument.
 - [probe/](probe/): a feasibility probe that runs in the public DELPHI container
   (`gitlab-registry.cern.ch/delphi/deployment/delphi/al9_64_xrd`). It checks xrootd access to
   the 1994 short DSTs, builds the stock skelana example, and extracts the manuals as text.
@@ -121,13 +124,19 @@ this lowers test B's 1992-95 exclusion chance from about 0.95 to about 0.88.
   ALEPH's 38 % b efficiency. `nexp.py` (v0.11) computes the expected ALEPH-sized signal in the
   tagged and untagged categories under both readings of ALEPH's hadronic count. `lep4f.py`
   turns the published LEP1 mu mu q qbar counts into the efficiency bound of NOTE-fourfermion.md
-  (CLs Poisson limits). `iso4f.py` counts isolated opposite-sign muon pairs, with and without
-  the b-tag, in simulation only, using dimusel's own selection. Pure Python, no dependencies.
-  Tests: `python -m unittest -v test_dimusel test_btagcal test_nexp test_lep4f test_iso4f`; run:
+  (CLs Poisson limits). `eff4f.py` (0.1.0) codes the published ALEPH, OPAL and L3 mu mu q qbar
+  selections at generator level and confronts their 20-40 GeV dimuon counts with the boson
+  prediction; `run_eff4f.py` runs it on Pythia 8 events of the three xkin boson models (needs
+  `numpy`, `pythia8mc`, and `xme.py`, `evana.py`, `fadgen.py`, `run_xkin.py` from `xkin/`
+  alongside). `iso4f.py` counts isolated opposite-sign muon pairs, with and without
+  the b-tag, in simulation only, using dimusel's own selection. Pure Python, no dependencies
+  except where stated.
+  Tests: `python -m unittest -v test_dimusel test_btagcal test_nexp test_lep4f test_iso4f
+  test_eff4f`; run:
   `python dimusel.py --dir NTUPLES --period y94 --out spectra.json [--config cuts.json]`,
   `python btagcal.py --dir NTUPLES --period y94 --out btagcal.json`,
   `python nexp.py --inputs nexp_inputs.json --out nexp.json`, `python lep4f.py`,
-  `python iso4f.py --dir SIM_NTUPLES --out iso4f.json`.
+  `python run_eff4f.py --out OUT`, `python iso4f.py --dir SIM_NTUPLES --out iso4f.json`.
 - [reviews/](reviews/): hand reviews of the code, with what was found and fixed.
 
 ## Status
@@ -136,9 +145,10 @@ Plan v0.11, 2026-11-17. No DELPHI dimuon mass from real data has been looked at 
 kinematic study (xkin-v1) has returned and passed all three of its pre-registered expectations
 (see NOTE-kinematics.md). The analysis-code tests (dimusel 0.3.0, btagcal 0.2.0: 26 of 26) have
 passed. The first forecast job stopped on a syntax error before computing anything and has been
-re-filed as 0.1.1. Seven validation, simulation and test jobs are still queued, plus the new
-four-fermion and lep4f jobs. Their results will be graded against the expectations written in
-PLAN.md before they ran. Results, positive, negative or inconclusive, will all be published here.
+re-filed as 0.1.1. Seven validation, simulation and test jobs are still queued, plus the
+four-fermion, lep4f and lep4f-eff jobs. Their results will be graded against the expectations
+written in PLAN.md and NOTE-fourfermion.md before they ran. Results, positive, negative or
+inconclusive, will all be published here.
 
 ## Data and licences
 
@@ -148,4 +158,5 @@ Code in this repository is Apache-2.0; text and result tables are CC BY 4.0. Pyt
 of the skelana common-block words were read from the public SKELANA decks and the
 delphi-nanoaod headers (GPL-3.0); no code from those projects is copied here. The DELSIM
 run steps follow the public documentation of the delphi-sim-pipeline project and the CERN Open
-Data simulation guide; no code from that project is copied here.
+Data simulation guide; no code from that project is copied here. The published LEP1
+four-fermion numbers are quoted from the cited papers.
