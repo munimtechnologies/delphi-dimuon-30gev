@@ -1,9 +1,13 @@
-# Analysis plan v0.1: does DELPHI see ALEPH's 30 GeV dimuon excess?
+# Analysis plan v0.2: does DELPHI see ALEPH's 30 GeV dimuon excess?
 
-MV2 of Munim, Inc. (mv2@munimtech.com). Written 2026-11-17. Made with AI agents working in
-MV2's name. This is a plan, not a result: as of v0.1, no DELPHI dimuon mass has been looked at.
-Not a DELPHI Collaboration result; DELPHI and CERN do not endorse it.
-Text CC BY 4.0, code Apache-2.0.
+MV2 of Munim, Inc. (mv2@munimtech.com). v0.1 written 2026-11-17 06:58 UTC; v0.2 2026-11-17 08:30 UTC.
+Made with AI agents working in MV2's name. This is a plan, not a result: as of v0.2, no
+DELPHI dimuon mass has been looked at. Not a DELPHI Collaboration result; DELPHI and CERN do
+not endorse it. Text CC BY 4.0, code Apache-2.0.
+
+Changes from v0.1: new section 4b (a generator-level kinematic study, `xkin/`, with its
+expectations written down before it runs); section 3 now names the route into the DELPHI
+detector simulation; the blinding in section 5 is unchanged.
 
 ## 1. The question
 
@@ -52,21 +56,25 @@ events; adding 1992-1993 roughly doubles that. ALEPH's background was about 1,45
 15-50 GeV, so with a resolution near 0.75 GeV and a 1.8 GeV width a window of about +-2.5 GeV
 holds about 15-20 % of the background. That is roughly 220-290 pairs for ALEPH-sized
 background, giving S/sqrt(B) of about 1.6-1.8 sigma for 1994-95 (27 / sqrt(219 to 291))
-and about 2.2-2.6 sigma with 1992-95 (54 / sqrt(438 to 582)). These numbers are only for planning. The real expectation comes from DELPHI's own
-simulation of a signal sample (section 4), and is pre-registered before unblinding.
+and about 2.2-2.6 sigma with 1992-95 (54 / sqrt(438 to 582)). These numbers are only for
+planning. The real expectation comes from DELPHI's own simulation of a signal sample
+(section 4), and is pre-registered before unblinding.
 
-## 3. Data (public, CC0, cite the DOIs)
+## 3. Data and software (public, CC0, cite the DOIs)
 
 - Real data: `short94_c2` (doi:10.7483/OPENDATA.DELPHI.0XNE.G96F, about 429 files of about 90 MB);
   `short95_d2` (doi:10.7483/OPENDATA.DELPHI.K4LR.4PQ4); 1992-1993 short DSTs if the vertex
   detector configuration allows a comparable b-tag.
 - Simulation: KK2f + PYTHIA Z -> q qbar, `sh_kk2f4146qqpy_e91.25_c94_2l_c2`
-  (doi:10.7483/OPENDATA.DELPHI.P4BN.GFID) and the 1995 equivalent; a private signal sample
-  (Z -> b bbar with X(30.4 GeV) -> mu+ mu- radiated from a b quark) passed through DELSIM with
-  `runsim -gext`.
+  (doi:10.7483/OPENDATA.DELPHI.P4BN.GFID) and the 1995 equivalent.
+- Signal simulation: events from `xkin/` (section 4b), hadronised with Pythia 8 and written
+  in DELSIM's external-generator format (FADGEN, `xkin/fadgen.py`, following the layout of
+  `hepmc2fadgen.cpp` in github.com/delphi-fullDST-edm4hep/delphi-sim-pipeline), then passed
+  through DELSIM with `runsim -VERSION v94c -EBEAM 45.594 -gext` (two-pass title with
+  `LUDECV TRUE` so DELSIM uses the generator's decay vertices).
 - Data policy: doi:10.7483/OPENDATA.DELPHI.0X8O.FBUH.
-- Software: DELPHI container `gitlab-registry.cern.ch/delphi/deployment/delphi/al9_64_xrd`,
-  skelana framework, data read over xrootd from eospublic.cern.ch.
+- Software: DELPHI container `gitlab-registry.cern.ch/delphi/deployment/delphi/al9_64_xrd`
+  (or the delphi-sim image), skelana, data read over xrootd from eospublic.cern.ch.
 
 ## 4. Analysis outline (selection to be frozen before unblinding)
 
@@ -86,7 +94,41 @@ simulation of a signal sample (section 4), and is pre-registered before unblindi
 7. Signal: Breit-Wigner(30.40, 1.78 GeV) convolved with DELPHI's simulated dimuon mass
    resolution.
 
-## 5. Blinding and pre-registration (commitments made now)
+## 4b. Kinematic study: would a real boson look like ALEPH's excess? (xkin, new in v0.2)
+
+ALEPH reports (arXiv:1610.06536, sec. 4.2) that "in all cases one of the two muons from
+di-muons is closer than 15 degrees to one of the leading jets", that the other muon-jet angle is
+"typically in the range of 5 to 20 degrees", and (sec. 4.7) that cos theta* near 30 GeV prefers
+forward/backward values. Lane and Pritchett (arXiv:1701.07376) noted qualitatively that a
+Z -> X Y signal should not put the muons close to the b jets, but nobody has computed these
+angles for explicit signal models. `xkin/` does this at generator level:
+
+- **V**: e+e- -> Z -> b bbar X, X -> mu+ mu-, X a vector radiated off the b line (exact tree-level
+  matrix element with full spin correlations, m = 30.40 GeV, Gamma = 1.78 GeV).
+- **S**: the same with a scalar radiated off the b line.
+- **P**: Z -> h A, h -> mu+ mu-, A -> b bbar (two 30.4 GeV spin-0 states, Lane-Pritchett type).
+- **Background**: inclusive Pythia 8 Z -> b bbar, opposite-sign muon pairs.
+
+All are hadronised with Pythia 8. They are compared at ALEPH-like cuts: muon p (or pT) > 2.5 GeV,
+|cos theta| < 0.95; at least 5 charged; visible missing momentum < 18 GeV; 26 < m_mumu < 35 GeV;
+e+e- anti-kt jets without leptons (R = 0.4, 0.7, 1.0); leading jet per thrust hemisphere.
+Checks: Ward identity, Ellis-Ross-Terrano massless limit, Lorentz invariance, momentum
+conservation (`xkin/test_xkin.py`).
+
+**Expectations written down before the job ran** (they are not used for any DELPHI
+decision):
+- E1: for V, S and P, fewer than half of the window events have alpha_min < 15 degrees (R = 0.4).
+- E2: for the b bbar background, more than 70 % of the window pairs have alpha_min < 15 degrees.
+- E3: for V, S and P, at least 30 % of the window events have both muons more than 20 degrees
+  from every jet above 3 GeV. For the background, at most 10 % do.
+
+**Why it matters for DELPHI.** If E1-E3 hold, ALEPH's own kinematics fit ordinary semileptonic b
+decays, not a boson radiated off a b quark or produced in Z -> h A. A DELPHI search can then add
+a second, model-motivated selection with both muons away from jets. There the b bbar background
+is small, so DELPHI could be more sensitive to a real boson than an ALEPH-style replica. Any
+such selection will be fixed in v1.0, before unblinding.
+
+## 5. Blinding and pre-registration (commitments made in v0.1, unchanged)
 
 - The opposite-sign dimuon mass window **26-35 GeV in b-tagged events stays blind** until
   version 1.0 of this plan is published with the frozen selection, background model,
@@ -100,7 +142,8 @@ simulation of a signal sample (section 4), and is pre-registered before unblindi
   "compatible with ALEPH" (N_exp inside the 68 % interval and background-only rejected at
   2 sigma), or "inconclusive" (anything else).
 - **Secondary:** a 15-50 GeV scan with free mass, local and global significance; the
-  e+e- channel; the year-by-year consistency.
+  e+e- channel; the year-by-year consistency; and (new in v0.2, to be defined exactly in v1.0)
+  the isolated-muon selection of section 4b.
 - Everything is published whatever the outcome, including a null or inconclusive result.
 
 ## 6. Steps and status
@@ -108,19 +151,23 @@ simulation of a signal sample (section 4), and is pre-registered before unblindi
 | step | status |
 |---|---|
 | prior-art search | done 2026-11-17 |
-| feasibility probe (container, xrootd, example build) | job `delphi-probe-v1` filed 2026-11-17 |
-| skelana ntuple writer (hadronic, b-tag, leptons) + tests on simulation | next |
+| feasibility probe (container, xrootd, example build) | job `delphi-probe-v1` filed 2026-11-17, waiting |
+| kinematic study + DELSIM input writer (`xkin/`) | job `xkin-v1` filed 2026-11-17, waiting |
+| skelana ntuple writer (hadronic, b-tag, leptons) + tests on simulation | after the probe |
 | full-data ntuple production (no mass histograms in the window) | after that |
-| signal simulation through DELSIM | after that |
+| signal simulation through DELSIM | after the probe (needs condition data access) |
 | plan v1.0 frozen, then unblinding | later |
 
 ## References
 
 - A. Heister, arXiv:1610.06536 (ALEPH archived data).
 - K. Lane, L. Pritchett, arXiv:1701.07376; Les Houches 2017 NP report, arXiv:1803.10379.
+- P. Ko, J. Li, arXiv:1610.07526.
 - T. Hebbeker, S. Roth, arXiv:1905.01111 (L3).
 - CMS Collaboration, JHEP 11 (2018) 161, arXiv:1808.01890.
 - LHCb Collaboration, LHCb-PAPER-2020-013.
 - ATLAS Collaboration, JHEP 06 (2026) 165, arXiv:2601.21361.
 - DELPHI open data: opendata.cern.ch/docs/delphi-data-release-2024; first physics use:
   J. Zhang et al., arXiv:2510.18762.
+- R. K. Ellis, D. A. Ross, A. E. Terrano, Nucl. Phys. B178 (1981) 421 (massless limit check).
+- DELPHI simulation pipeline: github.com/delphi-fullDST-edm4hep/delphi-sim-pipeline.

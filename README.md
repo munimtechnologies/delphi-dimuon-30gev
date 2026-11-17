@@ -14,13 +14,20 @@ name. It is not a DELPHI Collaboration result, and neither DELPHI nor CERN endor
 - [probe/](probe/): a feasibility probe that runs in the public DELPHI container
   (`gitlab-registry.cern.ch/delphi/deployment/delphi/al9_64_xrd`). It checks xrootd access to
   the 1994 short DSTs, builds the stock skelana example, and extracts the manuals as text.
+- [xkin/](xkin/): signal generator and kinematic study (PLAN section 4b). Exact tree-level
+  e+e- -> Z -> b bbar X (X -> mu mu) for a vector or scalar X radiated off the b line, and
+  Z -> h A; Pythia 8 hadronisation; ALEPH-style muon-jet angles, cos theta*, muon multiplicity;
+  and a writer for DELSIM's external-generator input (FADGEN). Run the tests with
+  `python -m unittest -v test_xkin`; run the study with
+  `python run_xkin.py --out OUT --nsig 20000 --nbkg 600000` (needs `numpy`, `pythia8mc`).
 
 ## Status
 
-Plan v0.1, 2026-11-17. No DELPHI dimuon mass has been looked at yet. Results, positive,
+Plan v0.2, 2026-11-17. No DELPHI dimuon mass has been looked at yet. Results, positive,
 negative or inconclusive, will all be published here.
 
 ## Data and licences
 
 DELPHI open data are CC0 (cite doi:10.7483/OPENDATA.DELPHI.0X8O.FBUH and each dataset's DOI).
-Code in this repository is Apache-2.0; text and result tables are CC BY 4.0.
+Code in this repository is Apache-2.0; text and result tables are CC BY 4.0. Pythia 8
+(`pythia8mc`) is GPL-2.0-or-later and is installed separately, not bundled here.
