@@ -26,18 +26,32 @@ the OPAL and L3 distributions only if their selections kept fewer than about 1 i
 (1 in 10 even at the lowest rate quoted for the excess in the literature). `analysis/eff4f.py`
 0.2.0 codes the three published selections as written, including OPAL's multiplicity, jet and
 isolation definitions, and a queued job measures their efficiency for the boson models, against
-expectations H1-H7 written in the note before it runs. As far as we can find, nobody has
-confronted the excess with these measurements before.
+expectations H1-H7 written in the note before it runs. A third reading
+([readings/lep4f-papers-notes-3.md](readings/lep4f-papers-notes-3.md)) found OPAL's muon
+acceptance, |cos theta| < 0.9, which becomes OPAL's nominal reading. As far as we can find,
+nobody has confronted the excess with these measurements before.
 
-**Two pre-registered primary tests (plan v0.9, refined in v0.10 and v0.11).** Test A replicates
+**A flaw caught before unblinding (plan amendment 0.12, 2026-11-18): [PLAN-amendment-0.12.md](PLAN-amendment-0.12.md).**
+The test-B forecast job showed that the pre-registered background rule can fake a *negative*
+signal in the not-b-tagged spectrum. When that background is a mix of b bbar and softer
+charm/fake pairs, the rule keeps a pure power law. The fit then returns half of an injected
+ALEPH-sized signal (mu_hat = 0.51 instead of 1 on noise-free pseudo-data), which would make a
+false exclusion of the ALEPH boson about 2.5 times too likely (hand estimate; the queued job
+measures it). The amendment fixes, before any
+DELPHI mass is seen, how the background treatment will be chosen: five candidates (including
+the discrete-profiling envelope of arXiv:1408.6865) are scored on pseudo-data by written
+criteria, against expectations K0-K7 written before the job runs.
+
+**Two pre-registered primary tests (plan v0.9, refined in v0.10-v0.12).** Test A replicates
 ALEPH's analysis on DELPHI's b-tagged events. Test B asks whether there is an ALEPH-sized boson
 produced together with b quarks. Such a boson would put about 1.6 events in the not-b-tagged
 sample for every tagged one, so test B fits both samples at once. A hand forecast says test B
 raises the chance of excluding an ALEPH-sized signal that is not there from about 40 % to about
-70 % with DELPHI's 1994-95 data, and to about 95 % with 1992-95 data. A forecast job checks
-this before any DELPHI mass is seen. **A third test (C, to be pre-registered in plan v1.0)** uses
-isolated muon pairs without the b-tag, where a boson would give on the order of 100 events in
-1992-95. Its four-fermion background comes from DELPHI's own EXCALIBUR simulation.
+70 % with DELPHI's 1994-95 data, and to about 95 % with 1992-95 data; the forecast job confirmed
+the gain where the background shape is modelled correctly (median-limit ratio 0.60-0.75) and
+found the flaw above where it is not. **A third test (C, to be pre-registered in plan v1.0)**
+uses isolated muon pairs without the b-tag, where a boson would give on the order of 100 events
+in 1992-95. Its four-fermion background comes from DELPHI's own EXCALIBUR simulation.
 
 **What "ALEPH-sized" means (plan v0.11, section 5f).** The expected signal is one written
 formula in produced Z decays (`analysis/nexp.py`). ALEPH's paper itself leaves its hadronic
@@ -48,11 +62,15 @@ this lowers test B's 1992-95 exclusion chance from about 0.95 to about 0.88.
 - [PLAN.md](PLAN.md): the question, sensitivity estimate, data, analysis outline and the
   **blinding commitments** (the 26-35 GeV opposite-sign dimuon window stays closed until the
   selection and tests are frozen and published here as plan v1.0).
+  [PLAN-amendment-0.12.md](PLAN-amendment-0.12.md): section 5g (background treatment), the
+  grading of the test-B forecast (G1-G6) and expectations K0-K7.
 - [NOTE-kinematics.md](NOTE-kinematics.md): the kinematic study's result, its pre-registered
   grades (E1-E3, all passed) and what it changes for the DELPHI test.
 - [NOTE-fourfermion.md](NOTE-fourfermion.md): the bounds from the published LEP1
   mu+ mu- q qbar counts and dimuon-mass distributions, their inputs (three readings of the boson
   rate), the expectations H1-H7 for the efficiency job, and the limits of the argument.
+- [readings/](readings/): word-for-word notes from the published LEP1 papers, made by AI agents
+  reading the scanned papers.
 - [probe/](probe/): a feasibility probe that runs in the public DELPHI container
   (`gitlab-registry.cern.ch/delphi/deployment/delphi/al9_64_xrd`). It checks xrootd access to
   the 1994 short DSTs, builds the stock skelana example, and extracts the manuals as text.
@@ -87,19 +105,22 @@ this lowers test B's 1992-95 exclusion chance from about 0.95 to about 0.88.
   `analysis/iso4f.py`. Simulation only.
 - [prod/](prod/): the production-slice runner (pinned git ref, version guard) and job
   templates for the full-data pass of PLAN section 4h; filed only after validation passes.
-- [stats/](stats/) (plan v0.4, test B in v0.9): the pre-registered statistics and sensitivity
-  forecasts. `dimustat.py` is the fit that will be used on the unblinded data for test A: 50 MeV
-  bins in 15-50 GeV, Voigt signal (m = 30.40, Gamma = 1.78 GeV), a log-Legendre background
-  whose degree is chosen on the sidebands by a fixed rule, the discovery statistic q0, and
-  asymptotic CLs upper limits (Cowan, Cranmer, Gross, Vitells 2011). `forecast.py` runs the
-  whole procedure on toy data drawn from a Pythia 8 Z -> b bbar dimuon shape scaled to ALEPH's
-  background, for several DELPHI scenarios (0.1.1 fixes a syntax error that stopped the first
-  forecast job; no logic change). `dimucomb.py` (v0.9) is test B: one signal
-  strength fitted across the b-tagged and not-b-tagged spectra, each with its own background,
-  and the pre-registered rule for the untagged signal yield. `combcast.py` forecasts test B
-  against test A on paired toys. Tests: `python -m unittest -v test_dimustat test_dimucomb`;
-  run: `python forecast.py --out OUT` (needs `numpy`, `scipy`, `pythia8mc`),
-  `python combcast.py --out OUT` (needs `numpy`, `scipy`).
+- [stats/](stats/) (plan v0.4, test B in v0.9, background treatment in v0.12): the
+  pre-registered statistics and sensitivity forecasts. `dimustat.py` is the fit for test A:
+  50 MeV bins in 15-50 GeV, Voigt signal (m = 30.40, Gamma = 1.78 GeV), a log-Legendre
+  background whose degree is chosen on the sidebands by a fixed rule, the discovery statistic
+  q0, and asymptotic CLs upper limits (Cowan, Cranmer, Gross, Vitells 2011). `forecast.py` runs
+  the whole procedure on toy data drawn from a Pythia 8 Z -> b bbar dimuon shape scaled to
+  ALEPH's background, for several DELPHI scenarios (0.1.1 fixes a syntax error that stopped the
+  first forecast job; no logic change). `dimucomb.py` (v0.9) is test B: one signal strength
+  fitted across the b-tagged and not-b-tagged spectra, each with its own background, and the
+  pre-registered rule for the untagged signal yield. `combcast.py` forecasts test B against
+  test A. `bkgsys.py` (v0.12) gives per-degree profile curves, the spurious-signal test and the
+  discrete-profiling envelope; `envcast.py` scores five background treatments on combcast's
+  pseudo-data (Asimov and toys, with a time budget). Tests:
+  `python -m unittest -v test_dimustat test_dimucomb test_bkgsys`; run:
+  `python forecast.py --out OUT` (needs `numpy`, `scipy`, `pythia8mc`),
+  `python combcast.py --out OUT`, `python envcast.py --out OUT` (need `numpy`, `scipy`).
 - [delsim/](delsim/) (plan v0.5; sigana 0.2.0 in v0.10, 0.3.0 in v0.11): the signal through
   DELPHI's own detector simulation. `run_delsim.sh` (DELPHI container) generates 30.4 GeV
   vector-boson signal events with `xkin/`, finds a working route to DELPHI's condition database,
@@ -143,14 +164,17 @@ this lowers test B's 1992-95 exclusion chance from about 0.95 to about 0.88.
 
 ## Status
 
-Plan v0.11, 2026-11-18. No DELPHI dimuon mass from real data has been looked at yet. The
-kinematic study (xkin-v1) has returned and passed all three of its pre-registered expectations
-(see NOTE-kinematics.md). The analysis-code tests (dimusel 0.3.0, btagcal 0.2.0: 26 of 26) have
-passed. The first forecast job stopped on a syntax error before computing anything and has been
-re-filed as 0.1.1. Seven validation, simulation and test jobs are still queued, plus the
-four-fermion, lep4f and lep4f-eff (v2, with eff4f 0.2.0) jobs. Their results will be graded
-against the expectations written in PLAN.md and NOTE-fourfermion.md before they ran. Results,
-positive, negative or inconclusive, will all be published here.
+Plan v0.11 plus amendment 0.12, 2026-11-18. No DELPHI dimuon mass from real data has been looked
+at yet. The kinematic study (xkin-v1) has returned and passed all three of its pre-registered
+expectations (see NOTE-kinematics.md). The analysis-code tests (dimusel 0.3.0, btagcal 0.2.0:
+26 of 26; sigana 0.3.0 and nexp: all pass) have passed. The test-B forecast (combcast-v1) passed
+G4 and the Asimov half of G3, failed G1 because of the background flaw described above, and
+timed out before its toys; its follow-up (envcast-v1) is queued. The first forecast job stopped
+on a syntax error before computing anything and has been re-filed as 0.1.1. The validation,
+simulation, four-fermion and lep4f-eff (v2, eff4f 0.2.0) jobs are still queued. Their results
+will be graded against the expectations written in PLAN.md, the amendment and
+NOTE-fourfermion.md before they ran. Results, positive, negative or inconclusive, will all be
+published here.
 
 ## Data and licences
 
