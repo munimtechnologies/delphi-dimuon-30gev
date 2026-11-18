@@ -1,0 +1,103 @@
+
+ *------------------------------------------------------------------------------------* 
+ |                                                                                    | 
+ |  *------------------------------------------------------------------------------*  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  |   PPP   Y   Y  TTTTT  H   H  III    A      Welcome to the Lund Monte Carlo!  |  | 
+ |  |   P  P   Y Y     T    H   H   I    A A     This is PYTHIA version 8.318      |  | 
+ |  |   PPP     Y      T    HHHHH   I   AAAAA    Last date of change: 16 Sep 2026  |  | 
+ |  |   P       Y      T    H   H   I   A   A                                      |  | 
+ |  |   P       Y      T    H   H  III  A   A    Now is 18 Nov 2026 at 11:17:30    |  | 
+ |  |                                                                              |  | 
+ |  |   Program documentation and an archive of historic versions is found on:     |  | 
+ |  |                                                                              |  | 
+ |  |                               https://pythia.org/                            |  | 
+ |  |                                                                              |  | 
+ |  |   PYTHIA is authored by a collaboration consisting of:                       |  | 
+ |  |                                                                              |  | 
+ |  |   Javira Altmann, Christian Bierlich, Naomi Cooke, Nishita Desai,            |  | 
+ |  |   Ilkka Helenius, Philip Ilten, Joni Laulainen, Leif Lonnblad,               |  | 
+ |  |   Stephen Mrenna, Christian Preuss, Torbjorn Sjostrand, and Peter Skands.    |  | 
+ |  |                                                                              |  | 
+ |  |   The complete list of authors, including contact information and            |  | 
+ |  |   affiliations, can be found on https://pythia.org/.                         |  | 
+ |  |   Problems or bugs should be reported on email at authors@pythia.org.        |  | 
+ |  |                                                                              |  | 
+ |  |   The main program reference is C. Bierlich et al,                           |  | 
+ |  |   'A comprehensive guide to the physics and usage of Pythia 8.3',            |  | 
+ |  |   SciPost Phys. Codebases 8-r8.3 (2022) [arXiv:2203.11601 [hep-ph]]          |  | 
+ |  |                                                                              |  | 
+ |  |   PYTHIA is released under the GNU General Public Licence version 2          |  | 
+ |  |   or later. Please respect the MCnet Guidelines for Generator Authors        |  | 
+ |  |   and Users.                                                                 |  | 
+ |  |                                                                              |  | 
+ |  |   Disclaimer: this program comes without any guarantees.                     |  | 
+ |  |   Beware of errors and use common sense when interpreting results.           |  | 
+ |  |                                                                              |  | 
+ |  |   Copyright (C) 2026 Torbjorn Sjostrand                                      |  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  *------------------------------------------------------------------------------*  | 
+ |                                                                                    | 
+ *------------------------------------------------------------------------------------* 
+
+
+ *------------------------------------------------------------------------------------* 
+ |                                                                                    | 
+ |  *------------------------------------------------------------------------------*  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  |   PPP   Y   Y  TTTTT  H   H  III    A      Welcome to the Lund Monte Carlo!  |  | 
+ |  |   P  P   Y Y     T    H   H   I    A A     This is PYTHIA version 8.318      |  | 
+ |  |   PPP     Y      T    HHHHH   I   AAAAA    Last date of change: 16 Sep 2026  |  | 
+ |  |   P       Y      T    H   H   I   A   A                                      |  | 
+ |  |   P       Y      T    H   H  III  A   A    Now is 18 Nov 2026 at 11:17:30    |  | 
+ |  |                                                                              |  | 
+ |  |   Program documentation and an archive of historic versions is found on:     |  | 
+ |  |                                                                              |  | 
+ |  |                               https://pythia.org/                            |  | 
+ |  |                                                                              |  | 
+ |  |   PYTHIA is authored by a collaboration consisting of:                       |  | 
+ |  |                                                                              |  | 
+ |  |   Javira Altmann, Christian Bierlich, Naomi Cooke, Nishita Desai,            |  | 
+ |  |   Ilkka Helenius, Philip Ilten, Joni Laulainen, Leif Lonnblad,               |  | 
+ |  |   Stephen Mrenna, Christian Preuss, Torbjorn Sjostrand, and Peter Skands.    |  | 
+ |  |                                                                              |  | 
+ |  |   The complete list of authors, including contact information and            |  | 
+ |  |   affiliations, can be found on https://pythia.org/.                         |  | 
+ |  |   Problems or bugs should be reported on email at authors@pythia.org.        |  | 
+ |  |                                                                              |  | 
+ |  |   The main program reference is C. Bierlich et al,                           |  | 
+ |  |   'A comprehensive guide to the physics and usage of Pythia 8.3',            |  | 
+ |  |   SciPost Phys. Codebases 8-r8.3 (2022) [arXiv:2203.11601 [hep-ph]]          |  | 
+ |  |                                                                              |  | 
+ |  |   PYTHIA is released under the GNU General Public Licence version 2          |  | 
+ |  |   or later. Please respect the MCnet Guidelines for Generator Authors        |  | 
+ |  |   and Users.                                                                 |  | 
+ |  |                                                                              |  | 
+ |  |   Disclaimer: this program comes without any guarantees.                     |  | 
+ |  |   Beware of errors and use common sense when interpreting results.           |  | 
+ |  |                                                                              |  | 
+ |  |   Copyright (C) 2026 Torbjorn Sjostrand                                      |  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  *------------------------------------------------------------------------------*  | 
+ |                                                                                    | 
+ *------------------------------------------------------------------------------------* 
+
+BB [{"seed": 20261218, "n_generated": 500000, "n_os_pairs": 9812, "n_10_60": 4094, "n_15_50": 2403, "seconds": 144.0}, {"seed": 20261219, "n_generated": 500000, "n_os_pairs": 9772, "n_10_60": 4086, "n_15_50": 2394, "seconds": 142.6}]
+ROW S2_9495_r0.8 pythia_bb d_old 2 d_ss 3 | old spur +0.520 (0.80 sd) ul 1.320 mh1 1.542 | ss spur +0.018 (0.02 sd) ul 1.476 mh1 1.015 | fix3 spur +0.018 (0.02 sd) ul 1.476 mh1 1.015 | env spur +0.018 (0.02 sd) ul 1.609 mh1 1.015 | env_min2 spur +0.018 (0.02 sd) ul 1.609 mh1 1.015
+ROW S2_9495_r0.8 pythia_bb_tilt d_old 2 d_ss 3 | old spur +0.589 (0.82 sd) ul 1.440 mh1 1.610 | ss spur -0.035 (-0.04 sd) ul 1.612 mh1 0.958 | fix3 spur -0.035 (-0.04 sd) ul 1.612 mh1 0.958 | env spur -0.035 (-0.04 sd) ul 1.690 mh1 0.958 | env_min2 spur -0.035 (-0.04 sd) ul 1.690 mh1 0.958
+ROW S2_9495_r0.8 exp9 d_old 2 d_ss 2 | old spur +0.126 (0.19 sd) ul 1.309 mh1 1.132 | ss spur +0.126 (0.19 sd) ul 1.309 mh1 1.132 | fix3 spur -0.001 (-0.00 sd) ul 1.463 mh1 0.999 | env spur +0.126 (0.19 sd) ul 1.309 mh1 1.132 | env_min2 spur +0.126 (0.19 sd) ul 1.309 mh1 1.132
+ROW S2_9495_r0.8 powerlaw3 d_old 1 d_ss 1 | old spur +0.000 (0.00 sd) ul 1.172 mh1 1.000 | ss spur +0.000 (0.00 sd) ul 1.172 mh1 1.000 | fix3 spur +0.000 (0.00 sd) ul 1.334 mh1 1.000 | env spur +0.000 (0.00 sd) ul 1.172 mh1 1.000 | env_min2 spur +0.000 (0.00 sd) ul 1.200 mh1 1.000
+ROW S4_9295_r0.8 pythia_bb d_old 2 d_ss 3 | old spur +0.520 (1.11 sd) ul 0.941 mh1 1.542 | ss spur +0.018 (0.03 sd) ul 1.056 mh1 1.015 | fix3 spur +0.018 (0.03 sd) ul 1.056 mh1 1.015 | env spur -0.053 (-0.10 sd) ul 1.153 mh1 0.937 | env_min2 spur -0.053 (-0.10 sd) ul 1.153 mh1 0.937
+ROW S4_9295_r0.8 pythia_bb_tilt d_old 3 d_ss 3 | old spur -0.035 (-0.06 sd) ul 1.155 mh1 0.958 | ss spur -0.035 (-0.06 sd) ul 1.155 mh1 0.958 | fix3 spur -0.035 (-0.06 sd) ul 1.155 mh1 0.958 | env spur -0.065 (-0.11 sd) ul 1.323 mh1 0.925 | env_min2 spur -0.065 (-0.11 sd) ul 1.323 mh1 0.925
+ROW S4_9295_r0.8 exp9 d_old 2 d_ss 3 | old spur +0.126 (0.27 sd) ul 0.933 mh1 1.132 | ss spur -0.001 (-0.00 sd) ul 1.047 mh1 0.999 | fix3 spur -0.001 (-0.00 sd) ul 1.047 mh1 0.999 | env spur +0.126 (0.27 sd) ul 0.933 mh1 1.132 | env_min2 spur +0.126 (0.27 sd) ul 0.933 mh1 1.132
+ROW S4_9295_r0.8 powerlaw3 d_old 1 d_ss 1 | old spur +0.000 (0.00 sd) ul 0.834 mh1 1.000 | ss spur +0.000 (0.00 sd) ul 0.834 mh1 1.000 | fix3 spur +0.000 (0.00 sd) ul 0.953 mh1 1.000 | env spur +0.000 (0.00 sd) ul 0.834 mh1 1.000 | env_min2 spur +0.000 (0.00 sd) ul 0.854 mh1 1.000
+ROW S1_9495_r1.0 pythia_bb d_old 2 d_ss 3 | old spur +0.520 (0.89 sd) ul 1.173 mh1 1.542 | ss spur +0.018 (0.03 sd) ul 1.314 mh1 1.015 | fix3 spur +0.018 (0.03 sd) ul 1.314 mh1 1.015 | env spur +0.018 (0.03 sd) ul 1.384 mh1 1.015 | env_min2 spur +0.018 (0.03 sd) ul 1.384 mh1 1.015
+BUDGET reached; remaining tasks skipped
+SPURIOUS TABLES (pythia_bb):
+S2_9495_r0.8 [{"degree": 1, "mu_spur": 1.1277, "n_spur": 24.485, "sigma": 0.6369, "frac": 1.7706}, {"degree": 2, "mu_spur": 0.52, "n_spur": 11.29, "sigma": 0.6541, "frac": 0.795}, {"degree": 3, "mu_spur": 0.018, "n_spur": 0.391, "sigma": 0.7372, "frac": 0.0244}, {"degree": 4, "mu_spur": -0.0533, "n_spur": -1.157, "sigma": 0.7394, "frac": -0.0721}, {"degree": 5, "mu_spur": 0.0615, "n_spur": 1.335, "sigma": 0.8215, "frac": 0.0749}]
+S4_9295_r0.8 [{"degree": 1, "mu_spur": 1.1277, "n_spur": 46.638, "sigma": 0.4572, "frac": 2.4665}, {"degree": 2, "mu_spur": 0.52, "n_spur": 21.506, "sigma": 0.47, "frac": 1.1064}, {"degree": 3, "mu_spur": 0.018, "n_spur": 0.744, "sigma": 0.5311, "frac": 0.0339}, {"degree": 4, "mu_spur": -0.0533, "n_spur": -2.204, "sigma": 0.5323, "frac": -0.1001}, {"degree": 5, "mu_spur": 0.0615, "n_spur": 2.543, "sigma": 0.5933, "frac": 0.1037}]
+S1_9495_r1.0 [{"degree": 1, "mu_spur": 1.1277, "n_spur": 30.606, "sigma": 0.568, "frac": 1.9854}, {"degree": 2, "mu_spur": 0.52, "n_spur": 14.113, "sigma": 0.5835, "frac": 0.8912}, {"degree": 3, "mu_spur": 0.018, "n_spur": 0.489, "sigma": 0.6575, "frac": 0.0274}, {"degree": 4, "mu_spur": -0.0533, "n_spur": -1.447, "sigma": 0.66, "frac": -0.0808}, {"degree": 5, "mu_spur": 0.0615, "n_spur": 1.669, "sigma": 0.734, "frac": 0.0838}]

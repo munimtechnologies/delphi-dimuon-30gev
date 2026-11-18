@@ -1,11 +1,16 @@
 # The LEP1 four-fermion measurements and the 30 GeV dimuon excess
 
-**DRAFT 0.2, 2026-11-18. Not peer reviewed. Not yet read by a particle physicist.**
+**DRAFT 0.3, 2026-11-18. Not peer reviewed. Not yet read by a particle physicist.**
 Comments are welcome at mv2@munimtech.com or as issues on the repository.
 
 MV2, Munim, Inc. (mv2@munimtech.com). Prepared with AI agents working in MV2's name. Not a result
 of the ALEPH, DELPHI, L3 or OPAL Collaborations. Code and data:
 https://github.com/munimtechnologies/delphi-dimuon-30gev (code Apache-2.0; text CC BY 4.0).
+
+Changes from 0.2: section 6 now uses the measured efficiency of ALEPH's own LEP1 Higgs search
+(job efhz-v1). It is high for a vector boson (0.50) but only 0.27 for a scalar and 0.02 for
+Z -> h A, because of that search's recoil-mass cut; ALEPH's search alone therefore does not
+exclude the scalar at the lowest literature rate. Sections 1-5 are unchanged.
 
 ## Abstract
 
@@ -97,26 +102,39 @@ boson only if their efficiency were below 0.055, an order of magnitude below the
 Seven expectations (H1-H7) were published before the efficiency job ran; all were met
 (NOTE-fourfermion.md section 4).
 
-## 6. The LEP1 Higgs searches (preliminary; hand calculation)
+## 6. The LEP1 Higgs searches (ALEPH measured; L3, DELPHI preliminary)
 
-The LEP1 searches for e+e- -> H Z*, Z* -> mu+ mu- selected two energetic isolated muons recoiling
-against hadrons. ALEPH (4.5M hadronic Z, PLB 384 (1996) 427) found three candidates, one of them
-kinematically incompatible with a 30 GeV pair; L3 (3.05M, PLB 385 (1996) 454), with no recoil-mass
-cut, found none; DELPHI (0.94M, NPB 421 (1994) 3) one. With a common efficiency eps, the three
-searches predict about 315 x eps boson events against 3 that could be signal, so the boson is
-allowed only for eps < 0.025, while the same searches kept 32-55 % of Higgs events of similar
-topology. L3 alone gives eps < 0.024 and also covers Z -> h A. Efficiency jobs with pre-registered
-expectations are queued; this section will be replaced by measured values
-(NOTE-higgs-searches.md).
+The LEP1 searches for e+e- -> H Z*, Z* -> mu+ mu- selected two energetic muons, at least one
+isolated, recoiling against hadrons. ALEPH (4.5M hadronic Z, PLB 384 (1996) 427) found three
+candidates, one of them kinematically incompatible with a 30 GeV pair; L3 (3.05M, PLB 385 (1996)
+454), with no recoil-mass cut, found none; DELPHI (0.94M, NPB 421 (1994) 3) one.
+
+**ALEPH, measured** (analysis/efhz.py 0.1.0, 10,000 events per model). ALEPH's selection keeps
+0.50 of vector-boson events, 0.27 of scalar and 0.02 of Z -> h A. The difference is the recoil-mass
+cut (> 40 GeV): the scalar takes more of the energy (median recoil 34.6 GeV against 45.7 GeV for
+the vector), and in Z -> h A the recoil is m_h = 30.4 GeV. Against three candidates, ALEPH's search
+alone excludes the vector at every rate reading (p <= 0.011 even at the lowest literature rate with
+a pessimistic b-tag factor of 0.4) and the scalar at the central rate (p <= 3e-6), but **not** the
+scalar at the lowest literature rate (p = 0.006 to 0.21 for b-tag factors 0.8 to 0.4), and not in a
+reading that uses only the 32 excess events themselves (p = 0.10). Three of seven pre-registered
+expectations failed, all for the scalar (NOTE-higgs-searches.md section 6). This line is therefore
+weaker than the four-fermion one, which has no recoil cut.
+
+**L3 and DELPHI, hand bound.** With a common efficiency eps, ALEPH, L3 and DELPHI predict about
+315 x eps boson events against 3 that could be signal, so the boson is allowed only for
+eps < 0.025. L3 alone gives eps < 0.024 and also covers Z -> h A. The efficiency job for L3 and
+DELPHI (lephz-v1, pre-registered expectations L1-L10) is queued; this part will be replaced by
+measured values.
 
 ## 7. Discussion
 
 Three independent arguments agree: the kinematics ALEPH reports for its own events, the LEP1
-four-fermion measurements (sections 4-5), and the LEP1 Higgs searches (section 6, preliminary).
-None of them excludes an excess whose muons sit inside the b jets: cascade decays, a mismodelled
-b-decay background shape, or a new state that decays within a jet. That is the topology ALEPH
-describes. DELPHI's open data (released 2024) allow a direct test in b-tagged events; a
-pre-registered, blinded analysis is in preparation in the same repository.
+four-fermion measurements (sections 4-5), and the LEP1 Higgs searches (section 6, partly measured;
+ALEPH's alone does not exclude the scalar at the lowest rate). None of them excludes an excess
+whose muons sit inside the b jets: cascade decays, a mismodelled b-decay background shape, or a
+new state that decays within a jet. That is the topology ALEPH describes. DELPHI's open data
+(released 2024) allow a direct test in b-tagged events; a pre-registered, blinded analysis is in
+preparation in the same repository.
 
 **Limitations.** Hadron level only, no detector simulation; isolation from generator particles;
 a common muon identification efficiency (ALEPH's) for all experiments; OPAL's hadronic Z count
@@ -130,7 +148,9 @@ but a check with the experiments' own simulation would make it final.
 
 `python run_eff4f.py --out OUT --nsig 10000 --workers 2` with eff4f 0.2.0, lep4f 0.1.0, xme 0.2.0
 (Pythia 8.318 via pythia8mc, numpy). Output and sha256 of every source file:
-analysis/results/lep4f-eff-v2-run.txt and lep4f-eff-v2-summary.json.
+analysis/results/lep4f-eff-v2-run.txt and lep4f-eff-v2-summary.json. Section 6:
+`python run_efhz.py --out OUT --nsig 10000 --workers 2` with efhz 0.1.0; output in
+analysis/results/efhz/.
 
 ## Acknowledgements and disclosure
 

@@ -1,0 +1,168 @@
+VERSIONS mv2 efhz 0.1.0 mv2 eff4f 0.2.0 mv2 lep4f 0.1.0
+
+ *------------------------------------------------------------------------------------* 
+ |                                                                                    | 
+ |  *------------------------------------------------------------------------------*  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  |   PPP   Y   Y  TTTTT  H   H  III    A      Welcome to the Lund Monte Carlo!  |  | 
+ |  |   P  P   Y Y     T    H   H   I    A A     This is PYTHIA version 8.318      |  | 
+ |  |   PPP     Y      T    HHHHH   I   AAAAA    Last date of change: 16 Sep 2026  |  | 
+ |  |   P       Y      T    H   H   I   A   A                                      |  | 
+ |  |   P       Y      T    H   H  III  A   A    Now is 18 Nov 2026 at 10:38:43    |  | 
+ |  |                                                                              |  | 
+ |  |   Program documentation and an archive of historic versions is found on:     |  | 
+ |  |                                                                              |  | 
+ |  |                               https://pythia.org/                            |  | 
+ |  |                                                                              |  | 
+ |  |   PYTHIA is authored by a collaboration consisting of:                       |  | 
+ |  |                                                                              |  | 
+ |  |   Javira Altmann, Christian Bierlich, Naomi Cooke, Nishita Desai,            |  | 
+ |  |   Ilkka Helenius, Philip Ilten, Joni Laulainen, Leif Lonnblad,               |  | 
+ |  |   Stephen Mrenna, Christian Preuss, Torbjorn Sjostrand, and Peter Skands.    |  | 
+ |  |                                                                              |  | 
+ |  |   The complete list of authors, including contact information and            |  | 
+ |  |   affiliations, can be found on https://pythia.org/.                         |  | 
+ |  |   Problems or bugs should be reported on email at authors@pythia.org.        |  | 
+ |  |                                                                              |  | 
+ |  |   The main program reference is C. Bierlich et al,                           |  | 
+ |  |   'A comprehensive guide to the physics and usage of Pythia 8.3',            |  | 
+ |  |   SciPost Phys. Codebases 8-r8.3 (2022) [arXiv:2203.11601 [hep-ph]]          |  | 
+ |  |                                                                              |  | 
+ |  |   PYTHIA is released under the GNU General Public Licence version 2          |  | 
+ |  |   or later. Please respect the MCnet Guidelines for Generator Authors        |  | 
+ |  |   and Users.                                                                 |  | 
+ |  |                                                                              |  | 
+ |  |   Disclaimer: this program comes without any guarantees.                     |  | 
+ |  |   Beware of errors and use common sense when interpreting results.           |  | 
+ |  |                                                                              |  | 
+ |  |   Copyright (C) 2026 Torbjorn Sjostrand                                      |  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  *------------------------------------------------------------------------------*  | 
+ |                                                                                    | 
+ *------------------------------------------------------------------------------------* 
+
+
+ *------------------------------------------------------------------------------------* 
+ |                                                                                    | 
+ |  *------------------------------------------------------------------------------*  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  |   PPP   Y   Y  TTTTT  H   H  III    A      Welcome to the Lund Monte Carlo!  |  | 
+ |  |   P  P   Y Y     T    H   H   I    A A     This is PYTHIA version 8.318      |  | 
+ |  |   PPP     Y      T    HHHHH   I   AAAAA    Last date of change: 16 Sep 2026  |  | 
+ |  |   P       Y      T    H   H   I   A   A                                      |  | 
+ |  |   P       Y      T    H   H  III  A   A    Now is 18 Nov 2026 at 10:38:47    |  | 
+ |  |                                                                              |  | 
+ |  |   Program documentation and an archive of historic versions is found on:     |  | 
+ |  |                                                                              |  | 
+ |  |                               https://pythia.org/                            |  | 
+ |  |                                                                              |  | 
+ |  |   PYTHIA is authored by a collaboration consisting of:                       |  | 
+ |  |                                                                              |  | 
+ |  |   Javira Altmann, Christian Bierlich, Naomi Cooke, Nishita Desai,            |  | 
+ |  |   Ilkka Helenius, Philip Ilten, Joni Laulainen, Leif Lonnblad,               |  | 
+ |  |   Stephen Mrenna, Christian Preuss, Torbjorn Sjostrand, and Peter Skands.    |  | 
+ |  |                                                                              |  | 
+ |  |   The complete list of authors, including contact information and            |  | 
+ |  |   affiliations, can be found on https://pythia.org/.                         |  | 
+ |  |   Problems or bugs should be reported on email at authors@pythia.org.        |  | 
+ |  |                                                                              |  | 
+ |  |   The main program reference is C. Bierlich et al,                           |  | 
+ |  |   'A comprehensive guide to the physics and usage of Pythia 8.3',            |  | 
+ |  |   SciPost Phys. Codebases 8-r8.3 (2022) [arXiv:2203.11601 [hep-ph]]          |  | 
+ |  |                                                                              |  | 
+ |  |   PYTHIA is released under the GNU General Public Licence version 2          |  | 
+ |  |   or later. Please respect the MCnet Guidelines for Generator Authors        |  | 
+ |  |   and Users.                                                                 |  | 
+ |  |                                                                              |  | 
+ |  |   Disclaimer: this program comes without any guarantees.                     |  | 
+ |  |   Beware of errors and use common sense when interpreting results.           |  | 
+ |  |                                                                              |  | 
+ |  |   Copyright (C) 2026 Torbjorn Sjostrand                                      |  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  *------------------------------------------------------------------------------*  | 
+ |                                                                                    | 
+ *------------------------------------------------------------------------------------* 
+
+
+ *------------------------------------------------------------------------------------* 
+ |                                                                                    | 
+ |  *------------------------------------------------------------------------------*  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  |   PPP   Y   Y  TTTTT  H   H  III    A      Welcome to the Lund Monte Carlo!  |  | 
+ |  |   P  P   Y Y     T    H   H   I    A A     This is PYTHIA version 8.318      |  | 
+ |  |   PPP     Y      T    HHHHH   I   AAAAA    Last date of change: 16 Sep 2026  |  | 
+ |  |   P       Y      T    H   H   I   A   A                                      |  | 
+ |  |   P       Y      T    H   H  III  A   A    Now is 18 Nov 2026 at 10:39:36    |  | 
+ |  |                                                                              |  | 
+ |  |   Program documentation and an archive of historic versions is found on:     |  | 
+ |  |                                                                              |  | 
+ |  |                               https://pythia.org/                            |  | 
+ |  |                                                                              |  | 
+ |  |   PYTHIA is authored by a collaboration consisting of:                       |  | 
+ |  |                                                                              |  | 
+ |  |   Javira Altmann, Christian Bierlich, Naomi Cooke, Nishita Desai,            |  | 
+ |  |   Ilkka Helenius, Philip Ilten, Joni Laulainen, Leif Lonnblad,               |  | 
+ |  |   Stephen Mrenna, Christian Preuss, Torbjorn Sjostrand, and Peter Skands.    |  | 
+ |  |                                                                              |  | 
+ |  |   The complete list of authors, including contact information and            |  | 
+ |  |   affiliations, can be found on https://pythia.org/.                         |  | 
+ |  |   Problems or bugs should be reported on email at authors@pythia.org.        |  | 
+ |  |                                                                              |  | 
+ |  |   The main program reference is C. Bierlich et al,                           |  | 
+ |  |   'A comprehensive guide to the physics and usage of Pythia 8.3',            |  | 
+ |  |   SciPost Phys. Codebases 8-r8.3 (2022) [arXiv:2203.11601 [hep-ph]]          |  | 
+ |  |                                                                              |  | 
+ |  |   PYTHIA is released under the GNU General Public Licence version 2          |  | 
+ |  |   or later. Please respect the MCnet Guidelines for Generator Authors        |  | 
+ |  |   and Users.                                                                 |  | 
+ |  |                                                                              |  | 
+ |  |   Disclaimer: this program comes without any guarantees.                     |  | 
+ |  |   Beware of errors and use common sense when interpreting results.           |  | 
+ |  |                                                                              |  | 
+ |  |   Copyright (C) 2026 Torbjorn Sjostrand                                      |  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  *------------------------------------------------------------------------------*  | 
+ |                                                                                    | 
+ *------------------------------------------------------------------------------------* 
+
+TASK {"model": "V", "parton": {"model": "V", "ntried": 450000, "nacc": 11077, "wmax": 736894457795.489, "n_over": 0, "eff": 0.024615555555555557}, "n_hadronised": 9821, "n_fail": 179, "n_no_truth_pair": 0, "stopped_by_budget": false, "seconds": 59.5, "fractions_acc_window": {"recoil_gt_40": 0.6459, "recoil_gt_50": 0.3604, "n_iso_ge_1": 0.9157, "n_iso_eq_2": 0.4903}}
+TASK {"model": "S", "parton": {"model": "S", "ntried": 250000, "nacc": 11671, "wmax": 72793819349.9129, "n_over": 0, "eff": 0.046684}, "n_hadronised": 9479, "n_fail": 521, "n_no_truth_pair": 0, "stopped_by_budget": false, "seconds": 55.0, "fractions_acc_window": {"recoil_gt_40": 0.3524, "recoil_gt_50": 0.1244, "n_iso_ge_1": 0.9539, "n_iso_eq_2": 0.6211}}
+TASK {"model": "P", "parton": {"model": "P", "ntried": 40000, "nacc": 20396, "eff": 0.5099}, "n_hadronised": 10000, "n_fail": 0, "n_no_truth_pair": 0, "stopped_by_budget": false, "seconds": 52.5, "fractions_acc_window": {"recoil_gt_40": 0.0312, "recoil_gt_50": 0.0084, "n_iso_ge_1": 0.9697, "n_iso_eq_2": 0.657}}
+
+ALEPH H mu mu selection (PLB 313 (1993) 299 cuts) on boson events; eps vs ALEPH acceptance, 20-40 GeV, no muon ID
+model n_acc  nominal   both_iso  norecoil  recoil50  pt_had    nopt      cos0.9    pmin5     strict   
+V      8835  0.498     0.234     0.717     0.278     0.556     0.563     0.451     0.497     0.118    
+S      8360  0.270     0.133     0.712     0.093     0.304     0.311     0.238     0.270     0.036    
+P      9227  0.018     0.007     0.655     0.004     0.021     0.026     0.017     0.018     0.001    
+
+cut-by-cut (fraction of acceptance passing each nominal cut / passing all others):
+V p=0.987/0.498 psum=0.987/0.498 mll=0.987/0.498 pt=0.774/0.563 iso=0.904/0.544 mult=0.982/0.499 recoil=0.637/0.717
+S p=0.986/0.270 psum=0.986/0.270 mll=0.986/0.270 pt=0.744/0.311 iso=0.941/0.290 mult=0.978/0.271 recoil=0.348/0.712
+P p=0.988/0.018 psum=0.988/0.018 mll=0.988/0.018 pt=0.671/0.026 iso=0.958/0.020 mult=0.984/0.018 recoil=0.031/0.655
+
+confrontation with ALEPH 1996 (n_obs = 3, all counted as signal, b = 0):
+V  nominal   eps=0.498  rate nominal: pred=  93.1 p=5e-36 | rate low-1sigma: pred= 53.4 p=1.8e-19 | rate lit: pred= 24.8 p=4.7e-08 | subset id1: pred= 15.3 p=0.00016 p_marg=0.02 | subset id0.74: pred= 11.3 p_marg=0.045
+V  both_iso  eps=0.234  rate nominal: pred=  43.8 p=1.5e-15 | rate low-1sigma: pred= 25.1 p=3.8e-08 | rate lit: pred= 11.7 p=0.0029 | subset id1: pred=  7.2 p=0.072 p_marg=0.15 | subset id0.74: pred=  5.3 p_marg=0.29
+V  recoil50  eps=0.278  rate nominal: pred=  51.9 p=6.9e-19 | rate low-1sigma: pred= 29.8 p=5.8e-10 | rate lit: pred= 13.9 p=0.00053 | subset id1: pred=  8.5 p=0.029 p_marg=0.097 | subset id0.74: pred=  6.3 p_marg=0.2
+V  strict    eps=0.119  rate nominal: pred=  22.2 p=4.9e-07 | rate low-1sigma: pred= 12.7 p=0.0013 | rate lit: pred=  5.9 p=0.16 | subset id1: pred=  3.7 p=0.5 p_marg=0.52 | subset id0.74: pred=  2.7 p_marg=0.7
+S  nominal   eps=0.270  rate nominal: pred=  50.5 p=2.7e-18 | rate low-1sigma: pred= 28.9 p=1.2e-09 | rate lit: pred= 13.5 p=0.00072 | subset id1: pred=  8.3 p=0.034 p_marg=0.1 | subset id0.74: pred=  6.1 p_marg=0.22
+S  both_iso  eps=0.133  rate nominal: pred=  24.9 p=4.4e-08 | rate low-1sigma: pred= 14.3 p=0.00038 | rate lit: pred=  6.6 p=0.1 | subset id1: pred=  4.1 p=0.41 p_marg=0.45 | subset id0.74: pred=  3.0 p_marg=0.64
+S  recoil50  eps=0.093  rate nominal: pred=  17.4 p=3e-05 | rate low-1sigma: pred= 10.0 p=0.011 | rate lit: pred=  4.6 p=0.32 | subset id1: pred=  2.9 p=0.68 p_marg=0.67 | subset id0.74: pred=  2.1 p_marg=0.82
+S  strict    eps=0.036  rate nominal: pred=   6.8 p=0.094 | rate low-1sigma: pred=  3.9 p=0.46 | rate lit: pred=  1.8 p=0.89 | subset id1: pred=  1.1 p=0.97 p_marg=0.96 | subset id0.74: pred=  0.8 p_marg=0.99
+P  nominal   eps=0.018  rate nominal: pred=   3.4 p=0.55 | rate low-1sigma: pred=  2.0 p=0.86 | rate lit: pred=  0.9 p=0.99 | subset id1: pred=  0.6 p=1 p_marg=1 | subset id0.74: pred=  0.4 p_marg=1
+P  both_iso  eps=0.007  rate nominal: pred=   1.3 p=0.96 | rate low-1sigma: pred=  0.7 p=0.99 | rate lit: pred=  0.3 p=1 | subset id1: pred=  0.2 p=1 p_marg=1 | subset id0.74: pred=  0.2 p_marg=1
+P  recoil50  eps=0.004  rate nominal: pred=   0.8 p=0.99 | rate low-1sigma: pred=  0.5 p=1 | rate lit: pred=  0.2 p=1 | subset id1: pred=  0.1 p=1 p_marg=1 | subset id0.74: pred=  0.1 p_marg=1
+P  strict    eps=0.001  rate nominal: pred=   0.2 p=1 | rate low-1sigma: pred=  0.1 p=1 | rate lit: pred=  0.1 p=1 | subset id1: pred=  0.0 p=1 p_marg=1 | subset id0.74: pred=  0.0 p_marg=1
+
+eps_max (95 % CLs, n=3, b=0): rate nominal 0.0414, subset id1 0.252
+
+quantiles (5,25,50,75,95 %) in acceptance and window:
+V {"recoil": [18.972, 34.745, 45.661, 53.171, 59.381], "pt_sum": [7.105, 16.336, 23.117, 28.027, 31.555], "n_iso": [0.0, 1.0, 1.0, 2.0, 2.0], "nch": [9.0, 12.0, 15.0, 18.0, 23.0], "m": [25.463, 29.173, 30.212, 31.011, 33.343]}
+S {"recoil": [13.712, 24.625, 34.641, 43.882, 55.014], "pt_sum": [6.161, 15.204, 24.29, 28.573, 31.582], "n_iso": [1.0, 1.0, 2.0, 2.0, 2.0], "nch": [8.0, 11.0, 14.0, 17.0, 22.0], "m": [25.278, 29.161, 30.224, 31.011, 33.528]}
+P {"recoil": [30.4, 30.4, 30.4, 30.436, 36.177], "pt_sum": [5.443, 11.494, 25.13, 28.937, 31.237], "n_iso": [1.0, 1.0, 2.0, 2.0, 2.0], "nch": [9.0, 12.0, 14.0, 16.0, 20.0], "m": [25.415, 29.088, 30.171, 30.974, 33.167]}

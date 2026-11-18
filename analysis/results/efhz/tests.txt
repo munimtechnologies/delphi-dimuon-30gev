@@ -1,0 +1,17 @@
+test_confront_keys_and_limits (test_efhz.TestConfront.test_confront_keys_and_limits) ... ok
+test_rate_prediction (test_efhz.TestConfront.test_rate_prediction) ... ok
+test_subset_prediction_and_pvalues (test_efhz.TestConfront.test_subset_prediction_and_pvalues) ... ok
+test_accumulate_and_eps (test_efhz.TestCounting.test_accumulate_and_eps) ... ok
+test_base_event_passes_every_cut (test_efhz.TestEvent.test_base_event_passes_every_cut) ... ok
+test_charged_track_in_cone (test_efhz.TestEvent.test_charged_track_in_cone) ... ok
+test_missing_energy_needs_eight_tracks (test_efhz.TestEvent.test_missing_energy_needs_eight_tracks) ... ok
+test_momentum_and_mass_cuts (test_efhz.TestEvent.test_momentum_and_mass_cuts) ... ok
+test_neutral_energy_and_brem (test_efhz.TestEvent.test_neutral_energy_and_brem) ... ok
+test_pt_sum (test_efhz.TestEvent.test_pt_sum) ... ok
+test_recoil_back_to_back (test_efhz.TestEvent.test_recoil_back_to_back) ... ok
+test_recoil_cut_alone_rejects_energetic_pair (test_efhz.TestEvent.test_recoil_cut_alone_rejects_energetic_pair) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.107s
+
+OK
