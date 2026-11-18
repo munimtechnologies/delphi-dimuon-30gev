@@ -1,0 +1,19 @@
+test_compatibility (test_lephz.TestCandidates.test_compatibility) ... ok
+test_mll_from_recoil_matches_event (test_lephz.TestCandidates.test_mll_from_recoil_matches_event) ... ok
+test_combine (test_lephz.TestConfront.test_combine) ... ok
+test_predictions (test_lephz.TestConfront.test_predictions) ... ok
+test_accumulate_and_eps (test_lephz.TestCounting.test_accumulate_and_eps) ... ok
+test_base_event_passes_all_four (test_lephz.TestSelections.test_base_event_passes_all_four) ... ok
+test_delphi_cuts (test_lephz.TestSelections.test_delphi_cuts) ... ok
+test_delphi_isolation_rules (test_lephz.TestSelections.test_delphi_isolation_rules) ... ok
+test_durham_agrees_with_eff4f (test_lephz.TestSelections.test_durham_agrees_with_eff4f) ... ok
+test_l3_calorimeter_isolation (test_lephz.TestSelections.test_l3_calorimeter_isolation) ... ok
+test_l3_d_product (test_lephz.TestSelections.test_l3_d_product) ... ok
+test_l3_has_no_recoil_cut (test_lephz.TestSelections.test_l3_has_no_recoil_cut) ... ok
+test_l3_multiplicity_and_thrust (test_lephz.TestSelections.test_l3_multiplicity_and_thrust) ... ok
+test_opal_cuts (test_lephz.TestSelections.test_opal_cuts) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.070s
+
+OK
