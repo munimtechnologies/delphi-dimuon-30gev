@@ -1,0 +1,122 @@
+{
+ "tool": "mv2 envtoys 0.1.0",
+ "envcast": "mv2 envcast 0.1.0",
+ "bkgsys": "mv2 bkgsys 0.1.0",
+ "made_by": "MV2 of Munim, Inc. (made with AI agents)",
+ "scenario": "C2_9495_f1.5",
+ "note": "No DELPHI data used. Truths and yields of combcast 0.1.0.",
+ "p_max": 0.07,
+ "n_min": 150,
+ "toys": {
+  "mu=0": {
+   "fix3|combined": {
+    "n": 30,
+    "muhat_mean": 0.0244,
+    "muhat_std": 0.4896,
+    "ul_median": 1.0785,
+    "z0_median": 0.0726,
+    "n_EXCLUDED": 13,
+    "p_EXCLUDED": 0.4333,
+    "n_COMPATIBLE": 1,
+    "p_COMPATIBLE": 0.0333,
+    "n_INCONCLUSIVE": 16,
+    "p_INCONCLUSIVE": 0.5333,
+    "p_EXCLUDED_cp95": [
+     0.2546,
+     0.6257
+    ]
+   },
+   "fix3|tagged": {
+    "n": 30,
+    "muhat_mean": 0.1129,
+    "muhat_std": 0.78,
+    "ul_median": 1.6602,
+    "z0_median": 0.1204,
+    "n_EXCLUDED": 8,
+    "p_EXCLUDED": 0.2667,
+    "n_COMPATIBLE": 0,
+    "p_COMPATIBLE": 0.0,
+    "n_INCONCLUSIVE": 22,
+    "p_INCONCLUSIVE": 0.7333,
+    "p_EXCLUDED_cp95": [
+     0.1228,
+     0.4589
+    ]
+   }
+  },
+  "mu=1": {
+   "fix3|combined": {
+    "n": 62,
+    "muhat_mean": 0.9977,
+    "muhat_std": 0.5661,
+    "ul_median": 1.9157,
+    "z0_median": 1.7934,
+    "n_EXCLUDED": 2,
+    "p_EXCLUDED": 0.0323,
+    "n_COMPATIBLE": 16,
+    "p_COMPATIBLE": 0.2581,
+    "n_INCONCLUSIVE": 44,
+    "p_INCONCLUSIVE": 0.7097,
+    "p_EXCLUDED_cp95": [
+     0.0039,
+     0.1117
+    ]
+   },
+   "fix3|tagged": {
+    "n": 62,
+    "muhat_mean": 1.0236,
+    "muhat_std": 0.8563,
+    "ul_median": 2.4067,
+    "z0_median": 1.3989,
+    "n_EXCLUDED": 1,
+    "p_EXCLUDED": 0.0161,
+    "n_COMPATIBLE": 8,
+    "p_COMPATIBLE": 0.129,
+    "n_INCONCLUSIVE": 53,
+    "p_INCONCLUSIVE": 0.8548,
+    "p_EXCLUDED_cp95": [
+     0.0004,
+     0.0866
+    ]
+   },
+   "old|combined": {
+    "n": 62,
+    "muhat_mean": 0.8791,
+    "muhat_std": 0.5166,
+    "ul_median": 1.6938,
+    "z0_median": 1.7571,
+    "n_EXCLUDED": 4,
+    "p_EXCLUDED": 0.0645,
+    "n_COMPATIBLE": 21,
+    "p_COMPATIBLE": 0.3387,
+    "n_INCONCLUSIVE": 37,
+    "p_INCONCLUSIVE": 0.5968,
+    "p_EXCLUDED_cp95": [
+     0.0179,
+     0.157
+    ]
+   },
+   "old|tagged": {
+    "n": 62,
+    "muhat_mean": 0.9943,
+    "muhat_std": 0.7327,
+    "ul_median": 2.251,
+    "z0_median": 1.4884,
+    "n_EXCLUDED": 2,
+    "p_EXCLUDED": 0.0323,
+    "n_COMPATIBLE": 7,
+    "p_COMPATIBLE": 0.1129,
+    "n_INCONCLUSIVE": 53,
+    "p_INCONCLUSIVE": 0.8548,
+    "p_EXCLUDED_cp95": [
+     0.0039,
+     0.1117
+    ]
+   }
+  }
+ },
+ "criterion_b_fix3": "UNDETERMINED",
+ "criterion_b_old": "UNDETERMINED",
+ "mean_sec_per_toy": 514.4,
+ "wall_s": 11941.3
+}

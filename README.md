@@ -10,7 +10,7 @@ name. It is not a DELPHI, ALEPH, L3 or OPAL Collaboration result, and neither th
 collaborations nor CERN endorse it. **No physicist has checked these results yet.**
 
 **Main result so far (2026-11-18): the excess is not a boson decaying to isolated muons.**
-Draft paper: [paper/DRAFT-lep1-4f-30gev.md](paper/DRAFT-lep1-4f-30gev.md) (draft 0.5, not peer
+Draft paper: [paper/DRAFT-lep1-4f-30gev.md](paper/DRAFT-lep1-4f-30gev.md) (draft 0.6, not peer
 reviewed). If the excess were a boson produced with b quarks (a vector or scalar radiated off the
 b, or Z -> h A), its two muons would be isolated from the jets in 92-95 % of events. Two families
 of LEP1 measurements selected exactly that signature, and both rule the boson out:
@@ -22,7 +22,7 @@ of LEP1 measurements selected exactly that signature, and both rule the boson ou
    **about 150 events** into OPAL's and L3's published dimuon-mass plots between 20 and 40 GeV,
    where they show **one**. At the lowest rate quoted for the excess and with the least
    favourable reading of every selection detail: p < 5 x 10^-12.
-2. **Higgs searches** ([NOTE-higgs-searches.md](NOTE-higgs-searches.md), version 0.5).
+2. **Higgs searches** ([NOTE-higgs-searches.md](NOTE-higgs-searches.md), version 0.6).
    All four LEP experiments searched their Z-peak data for e+e- -> H Z*, Z* -> mu+ mu-: two
    muons recoiling against hadrons. Jobs `efhz-v1` and `lephz-v1` measured how much of each boson
    model the four selections keep. ALEPH's own search has a recoil-mass cut that removes most
@@ -34,14 +34,21 @@ of LEP1 measurements selected exactly that signature, and both rule the boson ou
    written beforehand passed. With the weakest selection variants, scaled down to the
    experiments' own published Higgs efficiencies, the most pessimistic combination we can build
    still has p = 1.5e-6 (scalar, 4.7 standard deviations).
+3. **The models built to escape the LHC (new, job `kly-v1`, all nine expectations K1-K9
+   passed).** Ko, Li and Yu (arXiv:1610.07526) proposed two models that avoid the LHC Drell-Yan
+   bound: a Z' coupling the b quark to a heavy vector-like B quark (model II), and Z -> Z' phi
+   (model III). Through the same four Higgs-search selections, at model II's own benchmark rate,
+   L3 and DELPHI predict **21-28 events against one candidate (p = 2e-11 to 2e-8)** for every
+   variant. The most pessimistic combinations give p = 2e-7 to 6e-5 (3.8-5.0 standard
+   deviations). **Weakest point, stated plainly:** model III with a light 12 GeV scalar escapes
+   the DELPHI, ALEPH and OPAL searches (their recoil-mass cuts) and is closed by L3's search alone.
+   A second test with OPAL's four-fermion selection (job `kly4f-v1`, expectations F1-F5 written
+   first) is queued.
 
-**Prior work.** Ko, Li and Yu (arXiv:1610.07526, 2016) showed at parton level that their boson
-models put the muons far from the b jets, unlike ALEPH's events, and that a boson coupling
-directly to b bbar is excluded by LHC Drell-Yan data. What is new here is the confrontation with
-the LEP1 measurements themselves. **Next (job `kly-v1`, queued, expectations K1-K9 written
-first):** the same four Higgs-search selections applied to Ko, Li and Yu's two models built to
-escape the LHC bound (a Z' coupling the b quark to a heavy vector-like B quark, and Z -> Z' phi).
-Model II's benchmark rate is exactly the "lowest literature rate" used above.
+**Prior work.** Ko, Li and Yu (2016) showed at parton level that their boson models put the muons
+far from the b jets, unlike ALEPH's events (we confirm it at hadron level: 4-6 % within 15 deg),
+and that a boson coupling directly to b bbar is excluded by LHC Drell-Yan data. What is new here
+is the confrontation with the LEP1 measurements themselves.
 
 Limits: hadron level, no detector simulation; the selections and mass plots were read from
 scanned papers by AI reading agents. The two families overlap in data (L3's and OPAL's analyses),
@@ -72,10 +79,14 @@ would favour a false *confirmation*. [PLAN-amendment-0.14.md](PLAN-amendment-0.1
 deviations everywhere (the discrete-profiling envelope fails one scenario).
 [PLAN-amendment-0.15.md](PLAN-amendment-0.15.md): job `dimu-bbspur-v1` confirmed the b-tagged
 bias exactly (+0.52; expectations M1-M5 passed) and showed that more data do not rescue the old
-rule (M6 failed: with the 1992-95 yields it still picks degree 2, now a 1.1 standard-deviation
-bias). Degree 3 passes in all twelve scenarios. Job `dimu-envtoys-v1` (queued) runs 200
-pseudo-experiments to check that the degree-3 choice does not exclude a real ALEPH-sized boson
-more than 7 % of the time (expectations N0-N5).
+rule (M6 failed). Degree 3 passes in all twelve scenarios.
+[PLAN-amendment-0.16.md](PLAN-amendment-0.16.md): job `dimu-envtoys-v1` ran 62 pseudo-experiments
+with a true ALEPH-sized boson and 30 without (too slow for the planned 200). Degree 3 is unbiased
+(mean fitted signal 1.00 and 0.02) and falsely excluded a real boson in 2 of 62; the 150 toys
+needed to decide criterion (b) are being completed by `dimu-envtoys-v2` under a pooling rule
+written first. **A sensitivity limit reported before unblinding:** with no boson present, DELPHI's
+combined test excludes an ALEPH-sized one in only about 43 % of pseudo-experiments, so an
+INCONCLUSIVE result is the most likely outcome if the excess is not real.
 
 **What "ALEPH-sized" means (plan v0.11, section 5f).** The expected signal is one written
 formula in produced Z decays (`analysis/nexp.py`). ALEPH's paper leaves its hadronic event count
@@ -88,7 +99,8 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   **blinding commitments** (the 26-35 GeV opposite-sign dimuon window stays closed until the
   selection and tests are frozen and published here as plan v1.0). Amendments
   [0.12](PLAN-amendment-0.12.md), [0.13](PLAN-amendment-0.13.md),
-  [0.14](PLAN-amendment-0.14.md) and [0.15](PLAN-amendment-0.15.md).
+  [0.14](PLAN-amendment-0.14.md), [0.15](PLAN-amendment-0.15.md) and
+  [0.16](PLAN-amendment-0.16.md).
 - [paper/](paper/): the draft paper on the LEP1 isolated-muon result (not peer reviewed).
 - [NOTE-kinematics.md](NOTE-kinematics.md), [NOTE-fourfermion.md](NOTE-fourfermion.md),
   [NOTE-higgs-searches.md](NOTE-higgs-searches.md): the three external tests, each with its
@@ -132,31 +144,36 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   `lep4f.py` (limits from the published four-fermion counts), `eff4f.py` 0.2.0 and
   `run_eff4f.py` (the published four-fermion selections on the boson models), `efhz.py` and
   `lephz.py` (the LEP1 Higgs-search selections), `kly.py` and `run_kly.py` (Ko, Li and Yu's
-  models II and III through the same selections), `iso4f.py` (isolated pairs in simulation).
+  models II and III through the same selections), `run_kly4f.py` (the same events through the
+  four-fermion selections), `iso4f.py` (isolated pairs in simulation).
   [analysis/results/](analysis/results/) holds the output of `lep4f-eff-v2`, of
-  `dimu-envcast-v1` (`envcast/`), of `efhz-v1` (`efhz/`) and of `lephz-v1` (`lephz/`). Tests:
+  `dimu-envcast-v1` (`envcast/`), `dimu-envtoys-v1` (`envtoys/`), `efhz-v1` (`efhz/`),
+  `lephz-v1` (`lephz/`) and `kly-v1` (`kly/`). Tests:
   `python -m unittest -v test_dimusel test_btagcal test_nexp test_lep4f test_iso4f test_eff4f
-  test_efhz test_lephz test_kly`. Runs: `python run_eff4f.py --out OUT --nsig 10000 --workers 2`,
+  test_efhz test_lephz test_kly test_kly4f`. Runs: `python run_eff4f.py --out OUT --nsig 10000 --workers 2`,
   `python run_efhz.py --out OUT --nsig 10000 --workers 2`,
   `python run_lephz.py --out OUT --nsig 8000 --workers 2`,
-  `python run_kly.py --out OUT --nsig 8000 --workers 2` (need `numpy`, `pythia8mc` and the
+  `python run_kly.py --out OUT --nsig 8000 --workers 2`,
+  `python run_kly4f.py --out OUT --nsig 8000 --workers 2` (need `numpy`, `pythia8mc` and the
   `xkin/` modules alongside).
 - [reviews/](reviews/): hand reviews of the code, with what was found and fixed.
 
 ## Status
 
-Plan v0.11 plus amendments 0.12-0.15, 2026-11-18. No DELPHI dimuon mass from real data has been
+Plan v0.11 plus amendments 0.12-0.16, 2026-11-18. No DELPHI dimuon mass from real data has been
 looked at yet. Returned and graded: the kinematic study (xkin-v1, E1-E3 passed), the analysis-code
 tests (dimusel, btagcal, sigana, nexp), the test-B forecast (combcast-v1: background flaw found,
 amendment 0.12), the four-fermion limits (lep4f-v1: 11/11 tests), the four-fermion efficiencies
 (**lep4f-eff-v2: H1-H7 passed**), the test-A forecast (dimu-forecast-v2: its Asimov part found the
 bias of amendment 0.13), the background-treatment scoring (dimu-envcast-v1, amendment 0.14; and
 **dimu-bbspur-v1: M1-M5 passed, M6 failed**, amendment 0.15), ALEPH's Higgs-search efficiency
-(**efhz-v1: J1, J3, J4, J5 passed; J2, J6, J7 failed for the scalar model**) and the four LEP1
-Higgs searches (**lephz-v1: L1-L10 all passed**). Still queued: the DELPHI probe, ntuple,
-validation and detector-simulation jobs, the four-fermion simulation (fourf), envtoys-v1 and
-kly-v1 (Ko, Li and Yu's models). Each will be graded against the expectations written before it
-ran. Results, positive, negative or inconclusive, will all be published here.
+(**efhz-v1: J1, J3, J4, J5 passed; J2, J6, J7 failed for the scalar model**), the four LEP1
+Higgs searches (**lephz-v1: L1-L10 all passed**), Ko, Li and Yu's models (**kly-v1: K1-K9 all
+passed**) and the first toys (**dimu-envtoys-v1: N0, N4, N5 passed; N2, N3 failed as written;
+N1 undetermined**, amendment 0.16). Still queued: the DELPHI probe, ntuple, validation and
+detector-simulation jobs, the four-fermion simulation (fourf), dimu-envtoys-v2 and kly4f-v1.
+Each will be graded against the expectations written before it ran. Results, positive, negative
+or inconclusive, will all be published here.
 
 ## Data and licences
 

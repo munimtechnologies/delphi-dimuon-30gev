@@ -1,0 +1,22 @@
+test_clopper_pearson (test_envtoys.TestBookkeeping.test_clopper_pearson) ... ok
+test_summarise_and_criterion_b (test_envtoys.TestBookkeeping.test_summarise_and_criterion_b) ... ok
+test_task_list_order_counts_seeds (test_envtoys.TestBookkeeping.test_task_list_order_counts_seeds) ... ok
+test_partial_curves_match_degree_curves (test_envtoys.TestFits.test_partial_curves_match_degree_curves) ... ok
+test_toy_chunk_runs (test_envtoys.TestFits.test_toy_chunk_runs) ... ok
+test_outcomes_agree_with_envcast (test_envtoys.TestOneDefinition.test_outcomes_agree_with_envcast) ... ok
+test_curves_match_direct_fit (test_bkgsys.TestFits.test_curves_match_direct_fit) ... ok
+test_envelope_recovers_exact_signal (test_bkgsys.TestFits.test_envelope_recovers_exact_signal) ... ok
+test_spurious_negative_for_c2_mixture (test_bkgsys.TestFits.test_spurious_negative_for_c2_mixture) ... ok
+test_spurious_zero_for_exact_power_law (test_bkgsys.TestFits.test_spurious_zero_for_exact_power_law) ... ok
+test_c2_inputs_match_combcast_print (test_bkgsys.TestHelpers.test_c2_inputs_match_combcast_print) ... ok
+test_choose_degree_spurious_logic (test_bkgsys.TestHelpers.test_choose_degree_spurious_logic) ... ok
+test_cls_limit_closed_form (test_bkgsys.TestHelpers.test_cls_limit_closed_form) ... ok
+test_crossing_nan_when_never (test_bkgsys.TestHelpers.test_crossing_nan_when_never) ... ok
+test_envelope_and_penalty (test_bkgsys.TestHelpers.test_envelope_and_penalty) ... ok
+test_profile_summary_negative_muhat_has_zero_z0 (test_bkgsys.TestHelpers.test_profile_summary_negative_muhat_has_zero_z0) ... ok
+test_profile_summary_parabola (test_bkgsys.TestHelpers.test_profile_summary_parabola) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 9.459s
+
+OK

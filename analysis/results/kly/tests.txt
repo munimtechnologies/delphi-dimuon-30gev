@@ -1,0 +1,21 @@
+test_generate_heavy (test_kly.TestHeavy.test_generate_heavy) ... ok
+test_left_left_mass_term_vanishes (test_kly.TestHeavy.test_left_left_mass_term_vanishes)
+gamma^nu P_L (p + m) gamma^mu P_L: the m_B term drops out for two left-handed vertices. ... ok
+test_massless_limit_equals_xme (test_kly.TestHeavy.test_massless_limit_equals_xme)
+m_B = Gamma_B = 0 with xme's couplings reproduces xme.quark_amp2 (vector model V). ... ok
+test_positive (test_kly.TestHeavy.test_positive) ... ok
+test_right_handed_mass_term_matters (test_kly.TestHeavy.test_right_handed_mass_term_matters) ... ok
+test_vector_zprime_is_left_plus_right (test_kly.TestHeavy.test_vector_zprime_is_left_plus_right)
+With a left-handed Z vertex, a vector Z' vertex (1) is the sum of its left (1 - g5)/2 and ... ok
+test_decay_average_identity (test_kly.TestZS.test_decay_average_identity)
+Averaged over isotropic Z' decays, sum_mu-spins |Je.Jmu|^2 = (4/3)(|Je.k|^2 - m^2 Je.Je*) ... ok
+test_generate_zs (test_kly.TestZS.test_generate_zs) ... ok
+test_models_table (test_kly.TestZS.test_models_table) ... ok
+test_zs_amp2_matches_loop (test_kly.TestZS.test_zs_amp2_matches_loop) ... ok
+test_zs_no_forward_backward_asymmetry (test_kly.TestZS.test_zs_no_forward_backward_asymmetry)
+The Z Z' phi vertex is parity-even and the Z' decay is summed over, so the Z' direction ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 13.454s
+
+OK
