@@ -7,21 +7,33 @@ MV2 of Munim, Inc. (mv2@munimtech.com). Made with AI agents. Apache-2.0.
 
 analysis/lep4f.py 0.1.0 bounded the efficiency eps at which an ALEPH-sized boson could hide in the
 published mu mu q qbar *totals*. This module estimates eps itself, at hadron level (Pythia 8),
-with each paper's cuts as read from the papers (run 138 reading notes, see NOTE-fourfermion.md):
+with each paper's cuts as read from the papers (two independent readings, 2026-11-17; see
+NOTE-fourfermion.md):
 
-  OPAL  PLB 376 (1996) 315: each muon p >= 5 GeV, p1 + p2 >= 15 GeV; isolation angles
-        alpha_hi >= 30 deg, alpha_lo >= 10 deg, alpha = half-angle of the largest cone around the
-        lepton holding less than 1 GeV of other energy ("1 GeV cone"); no m_ll cut.
-  ALEPH ZPC 66 (1995) 3: less than 1 GeV of other energy in a 30 deg cone around each lepton; the
-        lepton momentum cut is in the paper's ref. 20, not read: 3 GeV assumed (2 and 5 GeV
-        variants); no m_ll cut.
+  OPAL  PLB 376 (1996) 315 (CERN-PPE/96-031): N_trk >= 8; >= 2 Durham jets (charged tracks and
+        unassociated EM clusters; y_cut not stated: 0.02 nominal, 0.005 variant); each lepton
+        p >= 5 GeV, |p1| + |p2| >= 15 GeV; opposite charge; isolation angle alpha = largest
+        half-angle of a cone around the lepton with E_cone < 1 GeV, E_cone = energy of all tracks
+        and unassociated EM clusters, "excluding both the lepton candidate itself, and also the
+        nearest other lepton candidate if it lies within the cone"; alpha_1 >= 30 deg,
+        alpha_2 >= 10 deg; no m_ll cut; no |cos theta| limit stated (0.95 nominal; 0.9 and 0.98
+        variants). Here "tracks and EM clusters" = every visible particle except neutrons and K_L
+        (Pythia keeps K_S and Lambda stable at tau0Max 10 mm; their decays give tracks/photons),
+        and the excluded lepton is the partner signal muon (a b-decay lepton nearby is kept,
+        which is stricter). Not modelled: the dE/dx electron veto on two hadronic tracks (always
+        passed by b-quark events at generator level).
+  ALEPH ZPC 66 (1995) 3 (CERN-PPE/94-169): >= 6 good charged tracks; two "energetic, isolated,
+        identified" leptons; < 1 GeV of other energy in a 30 deg cone; momentum cut in the paper's
+        ref. 20 (PLB 313 (1993) 299), not read: 3 GeV assumed (2 and 5 GeV variants); no m_ll cut.
+        Cone energy counts all visible particles (stricter).
   L3    PLB 321 (1994) 283: p_mu >= 3 GeV; min over muons of D = E_jet / p_mu - 1 < 0.4; min over
         muons of the energy in a 3-15 deg annulus < 0.7 GeV (ECAL in the paper; all visible
         energy here, which is stricter); muon chambers taken as 40-140 deg (the paper's generator
         cut); no m_ll cut. E_jet is approximated by the energy in a 25 deg cone (40 deg variant).
 
-Unknowns are taken on the strict side, so eps comes out low rather than high. Muon identification
-is not simulated: predictions multiply by ID_EFF per muon (ALEPH's 0.86, as a stand-in).
+Muon identification is not simulated: predictions multiply by ID_EFF per muon (ALEPH's 0.86, as a
+stand-in). Variant "OPAL:v010" is version 0.1.0's OPAL selection (all visible energy, no partner
+exclusion, no multiplicity cuts), kept for comparison.
 
 The efficiency is defined against the acceptance that analysis/lep4f.py's rate R_acc refers to
 (both muons p > 2.5 GeV, |cos theta| < 0.95, >= 5 charged particles, |p_miss| < 18 GeV, as in
@@ -35,24 +47,36 @@ import math
 
 import numpy as np
 
-VERSION = "mv2 eff4f 0.1.0"
+VERSION = "mv2 eff4f 0.2.0"
 
 NU = (12, 14, 16)
+NOT_EM_OR_TRACK = (2112, 130)      # neutron, K_L: no track, no EM cluster (OPAL's E_cone, jets)
 COS40 = math.cos(math.radians(40.0))
 ID_EFF = 0.86                      # per muon, ALEPH's value (arXiv:1610.06536), used as a stand-in
 WINDOW = (20.0, 40.0)
 GEN_RANGE = (22.0, 40.0)           # xme.generate_radiation / generate_pair defaults (mlo, mhi)
 BW_M, BW_G = 30.40, 1.78           # ALEPH's fitted mass and width, as in xme / run_xkin
+YCUTS = (0.02, 0.005)              # Durham y_cut for OPAL's ">= 2 jets" (not stated in the paper)
+OPAL_NTRK_MIN = 8
+ALEPH_NTRK_MIN = 6
+# Z -> b bbar mu mu branching ratio quoted from the ALEPH excess by Ko, Li and Yu
+# (arXiv:1610.07526): 1.1e-5 of all Z decays; per hadronic Z with Gamma_had / Gamma_Z = 0.69911.
+# It is close to the raw yield 32 / (number of Z) with no b-tag or muon-ID correction. Used as a
+# lowest-rate reading, taken as if every such event were inside ALEPH's acceptance.
+BR_LIT = 1.1e-5
+R_LIT = BR_LIT / 0.69911
 
 # Published dimuon-mass information for the mu mu q qbar events at the Z pole, read off the papers'
-# figures by MV2's reading agent on 2026-11-17 (to be confirmed by a second reading).
+# figures by two independent reading agents on 2026-11-17 (both readings agree).
 WINDOW_OBS = {
-    "OPAL": dict(n_obs=1, note="m(mu mu) plot of the selected mu mu q qbar events: 1 event in the "
-                 "20-30 GeV bin, 0 in 30-40 GeV; all of 20-40 counted"),
+    "OPAL": dict(n_obs=1, note="Fig. 3b (final event selection, sqrt(s) ~ m_Z), 10 GeV bins: 0-10: 19, "
+                 "10-20: 3, 20-30: 1, 30-40: 0, 40-50: 1, 50-60: 1, 60-70: 2, 70-80: 1, 80-100: 0 "
+                 "(sum 28 = observed); all of 20-40 counted"),
     "L3": dict(n_obs=0, note="Fig. 7a, m(mu mu) of the 6 events: 0-10: 1, 10-20: 1, 60-70: 2, "
                "80-90: 2; none in 20-40 GeV"),
-    "ALEPH": dict(n_obs=4, note="no mu-mu-only mass plot; e e q q and mu mu q q combined: 2 in 20-30, "
-                  "2 in 30-40 GeV, all counted as mu mu (upper bound)"),
+    "ALEPH": dict(n_obs=4, note="no mu-mu-only mass plot; Fig. 13b, e e q q and mu mu q q combined "
+                  "(29 events, 19 mu mu): 2 in 20-30, 2 in 30-40 GeV, all counted as mu mu "
+                  "(upper bound)"),
 }
 
 
@@ -65,6 +89,12 @@ def unit(v):
 
 def visible(ids):
     return ~np.isin(np.abs(np.asarray(ids)), NU)
+
+
+def em_or_track(ids):
+    """Particles that leave a track or an EM cluster (OPAL's E_cone and jet inputs)."""
+    a = np.abs(np.asarray(ids))
+    return ~np.isin(a, NU) & ~np.isin(a, NOT_EM_OR_TRACK)
 
 
 def pabs(p4):
@@ -87,18 +117,21 @@ def angles_deg(p4, i):
     return np.degrees(np.arccos(np.clip(u @ u[i], -1.0, 1.0)))
 
 
-def _others(vis, i):
+def _others(vis, i, exclude=None):
     m = np.array(vis, bool).copy()
     m[i] = False
+    if exclude is not None:
+        m[exclude] = False
     return m
 
 
-def iso_angle_energy(p4, vis, i, emax=1.0):
+def iso_angle_energy(p4, vis, i, emax=1.0, exclude=None):
     """Half-angle (deg) of the largest cone around particle i that holds less than emax GeV of
     other visible energy: the angle at which the cumulative energy, nearest first, reaches emax.
-    180 if all other visible energy together stays below emax."""
+    180 if all other visible energy together stays below emax. Particle `exclude` (index or
+    None) is left out of the cone energy (OPAL: the nearest other lepton candidate)."""
     p4 = np.asarray(p4, float)
-    m = _others(vis, i)
+    m = _others(vis, i, exclude)
     if not m.any():
         return 180.0
     ang = angles_deg(p4, i)[m]
@@ -111,10 +144,10 @@ def iso_angle_energy(p4, vis, i, emax=1.0):
     return float(ang[order][k[0]])
 
 
-def iso_angle_nearest(p4, vis, i, emin=1.0):
+def iso_angle_nearest(p4, vis, i, emin=1.0, exclude=None):
     """Angle (deg) to the nearest other visible particle with energy above emin (looser variant)."""
     p4 = np.asarray(p4, float)
-    m = _others(vis, i) & (p4[:, 0] > emin)
+    m = _others(vis, i, exclude) & (p4[:, 0] > emin)
     if not m.any():
         return 180.0
     return float(angles_deg(p4, i)[m].min())
@@ -126,6 +159,32 @@ def cone_energy(p4, vis, i, hi_deg, lo_deg=0.0):
     ang = angles_deg(p4, i)
     sel = _others(vis, i) & (ang >= lo_deg) & (ang < hi_deg)
     return float(p4[sel, 0].sum())
+
+
+def durham_njets(p4, ycut):
+    """Number of Durham (k_T) jets at y_cut, E-scheme recombination,
+    y_ij = 2 min(E_i, E_j)^2 (1 - cos theta_ij) / E_vis^2 with E_vis the summed input energy."""
+    p = np.array(p4, float).reshape(-1, 4)
+    n = len(p)
+    if n < 2:
+        return n
+    evis2 = float(p[:, 0].sum()) ** 2
+    if evis2 <= 0.0:
+        return n
+    while n >= 2:
+        u = unit(p[:, 1:])
+        c = np.clip(u @ u.T, -1.0, 1.0)
+        emin = np.minimum.outer(p[:, 0], p[:, 0])
+        y = 2.0 * emin ** 2 * (1.0 - c) / evis2
+        np.fill_diagonal(y, np.inf)
+        k = int(np.argmin(y))
+        a, b = divmod(k, n)
+        if y[a, b] >= ycut:
+            break
+        p[a] = p[a] + p[b]
+        p = np.delete(p, b, axis=0)
+        n -= 1
+    return n
 
 
 # ------------------------------------------------------------------ acceptance behind R_acc
@@ -155,7 +214,8 @@ def aleph_acceptance(ids, p4, charge, i, j):
 
 # ------------------------------------------------------------------ the three selections
 def sel_opal(p4, vis, i, j, pmin=5.0, psum=15.0, cmax=0.95, a_hi=30.0, a_lo=10.0, emax=1.0,
-             iso="energy"):
+             iso="energy", exclude_partner=False):
+    """OPAL's lepton cuts on muons i, j; `vis` is the set that counts in E_cone."""
     p = pabs(p4)
     c = costh(p4)
     if min(p[i], p[j]) < pmin or p[i] + p[j] < psum:
@@ -163,7 +223,8 @@ def sel_opal(p4, vis, i, j, pmin=5.0, psum=15.0, cmax=0.95, a_hi=30.0, a_lo=10.0
     if max(abs(c[i]), abs(c[j])) >= cmax:
         return False
     f = iso_angle_energy if iso == "energy" else iso_angle_nearest
-    a = sorted((f(p4, vis, i, emax), f(p4, vis, j, emax)))
+    xi, xj = (j, i) if exclude_partner else (None, None)
+    a = sorted((f(p4, vis, i, emax, exclude=xi), f(p4, vis, j, emax, exclude=xj)))
     return a[1] >= a_hi and a[0] >= a_lo
 
 
@@ -198,37 +259,74 @@ def sel_l3(p4, vis, i, j, pmin=3.0, cmax=COS40, dmax=0.4, jet_deg=25.0, ann=(3.0
     return d < dmax and e < emax
 
 
+# ------------------------------------------------------------------ event context + variants
+def make_ctx(ids, p4, charge):
+    """Event-level quantities the selections share."""
+    p4 = np.asarray(p4, float)
+    vis = visible(ids)
+    seen = em_or_track(ids)
+    return {"p4": p4, "vis": vis, "seen": seen, "nch": n_charged(p4, charge),
+            "njets": {y: durham_njets(p4[seen], y) for y in YCUTS}}
+
+
+def opal_ctx(ctx, i, j, seen=True, exclude_partner=True, mult=True, ycut=YCUTS[0],
+             ntrk_min=OPAL_NTRK_MIN, **kw):
+    if mult and (ctx["nch"] < ntrk_min or ctx["njets"][ycut] < 2):
+        return False
+    mask = ctx["seen"] if seen else ctx["vis"]
+    return sel_opal(ctx["p4"], mask, i, j, exclude_partner=exclude_partner, **kw)
+
+
+def aleph_ctx(ctx, i, j, nmin=ALEPH_NTRK_MIN, **kw):
+    if ctx["nch"] < nmin:
+        return False
+    return sel_aleph(ctx["p4"], ctx["vis"], i, j, **kw)
+
+
+def l3_ctx(ctx, i, j, **kw):
+    return sel_l3(ctx["p4"], ctx["vis"], i, j, **kw)
+
+
 VARIANTS = {
-    "OPAL": {"nominal": (sel_opal, {}),
-             "iso_nearest": (sel_opal, {"iso": "nearest"}),
-             "both_30deg": (sel_opal, {"a_lo": 30.0}),
-             "cos0.9": (sel_opal, {"cmax": 0.9})},
-    "ALEPH": {"nominal": (sel_aleph, {}),
-              "pmin2": (sel_aleph, {"pmin": 2.0}),
-              "pmin5": (sel_aleph, {"pmin": 5.0}),
-              "cos0.9": (sel_aleph, {"cmax": 0.9})},
-    "L3": {"nominal": (sel_l3, {}),
-           "jet40": (sel_l3, {"jet_deg": 40.0}),
-           "cos0.7": (sel_l3, {"cmax": 0.7}),
-           "pmin5": (sel_l3, {"pmin": 5.0})},
+    "OPAL": {"nominal": (opal_ctx, {}),
+             "nomult": (opal_ctx, {"mult": False}),
+             "ycut0.005": (opal_ctx, {"ycut": 0.005}),
+             "iso_nearest": (opal_ctx, {"iso": "nearest"}),
+             "both_30deg": (opal_ctx, {"a_lo": 30.0}),
+             "cos0.9": (opal_ctx, {"cmax": 0.9}),
+             "cos0.98": (opal_ctx, {"cmax": 0.98}),
+             "v010": (opal_ctx, {"seen": False, "exclude_partner": False, "mult": False})},
+    "ALEPH": {"nominal": (aleph_ctx, {}),
+              "pmin2": (aleph_ctx, {"pmin": 2.0}),
+              "pmin5": (aleph_ctx, {"pmin": 5.0}),
+              "cos0.9": (aleph_ctx, {"cmax": 0.9})},
+    "L3": {"nominal": (l3_ctx, {}),
+           "jet40": (l3_ctx, {"jet_deg": 40.0}),
+           "cos0.7": (l3_ctx, {"cmax": 0.7}),
+           "pmin5": (l3_ctx, {"pmin": 5.0})},
 }
 KEYS = ["%s:%s" % (e, v) for e in VARIANTS for v in VARIANTS[e]]
+VARIANT_NAMES = sorted({v for e in VARIANTS for v in VARIANTS[e]})
 
 
 def evaluate(ids, p4, charge, i, j):
     """All selections for one event with signal muons i, j."""
-    p4 = np.asarray(p4, float)
-    vis = visible(ids)
+    ctx = make_ctx(ids, p4, charge)
+    p4 = ctx["p4"]
     m = pair_mass(p4[i] + p4[j])
     out = {"m": m, "in_window": bool(WINDOW[0] < m < WINDOW[1]),
            "acc": bool(aleph_acceptance(ids, p4, charge, i, j))}
     for expt, vs in VARIANTS.items():
         for name, (fn, kw) in vs.items():
-            out["%s:%s" % (expt, name)] = bool(fn(p4, vis, i, j, **kw))
-    a = sorted((iso_angle_energy(p4, vis, i), iso_angle_energy(p4, vis, j)))
+            out["%s:%s" % (expt, name)] = bool(fn(ctx, i, j, **kw))
+    a = sorted((iso_angle_energy(p4, ctx["seen"], i, exclude=j),
+                iso_angle_energy(p4, ctx["seen"], j, exclude=i)))
     out["opal_alpha_lo"], out["opal_alpha_hi"] = a[0], a[1]
-    out["aleph_cone30_max"] = max(cone_energy(p4, vis, i, 30.0), cone_energy(p4, vis, j, 30.0))
-    out["l3_dmin"] = min(l3_d(p4, vis, i), l3_d(p4, vis, j))
+    out["nch"] = ctx["nch"]
+    out["njets_y0.02"] = ctx["njets"][0.02]
+    out["aleph_cone30_max"] = max(cone_energy(p4, ctx["vis"], i, 30.0),
+                                  cone_energy(p4, ctx["vis"], j, 30.0))
+    out["l3_dmin"] = min(l3_d(p4, ctx["vis"], i), l3_d(p4, ctx["vis"], j))
     return out
 
 
@@ -295,6 +393,14 @@ def z_of(p):
         else:
             hi = mid
     return 0.5 * (lo + hi)
+
+
+def n_sig_for_rate(rate, reading="nominal"):
+    """The ALEPH signal yield that lep4f.rate_acc turns into `rate` per hadronic Z (rate_acc is
+    linear in the yield)."""
+    import lep4f
+    ref = lep4f.ALEPH_N_SIG
+    return ref * rate / lep4f.rate_acc(reading, ref)
 
 
 def predict(expt, eps, reading="nominal", id_eff=ID_EFF, n_sig=None):

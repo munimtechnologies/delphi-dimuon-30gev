@@ -20,6 +20,7 @@ import eff4f
 
 EXPTS = ("OPAL", "L3", "ALEPH")
 QUANT = (0.05, 0.25, 0.5, 0.75, 0.95)
+EXTRA = ("opal_alpha_lo", "opal_alpha_hi", "nch", "njets_y0.02", "aleph_cone30_max", "l3_dmin", "m")
 
 
 def run_model(task):
@@ -38,7 +39,7 @@ def run_model(task):
         "36:m0 = 30.4", "36:mWidth = 0.01", "36:mMin = 5.", "36:mMax = 85."]
     py = run_xkin.make_pythia(sets)
     counts = eff4f.new_counts()
-    extra = {"opal_alpha_lo": [], "opal_alpha_hi": [], "aleph_cone30_max": [], "l3_dmin": [], "m": []}
+    extra = {k: [] for k in EXTRA}
     nok = nfail = nopair = 0
     for _ in range(n):
         if not py.next():
@@ -62,9 +63,25 @@ def run_model(task):
         a = np.array(v, float)
         a = a[np.isfinite(a)]
         q[k] = [round(float(x), 3) for x in np.quantile(a, QUANT)] if len(a) else []
+    frac = {}
+    if extra["nch"]:
+        nch = np.array(extra["nch"])
+        nj = np.array(extra["njets_y0.02"])
+        frac = {"nch_ge_8": round(float(np.mean(nch >= 8)), 4),
+                "nch_ge_6": round(float(np.mean(nch >= 6)), 4),
+                "njets_y0.02_ge_2": round(float(np.mean(nj >= 2)), 4)}
     stats = dict(model=model, parton=ev['stats'], n_hadronised=nok, n_fail=nfail,
-                 n_no_truth_pair=nopair, seconds=round(time.time() - t0, 1))
+                 n_no_truth_pair=nopair, seconds=round(time.time() - t0, 1),
+                 multiplicity_fractions_in_acceptance=frac)
     return model, counts, q, stats
+
+
+def yield_options():
+    """(tag, reading -> ALEPH yield): central, minus one sigma, and the literature rate."""
+    import lep4f
+    return (("central", lambda rd: None),
+            ("minus1sigma", lambda rd: lep4f.ALEPH_N_SIG - lep4f.ALEPH_N_SIG_ERR),
+            ("lit1.1e-5", lambda rd: eff4f.n_sig_for_rate(eff4f.R_LIT, rd)))
 
 
 def tables(counts_by_model):
@@ -74,14 +91,14 @@ def tables(counts_by_model):
         res = {"n_pairs": c["n_pairs"], "n_acc": c["n_acc"], "n_acc_win": c["n_acc_win"],
                "eps_kin": {k: [round(v[0], 4), round(v[1], 4)] for k, v in eps.items()},
                "confront": {}}
-        for variant in ("nominal",) + tuple(v for v in ("iso_nearest", "both_30deg", "cos0.9",
-                                                        "pmin2", "pmin5", "jet40", "cos0.7")):
+        for variant in eff4f.VARIANT_NAMES:
             e_by = {}
             for ex in EXPTS:
                 key = "%s:%s" % (ex, variant)
                 e_by[ex] = eps[key][0] if key in eps else eps["%s:nominal" % ex][0]
             for reading in ("nominal", "low"):
-                for ys, nsig in (("central", None), ("minus1sigma", 32.31 - 10.87)):
+                for ys, nsig_of in yield_options():
+                    nsig = nsig_of(reading)
                     tag = "%s|%s|%s" % (variant, reading, ys)
                     res["confront"][tag] = {
                         "OPAL": eff4f.confront(["OPAL"], e_by, reading, eff4f.ID_EFF, nsig),
@@ -119,7 +136,7 @@ def main():
                    made_by='MV2 of Munim, Inc. (made with AI agents)',
                    window_GeV=list(eff4f.WINDOW), window_obs=eff4f.WINDOW_OBS,
                    id_eff_per_muon=eff4f.ID_EFF, bw_fraction_gen=eff4f.bw_fraction(*eff4f.GEN_RANGE),
-                   counts=counts, quantiles_in_acceptance=quants, tasks=stats,
+                   r_lit=eff4f.R_LIT, counts=counts, quantiles_in_acceptance=quants, tasks=stats,
                    results=tables(counts))
     with open(os.path.join(a.out, 'eff4f-summary.json'), 'w') as f:
         json.dump(summary, f, indent=1)
@@ -135,11 +152,16 @@ def main():
         print(model, ' '.join('%s=%.3f' % (k, v[0]) for k, v in res['eps_kin'].items()))
     print('\nconfrontation (ID 0.86^2 per pair; b = 0): n_obs, predicted, s_up, mu_max, p, z')
     for model, res in summary['results'].items():
-        for tag in ('nominal|nominal|central', 'nominal|low|minus1sigma'):
+        for tag in ('nominal|nominal|central', 'nominal|low|minus1sigma', 'nominal|low|lit1.1e-5'):
             for grp, r in res['confront'][tag].items():
                 print('%-2s %-26s %-8s n=%d pred=%7.2f s_up=%5.2f mu_max=%.4f p=%.3g z=%.1f' % (
                     model, tag, grp, r['n_obs'], r['pred'], r['s_up_95'], r['mu_max'],
                     r['p_value'], r['z']))
+    print('\nworst case over all variants (OPAL+L3, low reading, lit1.1e-5 and minus1sigma):')
+    for model, res in summary['results'].items():
+        worst = max(((t, r['OPAL+L3']['p_value']) for t, r in res['confront'].items()
+                     if '|low|' in t and not t.endswith('|central')), key=lambda x: x[1])
+        print(model, worst[0], 'p=%.3g' % worst[1])
     print('\nquantiles (5,25,50,75,95 %) in acceptance:')
     for model, q in quants.items():
         print(model, json.dumps(q))
