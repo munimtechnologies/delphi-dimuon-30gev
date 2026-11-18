@@ -35,9 +35,7 @@ has two candidates that could be signal; L3, whose selection has no recoil-mass 
 tests Z -> h A, has **none** in 3.05 million; DELPHI one in 0.94 million. By hand the boson
 survives only if these selections kept fewer than about 2.5 % of its events. Jobs `efhz-v1` and
 `lephz-v1` (queued) measure the efficiencies against expectations J1-J7 and L1-L10. The readings of
-the five papers are in [readings/lephz-notes.md](readings/lephz-notes.md) (third reading,
-LEPHZ-C, added 2026-11-18: OPAL's 1994 cuts, ALEPH's event-level b-tag, L3's background of 0.65
-events).
+the five papers are in [readings/lephz-notes.md](readings/lephz-notes.md).
 
 **What is left, and what DELPHI tests.** If the excess is real, its muons must sit inside the b
 jets, as ALEPH describes: cascade decays, a mismodelled background shape, or a new state decaying
@@ -47,14 +45,21 @@ events in the not-tagged sample for every tagged one). Test C (to be pre-registe
 uses isolated muon pairs without the b-tag, with the four-fermion background from DELPHI's own
 EXCALIBUR simulation.
 
-**Two flaws caught before unblinding.** [PLAN-amendment-0.12.md](PLAN-amendment-0.12.md): in
-the not-b-tagged spectrum, the pre-registered background rule can fake a *negative* signal
-(mu_hat = 0.51 for an injected ALEPH-sized signal on noise-free pseudo-data), which would favour a
-false exclusion; five background treatments are scored on pseudo-data (job `dimu-envcast-v1`,
-expectations K0-K7). [PLAN-amendment-0.13.md](PLAN-amendment-0.13.md): in the b-tagged spectrum
-of test A, the same rule keeps a degree-2 background that fakes +0.52 of an ALEPH-sized signal on a
-realistic Pythia shape, which would favour a false *confirmation*; the decision rule must now also
-pass four scenarios built from the generator shape (job `dimu-bbspur-v1`, expectations M1-M6).
+**Two flaws caught before unblinding, and the fix chosen by a written rule.**
+[PLAN-amendment-0.12.md](PLAN-amendment-0.12.md): in the not-b-tagged spectrum, the
+pre-registered background rule can fake a *negative* signal (mu_hat = 0.51 for an injected
+ALEPH-sized signal on noise-free pseudo-data), which would favour a false exclusion.
+[PLAN-amendment-0.13.md](PLAN-amendment-0.13.md): in the b-tagged spectrum, the same rule keeps a
+degree-2 background that fakes +0.52 of an ALEPH-sized signal on a realistic Pythia shape, which
+would favour a false *confirmation* (job `dimu-bbspur-v1`, expectations M1-M6, queued).
+[PLAN-amendment-0.14.md](PLAN-amendment-0.14.md) (new, 2026-11-18): job `dimu-envcast-v1` scored
+five background treatments on eight pseudo-data scenarios. Only a **fixed degree-3 background in
+every category** keeps the fake signal below 0.2 standard deviations everywhere; the
+discrete-profiling envelope (penalty one unit per parameter, over the same five functions) fails
+in one of these scenarios (+0.29 sigma when the b bbar shape is exponential). Expectations K0, K1, K2, K4 and K5 passed, K3 failed (the envelope), K6 and K7 could
+not be graded (only 10 toys finished). Job `dimu-envtoys-v1` now runs 200 pseudo-experiments to
+check that the degree-3 choice does not exclude a real ALEPH-sized boson more than 7 % of the time
+(expectations N0-N5).
 
 **What "ALEPH-sized" means (plan v0.11, section 5f).** The expected signal is one written
 formula in produced Z decays (`analysis/nexp.py`). ALEPH's paper leaves its hadronic event count
@@ -66,7 +71,8 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
 - [PLAN.md](PLAN.md): the question, sensitivity estimate, data, analysis outline and the
   **blinding commitments** (the 26-35 GeV opposite-sign dimuon window stays closed until the
   selection and tests are frozen and published here as plan v1.0). Amendments
-  [0.12](PLAN-amendment-0.12.md) and [0.13](PLAN-amendment-0.13.md).
+  [0.12](PLAN-amendment-0.12.md), [0.13](PLAN-amendment-0.13.md) and
+  [0.14](PLAN-amendment-0.14.md).
 - [paper/](paper/): the draft paper on the four-fermion result (not peer reviewed).
 - [NOTE-kinematics.md](NOTE-kinematics.md), [NOTE-fourfermion.md](NOTE-fourfermion.md),
   [NOTE-higgs-searches.md](NOTE-higgs-searches.md): the three external tests, each with its
@@ -97,9 +103,9 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
 - [stats/](stats/): the pre-registered statistics. `dimustat.py` (test A: 50 MeV bins in 15-50 GeV,
   Voigt signal, log-Legendre background with a fixed degree rule, q0, asymptotic CLs),
   `dimucomb.py` (test B), `forecast.py`, `combcast.py`, `bkgsys.py` (spurious-signal test and
-  discrete-profiling envelope), `envcast.py` and `bbspur.py` (background-treatment scoring).
-  Tests: `python -m unittest -v test_dimustat test_dimucomb test_bkgsys test_bbspur` (needs
-  `numpy`, `scipy`; `pythia8mc` for forecast and bbspur).
+  discrete-profiling envelope), `envcast.py`, `envtoys.py` and `bbspur.py` (background-treatment
+  scoring). Tests: `python -m unittest -v test_dimustat test_dimucomb test_bkgsys test_envtoys
+  test_bbspur` (needs `numpy`, `scipy`; `pythia8mc` for forecast and bbspur).
 - [delsim/](delsim/): the signal through DELPHI's own detector simulation (`run_delsim.sh`,
   `runsim -gext`, `sigana.py` for resolution and efficiencies). Tests:
   `python -m unittest -v test_sigana`.
@@ -109,7 +115,8 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   `lep4f.py` (limits from the published four-fermion counts), `eff4f.py` 0.2.0 and
   `run_eff4f.py` (the published four-fermion selections on the boson models), `efhz.py` and
   `lephz.py` (the LEP1 Higgs-search selections), `iso4f.py` (isolated pairs in simulation).
-  [analysis/results/](analysis/results/) holds the output of `lep4f-eff-v2`. Tests:
+  [analysis/results/](analysis/results/) holds the output of `lep4f-eff-v2` and, in `envcast/`,
+  of `dimu-envcast-v1`. Tests:
   `python -m unittest -v test_dimusel test_btagcal test_nexp test_lep4f test_iso4f test_eff4f
   test_efhz test_lephz`. Runs: `python run_eff4f.py --out OUT --nsig 10000 --workers 2`,
   `python run_lephz.py --out OUT` (need `numpy`, `pythia8mc` and the `xkin/` modules alongside).
@@ -117,16 +124,17 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
 
 ## Status
 
-Plan v0.11 plus amendments 0.12 and 0.13, 2026-11-18. No DELPHI dimuon mass from real data has
-been looked at yet. Returned and graded: the kinematic study (xkin-v1, E1-E3 passed), the
+Plan v0.11 plus amendments 0.12, 0.13 and 0.14, 2026-11-18. No DELPHI dimuon mass from real data
+has been looked at yet. Returned and graded: the kinematic study (xkin-v1, E1-E3 passed), the
 analysis-code tests (dimusel, btagcal, sigana, nexp), the test-B forecast (combcast-v1: background
 flaw found, amendment 0.12), the four-fermion limits (lep4f-v1: 11/11 tests), the four-fermion
-efficiencies (**lep4f-eff-v2: H1-H7 passed**) and the test-A forecast (dimu-forecast-v2: timed
-out in its toys; its Asimov part found the bias of amendment 0.13). Still queued: the DELPHI
+efficiencies (**lep4f-eff-v2: H1-H7 passed**), the test-A forecast (dimu-forecast-v2: its Asimov
+part found the bias of amendment 0.13) and the background-treatment scoring (**dimu-envcast-v1:
+degree 3 is the only eligible treatment that passes**, amendment 0.14). Still queued: the DELPHI
 probe, ntuple, validation and detector-simulation jobs, the four-fermion simulation (fourf), the
-Higgs-search efficiency jobs (efhz-v1, lephz-v1) and the background-treatment jobs (envcast-v1,
-bbspur-v1). Each will be graded against the expectations written before it ran. Results, positive,
-negative or inconclusive, will all be published here.
+Higgs-search efficiency jobs (efhz-v1, lephz-v1), bbspur-v1 and envtoys-v1. Each will be graded
+against the expectations written before it ran. Results, positive, negative or inconclusive, will
+all be published here.
 
 ## Data and licences
 

@@ -1,0 +1,16 @@
+test_curves_match_direct_fit (test_bkgsys.TestFits.test_curves_match_direct_fit) ... ok
+test_envelope_recovers_exact_signal (test_bkgsys.TestFits.test_envelope_recovers_exact_signal) ... ok
+test_spurious_negative_for_c2_mixture (test_bkgsys.TestFits.test_spurious_negative_for_c2_mixture) ... ok
+test_spurious_zero_for_exact_power_law (test_bkgsys.TestFits.test_spurious_zero_for_exact_power_law) ... ok
+test_c2_inputs_match_combcast_print (test_bkgsys.TestHelpers.test_c2_inputs_match_combcast_print) ... ok
+test_choose_degree_spurious_logic (test_bkgsys.TestHelpers.test_choose_degree_spurious_logic) ... ok
+test_cls_limit_closed_form (test_bkgsys.TestHelpers.test_cls_limit_closed_form) ... ok
+test_crossing_nan_when_never (test_bkgsys.TestHelpers.test_crossing_nan_when_never) ... ok
+test_envelope_and_penalty (test_bkgsys.TestHelpers.test_envelope_and_penalty) ... ok
+test_profile_summary_negative_muhat_has_zero_z0 (test_bkgsys.TestHelpers.test_profile_summary_negative_muhat_has_zero_z0) ... ok
+test_profile_summary_parabola (test_bkgsys.TestHelpers.test_profile_summary_parabola) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 17.369s
+
+OK
