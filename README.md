@@ -31,6 +31,18 @@ expectations H1-H7 written in the note before it runs. A third reading
 acceptance, |cos theta| < 0.9, which becomes OPAL's nominal reading. As far as we can find,
 nobody has confronted the excess with these measurements before.
 
+**Third line (version 0.1, 2026-11-18, hand bound only): [NOTE-higgs-searches.md](NOTE-higgs-searches.md).**
+ALEPH's own final LEP1 Higgs search (Phys. Lett. B 384 (1996) 427) selected two energetic
+leptons, at least one isolated, recoiling against hadrons, in about 4.5 million hadronic Z decays
+from 1989-1995, which include the 1992-1995 data of the excess. It found three H mu+ mu-
+candidates, as expected from Standard Model background. An isolated-muon boson radiated off b
+quarks at the excess's rate would have put about 190 x eps events there, so it survives only if
+the Higgs selection kept fewer than about 4 % of them; even counting only the 32 excess events
+themselves, which are in that sample, it needs eps < 0.25. The Z -> h A model escapes this
+selection (its recoil mass, 30.4 GeV, is below the 40 GeV cut) but not the four-fermion one.
+`analysis/efhz.py` 0.1.0 measures eps (job `efhz-v1`, expectations J1-J7 written first). As far
+as we can find, no paper citing the excess uses the LEP1 Higgs searches.
+
 **A flaw caught before unblinding (plan amendment 0.12, 2026-11-18): [PLAN-amendment-0.12.md](PLAN-amendment-0.12.md).**
 The test-B forecast job showed that the pre-registered background rule can fake a *negative*
 signal in the not-b-tagged spectrum. When that background is a mix of b bbar and softer
@@ -69,6 +81,8 @@ this lowers test B's 1992-95 exclusion chance from about 0.95 to about 0.88.
 - [NOTE-fourfermion.md](NOTE-fourfermion.md): the bounds from the published LEP1
   mu+ mu- q qbar counts and dimuon-mass distributions, their inputs (three readings of the boson
   rate), the expectations H1-H7 for the efficiency job, and the limits of the argument.
+- [NOTE-higgs-searches.md](NOTE-higgs-searches.md): the bound from ALEPH's own LEP1 Higgs search
+  (H mu+ mu- channel), by rate and by the excess events themselves, expectations J1-J7.
 - [readings/](readings/): word-for-word notes from the published LEP1 papers, made by AI agents
   reading the scanned papers.
 - [probe/](probe/): a feasibility probe that runs in the public DELPHI container
@@ -151,15 +165,18 @@ this lowers test B's 1992-95 exclusion chance from about 0.95 to about 0.88.
   tracks and EM clusters without the partner lepton) and confronts their 20-40 GeV dimuon counts
   with the boson prediction under three readings of its rate; `run_eff4f.py` runs it on Pythia 8
   events of the three xkin boson models (needs `numpy`, `pythia8mc`, and `xme.py`, `evana.py`,
-  `fadgen.py`, `run_xkin.py` from `xkin/` alongside). `iso4f.py` counts isolated opposite-sign
+  `fadgen.py`, `run_xkin.py` from `xkin/` alongside). `efhz.py` (0.1.0) codes ALEPH's LEP1
+  H l+ l- selection and confronts it with the three H mu+ mu- candidates of ALEPH's 1996 Higgs
+  search; `run_efhz.py` runs it the same way. `iso4f.py` counts isolated opposite-sign
   muon pairs, with and without the b-tag, in simulation only, using dimusel's own selection. Pure
   Python, no dependencies except where stated.
   Tests: `python -m unittest -v test_dimusel test_btagcal test_nexp test_lep4f test_iso4f
-  test_eff4f`; run:
+  test_eff4f test_efhz`; run:
   `python dimusel.py --dir NTUPLES --period y94 --out spectra.json [--config cuts.json]`,
   `python btagcal.py --dir NTUPLES --period y94 --out btagcal.json`,
   `python nexp.py --inputs nexp_inputs.json --out nexp.json`, `python lep4f.py`,
-  `python run_eff4f.py --out OUT`, `python iso4f.py --dir SIM_NTUPLES --out iso4f.json`.
+  `python run_eff4f.py --out OUT`, `python run_efhz.py --out OUT`,
+  `python iso4f.py --dir SIM_NTUPLES --out iso4f.json`.
 - [reviews/](reviews/): hand reviews of the code, with what was found and fixed.
 
 ## Status
@@ -171,10 +188,10 @@ expectations (see NOTE-kinematics.md). The analysis-code tests (dimusel 0.3.0, b
 G4 and the Asimov half of G3, failed G1 because of the background flaw described above, and
 timed out before its toys; its follow-up (envcast-v1) is queued. The first forecast job stopped
 on a syntax error before computing anything and has been re-filed as 0.1.1. The validation,
-simulation, four-fermion and lep4f-eff (v2, eff4f 0.2.0) jobs are still queued. Their results
-will be graded against the expectations written in PLAN.md, the amendment and
-NOTE-fourfermion.md before they ran. Results, positive, negative or inconclusive, will all be
-published here.
+simulation, four-fermion, lep4f-eff (v2, eff4f 0.2.0) and Higgs-search (efhz-v1) jobs are still
+queued. Their results will be graded against the expectations written in PLAN.md, the amendment,
+NOTE-fourfermion.md and NOTE-higgs-searches.md before they ran. Results, positive, negative or
+inconclusive, will all be published here.
 
 ## Data and licences
 
@@ -185,4 +202,4 @@ of the skelana common-block words were read from the public SKELANA decks and th
 delphi-nanoaod headers (GPL-3.0); no code from those projects is copied here. The DELSIM
 run steps follow the public documentation of the delphi-sim-pipeline project and the CERN Open
 Data simulation guide; no code from that project is copied here. The published LEP1
-four-fermion numbers are quoted from the cited papers.
+four-fermion and Higgs-search numbers are quoted from the cited papers.
