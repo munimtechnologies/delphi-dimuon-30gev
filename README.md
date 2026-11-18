@@ -10,7 +10,7 @@ name. It is not a DELPHI, ALEPH, L3 or OPAL Collaboration result, and neither th
 collaborations nor CERN endorse it. **No physicist has checked these results yet.**
 
 **Main result so far (2026-11-18): the excess is not a boson decaying to isolated muons.**
-Draft paper: [paper/DRAFT-lep1-4f-30gev.md](paper/DRAFT-lep1-4f-30gev.md) (draft 0.4, not peer
+Draft paper: [paper/DRAFT-lep1-4f-30gev.md](paper/DRAFT-lep1-4f-30gev.md) (draft 0.5, not peer
 reviewed). If the excess were a boson produced with b quarks (a vector or scalar radiated off the
 b, or Z -> h A), its two muons would be isolated from the jets in 92-95 % of events. Two families
 of LEP1 measurements selected exactly that signature, and both rule the boson out:
@@ -22,18 +22,26 @@ of LEP1 measurements selected exactly that signature, and both rule the boson ou
    **about 150 events** into OPAL's and L3's published dimuon-mass plots between 20 and 40 GeV,
    where they show **one**. At the lowest rate quoted for the excess and with the least
    favourable reading of every selection detail: p < 5 x 10^-12.
-2. **Higgs searches** ([NOTE-higgs-searches.md](NOTE-higgs-searches.md), version 0.4, new).
+2. **Higgs searches** ([NOTE-higgs-searches.md](NOTE-higgs-searches.md), version 0.5).
    All four LEP experiments searched their Z-peak data for e+e- -> H Z*, Z* -> mu+ mu-: two
    muons recoiling against hadrons. Jobs `efhz-v1` and `lephz-v1` measured how much of each boson
    model the four selections keep. ALEPH's own search has a recoil-mass cut that removes most
    scalar and Z -> h A events (0.26 and 0.02 kept), so on its own it cannot exclude the scalar at
-   the lowest rate. **L3's search, which has no recoil cut and found no candidate in 3.05 million
-   hadronic Z decays, keeps 0.54-0.64, and DELPHI's 0.69-0.82.** L3 and DELPHI alone predict
-   25-30 boson events against one candidate at the lowest literature rate (p = 2e-12 to 3e-10);
-   DELPHI alone excludes every model at 99 %. All ten expectations L1-L10 written beforehand
-   passed. A calibration against the experiments' own published Higgs efficiencies, and a
-   reading question about L3's cuts, are worked through in section 5 of the note: the most
-   pessimistic combination we can build still has p = 8e-5 (scalar).
+   the lowest rate. **L3's search, which has no recoil cut (read twice, independently) and found
+   no candidate in 3.05 million hadronic Z decays, keeps 0.54-0.64, and DELPHI's 0.69-0.82.** L3
+   and DELPHI alone predict 25-30 boson events against one candidate at the lowest literature rate
+   (p = 2e-12 to 3e-10); DELPHI alone excludes every model at 99 %. All ten expectations L1-L10
+   written beforehand passed. With the weakest selection variants, scaled down to the
+   experiments' own published Higgs efficiencies, the most pessimistic combination we can build
+   still has p = 1.5e-6 (scalar, 4.7 standard deviations).
+
+**Prior work.** Ko, Li and Yu (arXiv:1610.07526, 2016) showed at parton level that their boson
+models put the muons far from the b jets, unlike ALEPH's events, and that a boson coupling
+directly to b bbar is excluded by LHC Drell-Yan data. What is new here is the confrontation with
+the LEP1 measurements themselves. **Next (job `kly-v1`, queued, expectations K1-K9 written
+first):** the same four Higgs-search selections applied to Ko, Li and Yu's two models built to
+escape the LHC bound (a Z' coupling the b quark to a heavy vector-like B quark, and Z -> Z' phi).
+Model II's benchmark rate is exactly the "lowest literature rate" used above.
 
 Limits: hadron level, no detector simulation; the selections and mass plots were read from
 scanned papers by AI reading agents. The two families overlap in data (L3's and OPAL's analyses),
@@ -123,13 +131,15 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   given), `btagcal.py` (b-tag efficiency by hemisphere double tag), `nexp.py` (expected signal),
   `lep4f.py` (limits from the published four-fermion counts), `eff4f.py` 0.2.0 and
   `run_eff4f.py` (the published four-fermion selections on the boson models), `efhz.py` and
-  `lephz.py` (the LEP1 Higgs-search selections), `iso4f.py` (isolated pairs in simulation).
+  `lephz.py` (the LEP1 Higgs-search selections), `kly.py` and `run_kly.py` (Ko, Li and Yu's
+  models II and III through the same selections), `iso4f.py` (isolated pairs in simulation).
   [analysis/results/](analysis/results/) holds the output of `lep4f-eff-v2`, of
   `dimu-envcast-v1` (`envcast/`), of `efhz-v1` (`efhz/`) and of `lephz-v1` (`lephz/`). Tests:
   `python -m unittest -v test_dimusel test_btagcal test_nexp test_lep4f test_iso4f test_eff4f
-  test_efhz test_lephz`. Runs: `python run_eff4f.py --out OUT --nsig 10000 --workers 2`,
+  test_efhz test_lephz test_kly`. Runs: `python run_eff4f.py --out OUT --nsig 10000 --workers 2`,
   `python run_efhz.py --out OUT --nsig 10000 --workers 2`,
-  `python run_lephz.py --out OUT --nsig 8000 --workers 2` (need `numpy`, `pythia8mc` and the
+  `python run_lephz.py --out OUT --nsig 8000 --workers 2`,
+  `python run_kly.py --out OUT --nsig 8000 --workers 2` (need `numpy`, `pythia8mc` and the
   `xkin/` modules alongside).
 - [reviews/](reviews/): hand reviews of the code, with what was found and fixed.
 
@@ -144,9 +154,9 @@ bias of amendment 0.13), the background-treatment scoring (dimu-envcast-v1, amen
 **dimu-bbspur-v1: M1-M5 passed, M6 failed**, amendment 0.15), ALEPH's Higgs-search efficiency
 (**efhz-v1: J1, J3, J4, J5 passed; J2, J6, J7 failed for the scalar model**) and the four LEP1
 Higgs searches (**lephz-v1: L1-L10 all passed**). Still queued: the DELPHI probe, ntuple,
-validation and detector-simulation jobs, the four-fermion simulation (fourf) and envtoys-v1. Each
-will be graded against the expectations written before it ran. Results, positive, negative or
-inconclusive, will all be published here.
+validation and detector-simulation jobs, the four-fermion simulation (fourf), envtoys-v1 and
+kly-v1 (Ko, Li and Yu's models). Each will be graded against the expectations written before it
+ran. Results, positive, negative or inconclusive, will all be published here.
 
 ## Data and licences
 
