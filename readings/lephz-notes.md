@@ -1,4 +1,4 @@
-# Readings LEPHZ-A and LEPHZ-B: the LEP1 Standard Model Higgs searches, H Z*(-> l+ l-) channel
+# Readings LEPHZ-A, LEPHZ-B and LEPHZ-C: the LEP1 Standard Model Higgs searches, H Z*(-> l+ l-) channel
 
 Made by AI reading agents working in the name of MV2 of Munim, Inc. (mv2@munimtech.com) on
 2026-11-18, from the scanned papers and CERN preprints linked from the INSPIRE records below.
@@ -31,8 +31,8 @@ Z. Phys. C 73 (1997) 189, CERN-PPE/96-118 (INSPIRE 423697).
   5 < p < 30 GeV; momentum sum > 20 GeV (was 25); a recoil-mass cut replaces the earlier 25 GeV
   hadronic-mass cut; sqrt(d1^2 + d2^2) < 50 micrometres; E_vis > 80 GeV; a secondary vertex with
   >= 3 tracks and decay length significance > 3; a forward-detector and silicon-tungsten veto;
-  isolation as in Phys. Lett. B 327 (1994) 397. The recoil-mass and isolation cut values are only
-  given by reference to that paper (not read).
+  isolation as in Phys. Lett. B 327 (1994) 397 (read in LEPHZ-C below). The value of the new
+  recoil-mass cut is not stated in what was read.
 - Candidate: one, recoil mass **61.2 +- 1.0 GeV**, muon momenta 19.3 and 7.3 GeV; m_mumu not
   stated (the agent derived about 17 GeV; NOTE-higgs-searches.md section 3 derives 16.8 GeV).
 - Efficiency eps_mumu: 8.6 % (m_H = 30), 23.1 % (40), 33.6 % (50), 29.4 % (54), 29.9 % (56),
@@ -56,7 +56,6 @@ Phys. Lett. B 385 (1996) 454, CERN-PPE/96-095 (INSPIRE 421562).
 - Candidates: **none** in the high-mass mu mu selection. Two low-mass events, recoil 5.3 +- 1.0
   GeV (1992) and 9.6 +- 1.0 GeV (1993); m_mumu not listed.
 - Efficiency mu mu H0: 37.0 % (m_H = 30), 37.1 % (40), 36.1 % (50), 32.3 % (60).
-- The agent notes that L3 does not give m(mu mu) or m(ee) for its candidates.
 
 **DELPHI**, "Search for the standard model Higgs boson in Z0 decays", Nucl. Phys. B 421 (1994) 3,
 CERN-PPE/94-46 (INSPIRE 374451).
@@ -72,12 +71,56 @@ CERN-PPE/94-46 (INSPIRE 374451).
 - Efficiency mu mu: 54.6 % (m_H = 35), 54.3 % (40), 52.8 % (50), 54.5 % (55), 54.0 % (60);
   30 GeV not given.
 
-## How lephz 0.1.0 reads the open points
+## LEPHZ-C (OPAL 1994; open points of ALEPH 1996 and L3 1996)
+
+Third reading, 2026-11-18. Only the agent's one-line summary and the last quoted passages were
+kept; they are reproduced here.
+
+**OPAL**, "Search for neutral Higgs bosons with the OPAL detector at LEP", Phys. Lett. B 327
+(1994) 397. l+ l- H0 channel:
+- Isolation: each of the two leptons must be isolated by either of two tests: (i) in 30 deg cones,
+  the track momentum and ECAL energy in the cone over the event total < 0.2; or (ii) cones of
+  45 deg around the harder and 15 deg around the softer lepton; in addition the scalar track
+  momentum within 15 deg < 1 GeV.
+- No recoil-mass cut. Dilepton mass > 15 GeV, and the mass outside the 15 deg lepton cones
+  > 25 GeV (the "25 GeV hadronic-mass cut" that OPAL 1997 replaced with a recoil cut).
+- Momenta: p > 3.0 GeV at preselection, each lepton > 5.0 GeV, sum of the two muons > 20.0 GeV
+  (> 25.0 GeV for the mu-pair identification); abs(cos theta) <= 0.92.
+- Efficiency for l l H0 (e + mu): 27 % (m_H = 30), 49 % (40), 49 % (50), 43 % (55), 38 % (60);
+  mu mu 41 % at 60 GeV.
+- The number of Z decays and the candidates of this paper are not in the part of the report that
+  was kept.
+
+**ALEPH 1996, open points:**
+- b-tag in the H l l channel: **yes**, an event-level P_uds < 0.05 on the high-recoil-mass
+  (> 40 GeV/c^2) candidates. (No such candidate in H nu nu.)
+- Expected background: 2.7 events for H l l combined (1.1 l l b bbar + 1.6 non-b); H mu mu alone
+  not stated.
+- The three candidates: only the recoil masses (49.7 +- 0.5, 51.5 +- 0.5, 66.9 +- 0.3 GeV/c^2)
+  are given; momenta, dilepton mass, year and b-tag value are not stated.
+
+**L3 1996, open points:**
+- Expected background in the high-mass mu mu H0 selection: 0.65 +- 0.11 events
+  (e+e- -> mu+ mu- q qbar, recoil > 30 GeV). L3 observed none.
+- Muon abs(cos theta) acceptance: not stated.
+- D = (E_jet - p_mu) / p_mu, with E_jet the energy of the jet that contains the muon; jets "are
+  formed using the jet algorithm described in Reference [25]" (O. Adriani et al., Nucl. Instr.
+  Meth. A 302 (1991) 53); algorithm and cone not stated. The cut values quoted: "D_1,2 < 2.5,
+  D_1 . D_2 < 0.25; min(E^bgo_1, E^bgo_2) < 200 MeV; E^hcl_1,2 < 4 GeV, E^hcl_1 . E^hcl_2
+  < 1 GeV^2", with E^bgo in a 15 deg minus 3 deg cone and E^hcl in a 30 deg minus 3 deg cone.
+
+## How lephz 0.1.0 reads the open points, and what LEPHZ-C changes
 
 - "missing mass > 15 GeV" (DELPHI) is read as the mass recoiling against the muon pair, and
   "recoil visible mass > 10 GeV" as the visible mass of the rest of the event.
 - "isolation from the jets > 40 deg and > 20 deg" (DELPHI) is read as the harder muon > 40 deg,
   the other > 20 deg (variants: both > 40 deg).
-- The ALEPH 1996 b-tag is applied as a factor 0.8 for events that contain b bbar.
-- OPAL's unread recoil and isolation cuts get stand-ins, and OPAL is left out of the nominal
-  combination.
+- The ALEPH 1996 b-tag is applied as a factor 0.8 for events that contain b bbar. LEPHZ-C
+  confirms the cut is applied to every H l l candidate, at event level. **0.8 may be optimistic**
+  for P_uds < 0.05; the next version of NOTE-higgs-searches.md will also give the result with a
+  factor 0.4, and with ALEPH left out (L3 alone already gives eps < 0.024 by hand).
+- L3's backgrounds (0.65 expected, 0 seen) and ALEPH's (2.7 expected for e e + mu mu) are not
+  subtracted (b = 0), which weakens the limits.
+- OPAL: the 1994 cuts are now known (no recoil cut; m_ll > 15 GeV; hadronic mass > 25 GeV; both
+  leptons isolated; abs(cos theta) <= 0.92), but the 1997 paper's recoil cut value and the 1994
+  paper's Z count and candidates are not, so OPAL stays outside the nominal combination.

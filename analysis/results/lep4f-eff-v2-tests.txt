@@ -1,0 +1,26 @@
+test_acceptance (test_eff4f.Acceptance.test_acceptance) ... ok
+test_agrees_with_evana (test_eff4f.Acceptance.test_agrees_with_evana) ... ok
+test_evaluate_and_counts (test_eff4f.Bookkeeping.test_evaluate_and_counts) ... ok
+test_window_bookkeeping (test_eff4f.Bookkeeping.test_window_bookkeeping) ... ok
+test_cone_energy (test_eff4f.Geometry.test_cone_energy) ... ok
+test_durham (test_eff4f.Geometry.test_durham) ... ok
+test_em_or_track_excludes_neutron_and_klong (test_eff4f.Geometry.test_em_or_track_excludes_neutron_and_klong) ... ok
+test_iso_angle_energy (test_eff4f.Geometry.test_iso_angle_energy) ... ok
+test_iso_angle_energy_neutron_and_partner (test_eff4f.Geometry.test_iso_angle_energy_neutron_and_partner) ... ok
+test_iso_angle_nearest (test_eff4f.Geometry.test_iso_angle_nearest) ... ok
+test_pair_mass (test_eff4f.Geometry.test_pair_mass) ... ok
+test_visible_excludes_neutrino (test_eff4f.Geometry.test_visible_excludes_neutrino) ... ok
+test_aleph (test_eff4f.Selections.test_aleph) ... ok
+test_l3 (test_eff4f.Selections.test_l3) ... ok
+test_l3_needs_one_isolated_muon (test_eff4f.Selections.test_l3_needs_one_isolated_muon) ... ok
+test_opal (test_eff4f.Selections.test_opal) ... ok
+test_opal_multiplicity (test_eff4f.Selections.test_opal_multiplicity) ... ok
+test_bw_fraction (test_eff4f.Statistics.test_bw_fraction) ... ok
+test_literature_rate (test_eff4f.Statistics.test_literature_rate) ... ok
+test_predict_and_confront (test_eff4f.Statistics.test_predict_and_confront) ... ok
+test_z_of (test_eff4f.Statistics.test_z_of) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.033s
+
+OK
