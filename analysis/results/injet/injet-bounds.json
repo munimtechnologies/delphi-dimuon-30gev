@@ -1,0 +1,35 @@
+{
+ "version": "0.1.0",
+ "inputs": {
+  "sqrt_s_peak": 91.19,
+  "sqrt_s_max_lep1": 94.3,
+  "m_aleph": 30.4,
+  "s_aleph": 32.31,
+  "b_aleph": 1457.06,
+  "n_l3_5_50": 170,
+  "l3_peak_excess": [6.4, 7.4],
+  "l3_signal_excess": [8.4, 8.6]
+ },
+ "single_jet_bound_gev": {
+  "15": {"peak": 12.005, "max_lep1": 12.415},
+  "20": {"peak": 16.079, "max_lep1": 16.628},
+  "25": {"peak": 20.216, "max_lep1": 20.906},
+  "30": {"peak": 24.434, "max_lep1": 25.268}
+ },
+ "min_cone_deg": {
+  "28.00": {"peak": 34.14, "max_lep1": 33.07},
+  "30.40": {"peak": 36.87, "max_lep1": 35.74}
+ },
+ "min_opening_deg": {
+  "28.00": {"peak": 68.28, "max_lep1": 66.15},
+  "30.40": {"peak": 73.75, "max_lep1": 71.47}
+ },
+ "l3": {
+  "s_over_b_aleph": 0.02217,
+  "expected_upper_acc1": 3.77,
+  "expected_upper_acc1p5": 5.65,
+  "expected_sigma_upper_acc1": 0.51,
+  "expected_sigma_upper_acc1p5": 0.76,
+  "peak_excess_minus_upper_acc1_sigma": 0.36
+ }
+}
