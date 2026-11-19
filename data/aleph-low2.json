@@ -1,0 +1,10 @@
+{
+ "source": "Blind reading ALEPHLOW2 of Heister, arXiv:1610.06536 v9 (HTML), 5-15 GeV bins: FIGURE K = HTML Figure 5 (opposite-sign di-muon data against the binned electron-muon data used as background) and FIGURE F = HTML Figure 7 (unbinned extended maximum-likelihood fit). Read by an AI reading agent with no access to MV2's repositories, report completed 2026-11-19T20:28Z, from the vector SVGs zoomed to 500 % (K) and 200 % (F). Values copied exactly as read, no edits. Reader's stated uncertainty: n +-0, v +-0.2 events. No OFF values. y axis top 70 in both figures. F's di-muon counts equal K's bin for bin; the fitted curve is not drawn below 15 GeV.",
+ "licence": "CC BY 4.0 (this reading); the figures belong to their author",
+ "edges": [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+ "n": [14, 29, 33, 43, 47, 48, 58, 44, 50, 55],
+ "v_scaled": [24.4, 33.4, 48.2, 45.6, 47.2, 50.9, 50.3, 50.3, 50.9, 39.2],
+ "n_figF": [14, 29, 33, 43, 47, 48, 58, 44, 50, 55],
+ "sums": {"n": 421, "v_scaled": 440.4, "n_figF": 421},
+ "reader_line": "ALEPHLOW2: K n 5..14 = 14,29,33,43,47,48,58,44,50,55 sum 421 | K v 5..14 = 24.4,33.4,48.2,45.6,47.2,50.9,50.3,50.3,50.9,39.2 sum 440.4 | F n 5..14 = 14,29,33,43,47,48,58,44,50,55 sum 421 | OFF count 0/0/0 | y top 70/70 | uncertainty n +-0, v +-0.2"
+}
