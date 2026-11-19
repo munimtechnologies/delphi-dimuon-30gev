@@ -1,13 +1,22 @@
 # NOTE-higgs-searches: do the four LEP1 Higgs searches leave room for a 30 GeV boson?
 
-MV2 of Munim, Inc. (mv2@munimtech.com). Version 0.8, 2026-11-19 (0.1-0.7 on 2026-11-18/19).
+MV2 of Munim, Inc. (mv2@munimtech.com). Version 0.9, 2026-11-19 (0.1-0.8 on 2026-11-18/19).
 Made with AI agents working in MV2's name. Not an ALEPH, DELPHI, L3 or OPAL Collaboration result.
 **No physicist has checked this note yet.** Section 3 is a hand calculation written before any
-efficiency was measured; sections 4, 5, 6 and 6b are measured (jobs `efhz-v1`, `lephz-v1`,
-`kly-v1` and `kly4f-v1`). Section 6c's decision rule is now graded from a blind reading of
-OPAL's paper. Section 6d pre-registers a new job (`klyscan-v1`, queued) whose expectations S1-S7
-are written below before it runs. Expectations J1-J7, L1-L10, K1-K9, F1-F5 and G1-G6 (section 8)
-were written before their jobs ran. Text CC BY 4.0, code Apache-2.0.
+efficiency was measured; sections 4, 5, 6, 6b and 6c are measured (jobs `efhz-v1`, `lephz-v1`,
+`kly-v1`, `kly4f-v1` and `kly4fj-v1`). Section 6c's decision rule was graded from a blind reading
+of OPAL's paper; its sensitivity check is graded in 0.9. Section 6d pre-registers a job
+(`klyscan-v1`, queued) whose expectations S1-S7 were written before it runs. Expectations J1-J7,
+L1-L10, K1-K9, F1-F5 and G1-G6 (section 8) were written before their jobs ran. Text CC BY 4.0,
+code Apache-2.0.
+
+**What changed in 0.9.** *Job kly4fj-v1 returned and is graded (sections 6c and 8).* G1 and G2
+passed: the job reproduced kly4f-v1 exactly, and for every model except the 12 GeV scalar OPAL's
+selection keeps 63-82 % of events even if the two muons are removed before jet finding. The
+information-only checks show how much the 12 GeV case hung on OPAL's jet definition: with the
+muons removed, OPAL would keep **0.8 %** of those events (G3 met; G4, G5 and G6 not met), and the
+case would rest on L3 alone. OPAL did not remove them (0.8), so nothing claimed changes; the
+dependence is now measured and stated.
 
 **What changed in 0.8.**
 1. *The condition on the light-scalar corner is settled (sections 6b, 6c).* A reading of OPAL's
@@ -20,8 +29,8 @@ were written before their jobs ran. Text CC BY 4.0, code Apache-2.0.
    worst calibration ratio: p = 3.3e-9). Every other cut in the reading also matches the code
    (readings/opal4f-jets-notes.md). **Every model we have tested is now excluded by at least two
    detectors.**
-2. *Job kly4fj-v1 (still queued) becomes a sensitivity check.* Its hadrons-only jet variants are not
-   OPAL's selection; G1 and G2 are still graded when it returns, G3-G6 are reported as information.
+2. *Job kly4fj-v1 became a sensitivity check.* Its hadrons-only jet variants are not OPAL's
+   selection; G1 and G2 are graded, G3-G6 are reported as information (graded in 0.9).
 3. *A mass scan is pre-registered (section 6d).* Model III was computed at three scalar masses only
    (limit 6). Job `klyscan-v1` adds m_phi = 15, 20, 25, 35, 40, 45 and 55 GeV with both families of
    selections; expectations S1-S7 are written below.
@@ -321,7 +330,7 @@ but this was not computed.
 measurement (OPAL alone, weakest variant: p = 2.6e-12; scaled by 0.62: p = 1.5e-7; OPAL + L3,
 weakest and scaled: p = 3.3e-9).
 
-## 6c. Light-scalar corner: OPAL's jets without the muons (job kly4fj-v1, queued; expectations written before it runs)
+## 6c. Light-scalar corner: OPAL's jets without the muons (job kly4fj-v1, returned 2026-11-19; expectations written before it ran)
 
 **What the job does.** `analysis/run_kly4fj.py` 0.1.0 regenerates the same events (same seeds,
 generator and Pythia settings), re-applies eff4f 0.2.0 (closure: n_acc and the OPAL and L3
@@ -351,10 +360,40 @@ paper does not say, the second exclusion is claimed only if G6 passes; otherwise
 corner rests on L3's Higgs search alone, and the paper says so.
 
 **Outcome (0.8): case (a).** The reading (section 6b; readings/opal4f-jets-notes.md) says the
-leptons were included. eff4f nominal stands and the second exclusion holds. When kly4fj-v1
-returns, G1 and G2 are graded as written; G3-G6 are graded too but are information only (they
-measure a selection OPAL did not use, and show how much the 12 GeV result would have depended on
-it). The job is not withdrawn: it is already in the queue and its closure checks are useful.
+leptons were included. eff4f nominal stands and the second exclusion holds. G1 and G2 are graded
+as written; G3-G6 are graded too but are information only (they measure a selection OPAL did not
+use, and show how much the 12 GeV result would have depended on it).
+
+**Result (0.9).** The job ran on 2 CPUs in 6 minutes (peak 0.1 GB). All 8 unit tests passed;
+every model reproduced kly4f-v1's counts (closure true in all six) and the all-particle jet count
+agreed with eff4f's in every event (0 mismatches). Outputs and sha256 of every source file:
+`analysis/results/kly4fj/`.
+
+| model | OPAL nominal (all particles) | hj_full02 | hj_had02 | hj_full005 | OPAL + L3 weakest, hj_full02, lit: p |
+|---|---|---|---|---|---|
+| B110 | 0.857 | 0.629 | 0.807 | 0.782 | 3.3e-12 |
+| B180 | 0.860 | 0.658 | 0.823 | 0.800 | 1.2e-12 |
+| B110L | 0.859 | 0.654 | 0.811 | 0.791 | 9.5e-13 |
+| **Q12** | **0.851** | **0.008** | **0.258** | **0.088** | **0.027** |
+| Q30 | 0.890 | 0.705 | 0.885 | 0.880 | 2.8e-13 |
+| Q50 | 0.817 | 0.816 | 0.817 | 0.817 | 3.5e-15 |
+
+For Q12 with the muons removed, 6,875 of the 7,053 events in the window form a single hadronic jet
+at y_cut 0.02 (whole-event normalisation); the median y at which the last two hadronic clusters
+merge is 0.0025 (whole event) or 0.015 (hadrons only), below every y_cut used. The 12 GeV scalar's
+two b quarks are simply too close to resolve. With the hadrons-only selections, OPAL + L3 (weakest
+L3) give p = 0.027 (hj_full02), 1.7e-3 (hj_full005) and 3.8e-6 (hj_had02); OPAL alone 0.96, 0.14
+and 4.6e-4.
+
+**Reading.** G1 and G2 pass. For model II and for model III at 30.4 and 50 GeV, the four-fermion
+exclusion does not depend on the jet definition: even with the muons removed, OPAL keeps 63-82 %
+of events and OPAL + L3 give p <= 3.3e-12. For the 12 GeV scalar it depends on it completely. Our
+priors for G4 and G5 (65 % each) were wrong: the scalar's hadrons stay one jet even at y_cut 0.005
+or with y normalised to the hadrons' energy. Because OPAL's paper says the leptons were included
+(case (a)), the second exclusion of section 6b stands; but it rests on that one sentence of a
+scanned 1996 paper, read once, blind. Had OPAL removed the leptons, the 12 GeV corner would rest on
+L3's Higgs search alone (section 6). A second blind reading of OPAL's jet sentence would make the
+claim sturdier and is listed in limit 1.
 
 ## 6d. Model III between the three computed masses (job klyscan-v1, queued; expectations written before it runs)
 
@@ -392,6 +431,11 @@ pessimistic reading, at every computed m_phi from 12 to 50 GeV (to 55 GeV if S7 
 limit 6's "three scalar masses only" is replaced by the scanned range. Any mass where S4 or S5
 fails is reported as resting on one detector at that mass, with its p values.
 
+**Note added in 0.9 (does not change S1-S7).** Section 6c shows that OPAL's four-fermion
+efficiency for a light scalar depends on the leptons being included in jet finding. At m_phi = 15
+GeV the same will be true; S5 at 15 GeV is graded as written (all-particle jets, OPAL's selection
+as read).
+
 ## 7. What this means
 
 Four LEP1 detectors, about 12 million hadronic Z decays, and selections built for two isolated
@@ -403,11 +447,12 @@ off b quarks, Z -> h A (which covers Lane and Pritchett's model), or either of t
 designed to escape the LHC bound (a Z' coupling b to a heavy vector-like quark, and Z -> Z' phi),
 decaying to isolated muons, at anything like the rate the excess needs. Every one of these cases
 is excluded by at least two detectors.** The last conditional case, Z -> Z' phi with a 12 GeV
-scalar, was settled by reading OPAL's jet definition (section 6b); section 6d checks the scalar
-masses between those computed. If the excess is real, its muons sit inside the b jets, which
-points to a b-jet effect (for example cascade decays or a mismodelled background shape) or to a
-state that decays inside a jet, rather than to the boson models tested here. DELPHI's open data
-test that directly (PLAN.md, tests A and B).
+scalar, was settled by reading OPAL's jet definition (section 6b); section 6c measured how much
+that reading matters (for this one case, everything), and section 6d checks the scalar masses
+between those computed. If the excess is real, its muons sit inside the b jets, which points to a
+b-jet effect (for example cascade decays or a mismodelled background shape) or to a state that
+decays inside a jet, rather than to the boson models tested here. DELPHI's open data test that
+directly (PLAN.md, tests A and B).
 
 ## 8. Expectations, written before the jobs ran, and grades
 
@@ -473,18 +518,31 @@ Five of five passed. The hand estimate (39.2 and 10.7 events at efficiency 1) ma
 Decision rule of section 6c (written in 0.7, graded in 0.8 from a blind reading): **case (a)**,
 leptons included; the second exclusion of the 12 GeV corner holds.
 
-kly4fj-v1: G1-G6 in section 6c (G3-G6 now information only); grades when the job returns.
+kly4fj-v1 (written in 0.7, graded in 0.9; G3-G6 information only since 0.8):
+
+| | expectation | result | grade |
+|---|---|---|---|
+| G1 | all unit tests pass; closure with kly4f-v1; all-particle jet count agrees with eff4f in every event | 8 of 8 ok; closure true in all six; 0 mismatches | **PASS** |
+| G2 | B110, B180, B110L, Q30, Q50: eps(OPAL:hj_full02) >= 0.60 | 0.629, 0.658, 0.654, 0.705, 0.816 | **PASS** |
+| G3 | Q12: eps(OPAL:hj_full02) < 0.20 (info) | 0.008 | met |
+| G4 | Q12: eps(OPAL:hj_had02) >= 0.50 (info) | 0.258 | not met |
+| G5 | Q12: eps(OPAL:hj_full005) >= 0.40 (info) | 0.088 | not met |
+| G6 | Q12: OPAL (hj_full02) + L3 weakest, lit, 1 observed: p < 1e-3 (info) | 0.027 | not met |
+
 klyscan-v1: S1-S7 in section 6d; grades when the job returns.
 
-Tally of graded expectations in this note and NOTE-fourfermion.md (H1-H7): 38 written, 35 met;
-the three failures (J2, J6, J7) are all ALEPH's own Higgs search against the scalar model.
+Tally of graded expectations in this note and NOTE-fourfermion.md (H1-H7): **40 written, 37 met**;
+the three failures (J2, J6, J7) are all ALEPH's own Higgs search against the scalar model. Not in
+the tally: the four information-only checks G3-G6 (one met), which measure a selection OPAL did
+not use.
 
 ## 9. Limits (read before citing)
 
 1. **Readings.** The cuts come from AI reading agents' summaries of scanned papers; a few values
    are interpretations (readings/lephz-notes.md, last section). L3's lack of a recoil cut was
-   read twice, independently. OPAL's four-fermion jet definition was read blind to this
-   repository (readings/opal4f-jets-notes.md); its y_cut is not stated in the paper.
+   read twice, independently. OPAL's four-fermion jet definition was read once, blind to this
+   repository (readings/opal4f-jets-notes.md); its y_cut is not stated in the paper. Section 6c
+   shows that the second exclusion of the 12 GeV scalar depends entirely on that one reading.
 2. **Generator level.** Hadron level (Pythia 8), no detector simulation. Isolation is computed
    from generator particles. Muon identification is a common factor 0.86 per muon (ALEPH's).
    Section 5 item 3 compares with the experiments' own efficiencies (ratios 0.62-0.90).
@@ -523,8 +581,8 @@ seven more scalar masses through both families of selections. Run:
 `python run_kly4fj.py --out OUT --nsig 8000 --workers 2` and
 `python run_klyscan.py --out OUT --nsig 8000 --workers 2` (need `numpy`, `pythia8mc`, and
 eff4f.py, lep4f.py and the xkin modules alongside). Outputs: `analysis/results/efhz/`,
-`analysis/results/lephz/`, `analysis/results/kly/`, `analysis/results/kly4f/` (and
-`analysis/results/kly4fj/`, `analysis/results/klyscan/` when those jobs return).
+`analysis/results/lephz/`, `analysis/results/kly/`, `analysis/results/kly4f/`,
+`analysis/results/kly4fj/` (and `analysis/results/klyscan/` when that job returns).
 
 ## 11. Prior art
 

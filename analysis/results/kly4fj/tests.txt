@@ -1,0 +1,13 @@
+test_closure_table_covers_models (test_kly4fj.TestAgainstEff4f.test_closure_table_covers_models) ... ok
+test_same_jet_count_as_eff4f (test_kly4fj.TestAgainstEff4f.test_same_jet_count_as_eff4f) ... ok
+test_back_to_back_pair (test_kly4fj.TestDurham.test_back_to_back_pair) ... ok
+test_collinear_pair_merges_with_full_event_norm (test_kly4fj.TestDurham.test_collinear_pair_merges_with_full_event_norm) ... ok
+test_njets_from_history_non_monotonic (test_kly4fj.TestDurham.test_njets_from_history_non_monotonic) ... ok
+test_three_particles_order_and_values (test_kly4fj.TestDurham.test_three_particles_order_and_values) ... ok
+test_muons_removed (test_kly4fj.TestHadronicJets.test_muons_removed) ... ok
+test_new_pass (test_kly4fj.TestHadronicJets.test_new_pass) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.035s
+
+OK
