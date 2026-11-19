@@ -67,19 +67,25 @@ models put a muon within 15 degrees of a leading jet in only 5-11 % of events, w
 Z -> b bbar does so in 99.4 %. ALEPH reports this "in all cases". Taken at face value, ALEPH's own
 kinematics allow at most about 4-10 of its 32 fitted events to be such a boson (95 % CL).
 
-**What is left, and what DELPHI tests ([NOTE-injet.md](NOTE-injet.md), version 0.1, 2026-11-19).**
+**What is left, and what DELPHI tests ([NOTE-injet.md](NOTE-injet.md), version 0.2, 2026-11-19).**
 ALEPH reports that each muon of its excess sits close to one of the leading jets. Exact kinematics
 show that two muons within 20 degrees of the *same* jet can have a mass of at most 16.6 GeV at
 LEP1, so the two muons of a 30 GeV pair sit next to two different jets, and **no new state decaying
 within one jet can make the excess**. ALEPH's background is its own electron-muon data, so ordinary
 b-decay effects (cascades, fragmentation, a mismodelled semileptonic spectrum) cancel in the
-excess unless they treat muons and electrons differently. What remains is a statistical
-fluctuation (in the muon pairs or in the electron-muon template), a muon-specific detector effect,
-or a muon-coupled state whose muons fall near two b jets by accident (already bounded above). L3's
-2019 cross-check (arXiv:1905.01111) expected at most about 4 signal events against a 7.4-event
-uncertainty, so it could not decide. Test A replicates ALEPH's analysis on DELPHI's b-tagged events;
-NOTE-injet adds test A', the same fit against DELPHI's own electron-muon spectrum (ALEPH's frame),
-for plan v1.0. Test B fits the b-tagged and not-b-tagged spectra together (a boson produced with b
+excess unless they treat muons and electrons differently. **A blind reading of ALEPH's own figures
+(NOTE-injet sec. 7)** finds the excess in the muon-pair data itself: +15.8 events against ALEPH's
+simulation and +17.8 against its electron-muon background in 29-32 GeV, while the electron-muon
+control agrees with simulation there (+1.5). Pre-registered grade R2 passed; R1 (at least 16
+events) failed as written by 0.2 events, inside the reading uncertainty, so test A' is now the
+primary DELPHI test. The electron-muon control does dip in the 28-29 GeV bin next to the window.
+What remains is a statistical fluctuation of the muon pairs (or of the template next to the
+window), a muon-specific detector effect, or a muon-coupled state whose muons fall near two b jets
+by accident (already bounded above). L3's 2019 cross-check (arXiv:1905.01111) expected at most
+about 4 signal events against a 7.4-event uncertainty, so it could not decide. Test A replicates
+ALEPH's analysis on DELPHI's b-tagged events; NOTE-injet adds test A', the same fit against
+DELPHI's own electron-muon spectrum (ALEPH's frame) with the template's own Poisson errors, for
+plan v1.0. Test B fits the b-tagged and not-b-tagged spectra together (a boson produced with b
 quarks would put about 1.6 events in the not-tagged sample for every tagged one). Test C (to be
 pre-registered in plan v1.0) uses isolated muon pairs without the b-tag, with the four-fermion
 background from DELPHI's own EXCALIBUR simulation. DELPHI's open data exist only in DELPHI's own
@@ -133,10 +139,11 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   [NOTE-higgs-searches.md](NOTE-higgs-searches.md), [NOTE-lane-pritchett.md](NOTE-lane-pritchett.md):
   the external tests, each with its pre-registered expectations, grades and limits.
   [NOTE-injet.md](NOTE-injet.md): the single-jet mass bound, ALEPH's electron-muon background
-  frame, L3's sensitivity, and the pre-registered test A' and figure-reading grades R1-R2.
+  frame, L3's sensitivity, the pre-registered test A', and the graded figure reading (R1, R2).
 - [readings/](readings/): notes from the published LEP1 papers, made by AI agents reading the
   scanned papers (including [opal4f-jets-notes.md](readings/opal4f-jets-notes.md), OPAL's
-  four-fermion jet definition, read blind to this repository).
+  four-fermion jet definition, and [aleph-figs-notes.md](readings/aleph-figs-notes.md), three of
+  ALEPH's 2016 figures; both read blind to this repository).
 - [probe/](probe/): a feasibility probe that runs in the public DELPHI container
   (`gitlab-registry.cern.ch/delphi/deployment/delphi/al9_64_xrd`): xrootd access to the 1994
   short DSTs, the stock skelana example, the manuals as text.
@@ -197,7 +204,7 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
 
 ## Status
 
-Plan v0.11 plus amendments 0.12-0.18, 2026-11-19, and NOTE-injet 0.1. No DELPHI dimuon mass from
+Plan v0.11 plus amendments 0.12-0.18, 2026-11-19, and NOTE-injet 0.2. No DELPHI dimuon mass from
 real data has been looked at yet. Returned and graded: the kinematic study (xkin-v1, E1-E3 passed),
 the analysis-code tests (dimusel, btagcal, sigana, nexp), the test-B forecast (combcast-v1:
 background flaw found, amendment 0.12), the four-fermion limits (lep4f-v1: 11/11 tests), the
@@ -207,10 +214,11 @@ its Asimov part found the bias of amendment 0.13), the background-treatment scor
 0.15), ALEPH's Higgs-search efficiency (**efhz-v1: J1, J3, J4, J5 passed; J2, J6, J7 failed for the
 scalar model**), the four LEP1 Higgs searches (**lephz-v1: L1-L10 all passed**), Ko, Li and Yu's
 models (**kly-v1: K1-K9 all passed; kly4f-v1: F1-F5 all passed; F5's condition on OPAL's jet
-definition met, from a blind reading of OPAL's paper**) and the toys (**dimu-envtoys-v1: N0, N4, N5
+definition met, from a blind reading of OPAL's paper**), the toys (**dimu-envtoys-v1: N0, N4, N5
 passed; N2, N3 failed as written**, amendment 0.16; **dimu-envtoys-v2: N6, N8 passed**, amendment
-0.17; **dimu-envtoys-v3 and the pool: N7 (criterion (b)), N9, N10 passed**, amendment 0.18). Still
-queued: the DELPHI probe, ntuple, validation and detector-simulation jobs, the four-fermion
-simulation (fourf), kly4fj-v1 and klyscan-v1, and the blind reading of ALEPH's figures for
-NOTE-injet's R1-R2. Each will be graded against the expectations written before it ran. Results,
-positive, negative or inconclusive, will all be published here.
+0.17; **dimu-envtoys-v3 and the pool: N7 (criterion (b)), N9, N10 passed**, amendment 0.18) and the
+blind reading of ALEPH's figures (**R2 passed; R1 failed as written by 0.2 events**, NOTE-injet
+sec. 7). Still queued: the DELPHI probe, ntuple, validation and detector-simulation jobs, the
+four-fermion simulation (fourf), kly4fj-v1 and klyscan-v1. Each will be graded against the
+expectations written before it ran. Results, positive, negative or inconclusive, will all be
+published here.

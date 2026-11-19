@@ -1,10 +1,12 @@
 # NOTE-injet: what the "in-jet" reading of the ALEPH 30 GeV excess can still be
 
-Version 0.1, 2026-11-19. MV2 of Munim, Inc. (mv2@munimtech.com). Made with AI agents working in
-MV2's name; **no physicist has checked it yet**. Licence: text CC BY 4.0, code Apache-2.0.
+Version 0.2, 2026-11-19 (0.1 the same day; 0.2 adds section 7, the graded blind figure reading).
+MV2 of Munim, Inc. (mv2@munimtech.com). Made with AI agents working in MV2's name; **no physicist
+has checked it yet**. Licence: text CC BY 4.0, code Apache-2.0.
 Code: [analysis/injet.py](analysis/injet.py) (pure Python), tests
 [analysis/test_injet.py](analysis/test_injet.py), numbers
-[analysis/results/injet/injet-bounds.json](analysis/results/injet/injet-bounds.json).
+[analysis/results/injet/injet-bounds.json](analysis/results/injet/injet-bounds.json); figure reading
+[readings/aleph-figs-notes.md](readings/aleph-figs-notes.md).
 
 ## 1. Why this note
 
@@ -79,6 +81,8 @@ What is left, with the in-jet description and the isolated-muon exclusions toget
    downwards fluctuation around 28 GeV" in the e mu data against simulation; the default
    significance (Z_asym = 5.35) treats the smoothed template as exact, while Z_Bi (2.63, with
    tau = 1) does not. This is also Lane and Pritchett's conclusion (arXiv:1701.07376).
+   (Section 7: the blind reading finds no e mu deficit inside 29-32 GeV, so the template part of
+   this reading is now limited to the 28-29 GeV bin next to the window.)
 2. **A muon-specific detector effect** that is localised in mass (fake muons from punch-through or
    decays in flight sit inside jets, but their rates are smooth in momentum, and we know of no
    mechanism that would localise them at 30 GeV).
@@ -135,5 +139,51 @@ simulation, both normalised to the opposite-sign mu mu yield), read bin by bin f
 The bound in sec. 2 is exact kinematics and assumes only energy-momentum conservation. Secs. 3-4
 rely on Heister's and Hebbeker and Roth's text as read by AI agents from arXiv HTML; the L3 scaling
 assumes that the signal-to-background acceptance ratio is similar in the two detectors (a factor
-1.5 is shown). The figure readings in sec. 5 have not been made yet. None of this is a result of
-the ALEPH, DELPHI, L3 or OPAL Collaborations.
+1.5 is shown). The figure readings of sec. 5 are graded in sec. 7; they were made by eye from the
+published figures. None of this is a result of the ALEPH, DELPHI, L3 or OPAL Collaborations.
+
+## 7. The blind figure reading, graded (added in version 0.2)
+
+The reading was made on 2026-11-19 by an AI reading agent with no access to this repository,
+from the arXiv HTML of v9 ([readings/aleph-figs-notes.md](readings/aleph-figs-notes.md)). Figures as
+numbered in the HTML: E = Fig. 3 (e mu data and simulation, both normalised to the opposite-sign
+mu mu data yield), M = Fig. 21(a) (opposite-sign mu mu data against ALEPH simulation, logarithmic
+y axis; the paper's text calls it Fig. 20(a)), K = Fig. 5 (mu mu data against the binned e mu data
+used as background). All three have 1 GeV bins. The reader's stated uncertainty is 0.3-0.5 events
+per bin, so about +-1 to 1.5 events on a three-bin sum. Bins summed: 29-30, 30-31 and 31-32 GeV.
+
+| figure | summed over 29-32 GeV | value (events) |
+|---|---|---|
+| M | mu mu data minus ALEPH simulation | **+15.8** |
+| E | e mu data minus simulation (same normalisation) | **+1.5** |
+| K | mu mu data minus binned e mu data (ALEPH's background) | +17.8 (information) |
+
+**Grades.**
+- **R1: FAIL as written.** +15.8 is below the threshold of 16 by 0.2 events, less than the reading
+  uncertainty. The threshold is not moved; R1 is recorded as failed.
+- **R2: PASS.** +1.5 is far above -16; in the signal window the e mu control agrees with simulation.
+
+**Decision, as pre-registered.** Because R1 failed, A' becomes the primary DELPHI test in plan
+v1.0. The explanation the plan attached to a failure ("a large part of the excess is a deficit in
+the e mu control") is **not** what the reading shows, and we say so: R2 finds no deficit in the
+window. R1 fails because the threshold, half of the fitted 32.3 events, did not allow for the part
+of the fitted signal that falls outside 29-32 GeV (ALEPH fits a natural width of 1.78 GeV on top of a
+0.74 GeV resolution). Read plainly, the excess is in the mu mu data itself, against ALEPH's
+simulation (+15.8) and against its e mu background (+17.8), and it is not made by a dip in the e mu
+template inside the signal window.
+
+**What else the reading shows.** In E, the e mu data have a one-bin dip at 28-29 GeV (about 3.5
+events against 8.2 simulated), no bump at 30 GeV, and an excess at 24-25 GeV. This matches ALEPH's
+text ("a small downwards fluctuation around 28 GeV", "deviation around 24 GeV"). In M, the mu mu
+bump is at 29-31 GeV (about 12 and 14 events against about 8 and 5 simulated). The number of e mu
+pairs is not stated in the paper.
+
+**What it changes in sec. 3.** Reading 1 (statistical fluctuation) narrows: a fluctuation of the
+e mu template inside the signal window is not supported. A smoothed template can still carry the
+28-29 GeV dip some way into the window, which only a fit with the template's own Poisson errors
+can size; that is test A'. A fluctuation of the mu mu sample itself, a muon-specific detector
+effect and a muon-coupled state with muons near two different jets remain.
+
+**Limits of the reading.** Values were read by eye from published figures by one reader; only the
+summary values and quoted sentences are preserved (the per-bin table was not kept in full). The
+16-event threshold and the decision rule were written before the reading and are graded as written.
