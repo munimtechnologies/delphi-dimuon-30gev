@@ -1,0 +1,86 @@
+{
+ "tool": "mv2 envtoys 0.1.0",
+ "envcast": "mv2 envcast 0.1.0",
+ "bkgsys": "mv2 bkgsys 0.1.0",
+ "made_by": "MV2 of Munim, Inc. (made with AI agents)",
+ "scenario": "C2_9495_f1.5",
+ "note": "No DELPHI data used. Truths and yields of combcast 0.1.0.",
+ "p_max": 0.07,
+ "n_min": 150,
+ "toys": {
+  "mu=1": {
+   "fix3|combined": {
+    "n": 60,
+    "muhat_mean": 0.9938,
+    "muhat_std": 0.506,
+    "ul_median": 2.002,
+    "z0_median": 1.9301,
+    "n_EXCLUDED": 2,
+    "p_EXCLUDED": 0.0333,
+    "n_COMPATIBLE": 20,
+    "p_COMPATIBLE": 0.3333,
+    "n_INCONCLUSIVE": 38,
+    "p_INCONCLUSIVE": 0.6333,
+    "p_EXCLUDED_cp95": [
+     0.0041,
+     0.1153
+    ]
+   },
+   "fix3|tagged": {
+    "n": 60,
+    "muhat_mean": 0.9457,
+    "muhat_std": 0.8526,
+    "ul_median": 2.2492,
+    "z0_median": 1.2559,
+    "n_EXCLUDED": 4,
+    "p_EXCLUDED": 0.0667,
+    "n_COMPATIBLE": 7,
+    "p_COMPATIBLE": 0.1167,
+    "n_INCONCLUSIVE": 49,
+    "p_INCONCLUSIVE": 0.8167,
+    "p_EXCLUDED_cp95": [
+     0.0185,
+     0.162
+    ]
+   },
+   "old|combined": {
+    "n": 60,
+    "muhat_mean": 0.9174,
+    "muhat_std": 0.497,
+    "ul_median": 1.8422,
+    "z0_median": 2.0891,
+    "n_EXCLUDED": 3,
+    "p_EXCLUDED": 0.05,
+    "n_COMPATIBLE": 26,
+    "p_COMPATIBLE": 0.4333,
+    "n_INCONCLUSIVE": 31,
+    "p_INCONCLUSIVE": 0.5167,
+    "p_EXCLUDED_cp95": [
+     0.0104,
+     0.1392
+    ]
+   },
+   "old|tagged": {
+    "n": 60,
+    "muhat_mean": 1.0024,
+    "muhat_std": 0.6738,
+    "ul_median": 2.2706,
+    "z0_median": 1.4379,
+    "n_EXCLUDED": 2,
+    "p_EXCLUDED": 0.0333,
+    "n_COMPATIBLE": 8,
+    "p_COMPATIBLE": 0.1333,
+    "n_INCONCLUSIVE": 50,
+    "p_INCONCLUSIVE": 0.8333,
+    "p_EXCLUDED_cp95": [
+     0.0041,
+     0.1153
+    ]
+   }
+  }
+ },
+ "criterion_b_fix3": "UNDETERMINED",
+ "criterion_b_old": "UNDETERMINED",
+ "mean_sec_per_toy": 1208.2,
+ "wall_s": 18543.5
+}

@@ -82,11 +82,14 @@ bias exactly (+0.52; expectations M1-M5 passed) and showed that more data do not
 rule (M6 failed). Degree 3 passes in all twelve scenarios.
 [PLAN-amendment-0.16.md](PLAN-amendment-0.16.md): job `dimu-envtoys-v1` ran 62 pseudo-experiments
 with a true ALEPH-sized boson and 30 without (too slow for the planned 200). Degree 3 is unbiased
-(mean fitted signal 1.00 and 0.02) and falsely excluded a real boson in 2 of 62; the 150 toys
-needed to decide criterion (b) are being completed by `dimu-envtoys-v2` under a pooling rule
-written first. **A sensitivity limit reported before unblinding:** with no boson present, DELPHI's
-combined test excludes an ALEPH-sized one in only about 43 % of pseudo-experiments, so an
-INCONCLUSIVE result is the most likely outcome if the excess is not real.
+(mean fitted signal 1.00 and 0.02) and falsely excluded a real boson in 2 of 62.
+[PLAN-amendment-0.17.md](PLAN-amendment-0.17.md): the top-up `dimu-envtoys-v2` added 60 toys
+(N6 and N8 passed). Pooled, degree 3 falsely excludes a real boson in 5 of 122 (b-tagged test) and
+4 of 122 (combined test) pseudo-experiments, below the 7 % limit, but the rule written first needs
+150 toys, so a third top-up (`dimu-envtoys-v3`) is queued. **A sensitivity limit reported before
+unblinding:** with no boson present, DELPHI's combined test excludes an ALEPH-sized one in only
+about 43 % of pseudo-experiments, so an INCONCLUSIVE result is the most likely outcome if the
+excess is not real.
 
 **What "ALEPH-sized" means (plan v0.11, section 5f).** The expected signal is one written
 formula in produced Z decays (`analysis/nexp.py`). ALEPH's paper leaves its hadronic event count
@@ -99,8 +102,8 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   **blinding commitments** (the 26-35 GeV opposite-sign dimuon window stays closed until the
   selection and tests are frozen and published here as plan v1.0). Amendments
   [0.12](PLAN-amendment-0.12.md), [0.13](PLAN-amendment-0.13.md),
-  [0.14](PLAN-amendment-0.14.md), [0.15](PLAN-amendment-0.15.md) and
-  [0.16](PLAN-amendment-0.16.md).
+  [0.14](PLAN-amendment-0.14.md), [0.15](PLAN-amendment-0.15.md),
+  [0.16](PLAN-amendment-0.16.md) and [0.17](PLAN-amendment-0.17.md).
 - [paper/](paper/): the draft paper on the LEP1 isolated-muon result (not peer reviewed).
 - [NOTE-kinematics.md](NOTE-kinematics.md), [NOTE-fourfermion.md](NOTE-fourfermion.md),
   [NOTE-higgs-searches.md](NOTE-higgs-searches.md): the three external tests, each with its
@@ -147,8 +150,8 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   models II and III through the same selections), `run_kly4f.py` (the same events through the
   four-fermion selections), `iso4f.py` (isolated pairs in simulation).
   [analysis/results/](analysis/results/) holds the output of `lep4f-eff-v2`, of
-  `dimu-envcast-v1` (`envcast/`), `dimu-envtoys-v1` (`envtoys/`), `efhz-v1` (`efhz/`),
-  `lephz-v1` (`lephz/`) and `kly-v1` (`kly/`). Tests:
+  `dimu-envcast-v1` (`envcast/`), `dimu-envtoys-v1` (`envtoys/`), `dimu-envtoys-v2`
+  (`envtoys-v2/`), `efhz-v1` (`efhz/`), `lephz-v1` (`lephz/`) and `kly-v1` (`kly/`). Tests:
   `python -m unittest -v test_dimusel test_btagcal test_nexp test_lep4f test_iso4f test_eff4f
   test_efhz test_lephz test_kly test_kly4f`. Runs: `python run_eff4f.py --out OUT --nsig 10000 --workers 2`,
   `python run_efhz.py --out OUT --nsig 10000 --workers 2`,
@@ -160,7 +163,7 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
 
 ## Status
 
-Plan v0.11 plus amendments 0.12-0.16, 2026-11-18. No DELPHI dimuon mass from real data has been
+Plan v0.11 plus amendments 0.12-0.17, 2026-11-19. No DELPHI dimuon mass from real data has been
 looked at yet. Returned and graded: the kinematic study (xkin-v1, E1-E3 passed), the analysis-code
 tests (dimusel, btagcal, sigana, nexp), the test-B forecast (combcast-v1: background flaw found,
 amendment 0.12), the four-fermion limits (lep4f-v1: 11/11 tests), the four-fermion efficiencies
@@ -169,19 +172,9 @@ bias of amendment 0.13), the background-treatment scoring (dimu-envcast-v1, amen
 **dimu-bbspur-v1: M1-M5 passed, M6 failed**, amendment 0.15), ALEPH's Higgs-search efficiency
 (**efhz-v1: J1, J3, J4, J5 passed; J2, J6, J7 failed for the scalar model**), the four LEP1
 Higgs searches (**lephz-v1: L1-L10 all passed**), Ko, Li and Yu's models (**kly-v1: K1-K9 all
-passed**) and the first toys (**dimu-envtoys-v1: N0, N4, N5 passed; N2, N3 failed as written;
-N1 undetermined**, amendment 0.16). Still queued: the DELPHI probe, ntuple, validation and
-detector-simulation jobs, the four-fermion simulation (fourf), dimu-envtoys-v2 and kly4f-v1.
-Each will be graded against the expectations written before it ran. Results, positive, negative
-or inconclusive, will all be published here.
-
-## Data and licences
-
-DELPHI open data are CC0 (cite doi:10.7483/OPENDATA.DELPHI.0X8O.FBUH and each dataset's DOI).
-Code in this repository is Apache-2.0; text and result tables are CC BY 4.0. Pythia 8
-(`pythia8mc`) is GPL-2.0-or-later and is installed separately, not bundled here. The meanings
-of the skelana common-block words were read from the public SKELANA decks and the
-delphi-nanoaod headers (GPL-3.0); no code from those projects is copied here. The DELSIM
-run steps follow the public documentation of the delphi-sim-pipeline project and the CERN Open
-Data simulation guide; no code from that project is copied here. The published LEP1
-four-fermion and Higgs-search numbers are quoted from the cited papers.
+passed**) and the toys (**dimu-envtoys-v1: N0, N4, N5 passed; N2, N3 failed as written**,
+amendment 0.16; **dimu-envtoys-v2: N6, N8 passed; N1/N7 undetermined at 122 of 150 toys**,
+amendment 0.17). Still queued: the DELPHI probe, ntuple, validation and detector-simulation jobs,
+the four-fermion simulation (fourf), dimu-envtoys-v3 and kly4f-v1. Each will be graded against the
+expectations written before it ran. Results, positive, negative or inconclusive, will all be
+published here.
