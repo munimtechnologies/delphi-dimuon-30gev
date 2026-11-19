@@ -82,15 +82,23 @@ primary DELPHI test. The electron-muon control does dip in the 28-29 GeV bin nex
 What remains is a statistical fluctuation of the muon pairs (or of the template next to the
 window), a muon-specific detector effect, or a muon-coupled state whose muons fall near two b jets
 by accident (already bounded above). L3's 2019 cross-check (arXiv:1905.01111) expected at most
-about 4 signal events against a 7.4-event uncertainty, so it could not decide. Test A replicates
-ALEPH's analysis on DELPHI's b-tagged events; NOTE-injet adds test A', the same fit against
-DELPHI's own electron-muon spectrum (ALEPH's frame) with the template's own Poisson errors, for
-plan v1.0. Test B fits the b-tagged and not-b-tagged spectra together (a boson produced with b
-quarks would put about 1.6 events in the not-tagged sample for every tagged one). Test C (to be
-pre-registered in plan v1.0) uses isolated muon pairs without the b-tag, with the four-fermion
-background from DELPHI's own EXCALIBUR simulation. DELPHI's open data exist only in DELPHI's own
-formats (RAW, DSTO, LONG, SHORT, XSHORT; checked on the CERN Open Data portal 2026-11-19), so these
-tests need the DELPHI software container.
+about 4 signal events against a 7.4-event uncertainty, so it could not decide.
+
+**Test A' and ALEPH's own significance ([PLAN-amendment-0.19.md](PLAN-amendment-0.19.md),
+2026-11-19).** Test A' fits DELPHI's b-tagged muon pairs against DELPHI's own electron-muon
+spectrum (ALEPH's frame), keeping the template's own counting error bin by bin
+([stats/emuframe.py](stats/emuframe.py), Barlow-Beeston, pure Python). ALEPH's headline 5.35 sigma
+treats its smoothed electron-muon template as exact, and its 2.63 sigma (Z_Bi) takes the template
+to be no larger than the background it predicts; neither is the significance with the template's
+actual Poisson error. Amendment 0.19 pre-registers that number for ALEPH's own published spectrum
+(P0-P4, graded on a blind per-bin reading of ALEPH's Fig. 5) and a toy calibration (C1-C5, job
+`aprime-toys-v1`), before either exists. Test A replicates ALEPH's analysis on DELPHI's b-tagged
+events with a fitted smooth background and is reported beside A'. Test B fits the b-tagged and
+not-b-tagged spectra together (a boson produced with b quarks would put about 1.6 events in the
+not-tagged sample for every tagged one). Test C (to be pre-registered in plan v1.0) uses isolated
+muon pairs without the b-tag, with the four-fermion background from DELPHI's own EXCALIBUR
+simulation. DELPHI's open data exist only in DELPHI's own formats (RAW, DSTO, LONG, SHORT, XSHORT;
+checked on the CERN Open Data portal 2026-11-19), so these tests need the DELPHI software container.
 
 **Two flaws caught before unblinding, and the fix chosen by a written rule.**
 [PLAN-amendment-0.12.md](PLAN-amendment-0.12.md): in the not-b-tagged spectrum, the
@@ -132,8 +140,8 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   selection and tests are frozen and published here as plan v1.0). Amendments
   [0.12](PLAN-amendment-0.12.md), [0.13](PLAN-amendment-0.13.md),
   [0.14](PLAN-amendment-0.14.md), [0.15](PLAN-amendment-0.15.md),
-  [0.16](PLAN-amendment-0.16.md), [0.17](PLAN-amendment-0.17.md) and
-  [0.18](PLAN-amendment-0.18.md).
+  [0.16](PLAN-amendment-0.16.md), [0.17](PLAN-amendment-0.17.md),
+  [0.18](PLAN-amendment-0.18.md) and [0.19](PLAN-amendment-0.19.md) (test A').
 - [paper/](paper/): the draft paper on the LEP1 isolated-muon result (not peer reviewed).
 - [NOTE-kinematics.md](NOTE-kinematics.md), [NOTE-fourfermion.md](NOTE-fourfermion.md),
   [NOTE-higgs-searches.md](NOTE-higgs-searches.md), [NOTE-lane-pritchett.md](NOTE-lane-pritchett.md):
@@ -169,10 +177,14 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   Voigt signal, log-Legendre background with a fixed degree rule, q0, asymptotic CLs),
   `dimucomb.py` (test B), `forecast.py`, `combcast.py`, `bkgsys.py` (spurious-signal test and
   discrete-profiling envelope), `envcast.py`, `envtoys.py` and `bbspur.py` (background-treatment
-  scoring), `envpool.py` (pools the toy batches and grades criterion (b); pure Python).
+  scoring), `envpool.py` (pools the toy batches and grades criterion (b); pure Python),
+  `emuframe.py` (test A' and the A'-ALEPH re-evaluation: mu mu against the e mu template with
+  Barlow-Beeston per-bin errors, q0, asymptotic CLs, Z_Bi; pure Python) and `aprime_toys.py` (its
+  background-only calibration toys on made-up spectra).
   [stats/results/bbspur/](stats/results/bbspur/) holds the output of `dimu-bbspur-v1`.
   Tests: `python -m unittest -v test_dimustat test_dimucomb test_bkgsys test_envtoys test_bbspur
-  test_envpool` (needs `numpy`, `scipy`; `pythia8mc` for forecast and bbspur).
+  test_envpool test_emuframe` (needs `numpy`, `scipy`; `pythia8mc` for forecast and bbspur;
+  `test_emuframe` needs nothing).
 - [delsim/](delsim/): the signal through DELPHI's own detector simulation (`run_delsim.sh`,
   `runsim -gext`, `sigana.py` for resolution and efficiencies). Tests:
   `python -m unittest -v test_sigana`.
@@ -204,7 +216,7 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
 
 ## Status
 
-Plan v0.11 plus amendments 0.12-0.18, 2026-11-19, and NOTE-injet 0.2. No DELPHI dimuon mass from
+Plan v0.11 plus amendments 0.12-0.19, 2026-11-19, and NOTE-injet 0.2. No DELPHI dimuon mass from
 real data has been looked at yet. Returned and graded: the kinematic study (xkin-v1, E1-E3 passed),
 the analysis-code tests (dimusel, btagcal, sigana, nexp), the test-B forecast (combcast-v1:
 background flaw found, amendment 0.12), the four-fermion limits (lep4f-v1: 11/11 tests), the
@@ -219,6 +231,7 @@ passed; N2, N3 failed as written**, amendment 0.16; **dimu-envtoys-v2: N6, N8 pa
 0.17; **dimu-envtoys-v3 and the pool: N7 (criterion (b)), N9, N10 passed**, amendment 0.18) and the
 blind reading of ALEPH's figures (**R2 passed; R1 failed as written by 0.2 events**, NOTE-injet
 sec. 7). Still queued: the DELPHI probe, ntuple, validation and detector-simulation jobs, the
-four-fermion simulation (fourf), kly4fj-v1 and klyscan-v1. Each will be graded against the
+four-fermion simulation (fourf), kly4fj-v1, klyscan-v1, the A' calibration toys (aprime-toys-v1)
+and the blind per-bin reading of ALEPH's Fig. 5 (A'-ALEPH, P0-P4). Each will be graded against the
 expectations written before it ran. Results, positive, negative or inconclusive, will all be
 published here.
