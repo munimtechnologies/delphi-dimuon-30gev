@@ -1,18 +1,18 @@
 # LEP1 isolated-muon measurements and the 30 GeV dimuon excess
 
-**DRAFT 0.7, 2026-11-19. Not peer reviewed. Not yet read by a particle physicist.**
+**DRAFT 0.8, 2026-11-19. Not peer reviewed. Not yet read by a particle physicist.**
 Comments are welcome at mv2@munimtech.com or as issues on the repository.
 
 MV2, Munim, Inc. (mv2@munimtech.com). Prepared with AI agents working in MV2's name. Not a result
 of the ALEPH, DELPHI, L3 or OPAL Collaborations. Code and data:
 https://github.com/munimtechnologies/delphi-dimuon-30gev (code Apache-2.0; text CC BY 4.0).
 
-Changes from 0.6: (a) section 6b now includes the second, pre-registered test of Ko, Li and Yu's
-models with the four-fermion selections (job kly4f-v1; all five expectations met): OPAL's
-selection keeps 82-89 % of every model, including Z -> Z' phi with a 12 GeV scalar; (b) a caveat
-found while grading is stated in 6b: whether OPAL's two-jet requirement counted the muons decides
-the 12 GeV case, and a further pre-registered job measures it; (c) Lane and Pritchett's model is
-covered by the Z -> h A results (section 7).
+Changes from 0.7: the caveat of 0.7 is settled. A reading of OPAL's four-fermion paper, made blind
+to this work, finds that OPAL formed jets from all tracks and unassociated clusters, the leptons
+included, and required at least two jets per event, which is how our code applies it (section
+6b). The 12 GeV scalar of Z -> Z' phi is therefore excluded by a second detector, and every model
+tested is excluded by at least two. A scan of the scalar mass (15-55 GeV) is pre-registered
+(NOTE-higgs-searches.md section 6d).
 
 ## Abstract
 
@@ -34,8 +34,8 @@ exclude the two models built to escape the LHC bound (a Z' coupling the b quark 
 vector-like quark, and Z -> Z' phi): at the models' own rate, L3 and DELPHI's Higgs searches
 predict 21-28 events against one candidate (p <= 2.1 x 10^-8), and OPAL and L3's four-fermion
 selections 38-41 events against one (p <= 1.2 x 10^-15). Every model is excluded by at least two
-detectors, except Z -> Z' phi with a 12 GeV scalar, where the second detector's verdict depends on
-a jet-finding detail that a pre-registered job now tests. All five models contradict ALEPH's
+detectors, including Z -> Z' phi with a 12 GeV scalar, which escapes three of the four Higgs
+searches but not L3's or OPAL's four-fermion selection. All five models contradict ALEPH's
 observation that the muons of the excess lie close to the jets. A real effect would therefore have
 to produce muons inside the b jets, which the open DELPHI data can test directly. All
 expectations for each efficiency calculation were published before it was run.
@@ -90,7 +90,7 @@ the nearer muon is within 15 degrees of a jet in 3.6-6.1 % of events.
 | m(mu mu) in 20-40 GeV | 4 (e e and mu mu together; overlaps the excess data) | **1** (Fig. 3b, final selection) | **0** (Fig. 7a) |
 
 Selections in full, with every detail we could not read and the variant that brackets it:
-NOTE-fourfermion.md section 2.
+NOTE-fourfermion.md section 2; OPAL's jet finding: readings/opal4f-jets-notes.md.
 
 ## 5. Efficiencies and confrontation
 
@@ -190,16 +190,22 @@ down to the experiments' published Higgs efficiencies, the most pessimistic comb
 p = 5.6e-7 to 7.4e-7 for model II and 2.3e-7, 1.6e-5 and 6.1e-5 for model III at 30.4, 50 and
 12 GeV (3.8-5.0 standard deviations). The four-fermion selections have no recoil-mass cut and give
 the 12 GeV case a second detector: with the weakest variant of each, OPAL + L3 predict 35.3
-events against one (p = 1.7e-14), and OPAL alone 30.1 (p = 2.6e-12).
+events against one (p = 1.7e-14), and OPAL alone 30.1 (p = 2.6e-12). Scaled down by the worst
+calibration ratio we found for any LEP1 selection (0.62 for OPAL, 0.78 for L3), OPAL + L3 still
+predict 22.7 events (p = 3.3e-9) and OPAL alone 18.7 (p = 1.5e-7).
 
-**Caveat.** OPAL's four-fermion selection requires at least two Durham jets. Our code clusters
-all particles, the two isolated muons included, so this requirement never removes a signal event.
-Our reading of OPAL's paper does not say whether the leptons were removed before jet finding. If
-they were, and y was normalised to the full visible energy, the hadrons of a 12 GeV scalar would
-often form a single jet (y <= m^2 / E_vis^2 ~ 0.017 < 0.02) and OPAL's verdict on that case could
-disappear. A pre-registered job (kly4fj-v1, NOTE-higgs-searches.md section 6c) measures all three
-readings, and a blind reading of OPAL's paper will decide which applies. The other models are not
-affected. Until then, Z -> Z' phi with a 12 GeV scalar rests for certain only on L3's Higgs search.
+**OPAL's jet requirement.** OPAL's four-fermion selection requires at least two Durham jets. Our
+code clusters all seen particles, the two isolated muons included, so this requirement never
+removes a signal event. Had OPAL removed the leptons first, the hadrons of a 12 GeV scalar would
+often have formed a single jet and the second exclusion of that case could have disappeared; we
+found this while grading and published it as a condition (draft 0.7). A reading of OPAL's paper,
+made blind to this work, settles it: "Charged tracks and electromagnetic clusters not associated
+to any track are formed into jets", the paper expects "one or two 'jets' originating from the
+leptons", and "the number of jets per event has to be greater than or equal to two". This is the
+selection as coded. The same reading confirms OPAL's multiplicity, momentum, isolation and (absent)
+mass cuts as we applied them. OPAL's y_cut is not stated (our two values, 0.02 and 0.005, give
+identical results), and its requirement of two non-electron tracks in the hadronic system is not
+modelled; a b bbar system has far more than two charged tracks.
 
 ## 7. Discussion
 
@@ -208,7 +214,9 @@ four-fermion measurements (sections 4-5), and the LEP1 Higgs searches (sections 
 are separate selections and publications, but not fully independent data: L3's Higgs search
 (1991-94) contains its four-fermion data (1991-92), and OPAL's two analyses overlap too. DELPHI's
 1991-92 data are in neither four-fermion constraint, and its Higgs search alone excludes the
-vector, scalar, Z -> h A and model II at 99 % even at the lowest rate.
+vector, scalar, Z -> h A and model II at 99 % even at the lowest rate. Every model is excluded by
+at least two detectors: model III with a 12 GeV scalar by L3 (Higgs search) and OPAL
+(four-fermion), the other cases by L3 and DELPHI, and by OPAL as well.
 
 For a boson coupling directly to b bbar (our vector and scalar), Ko, Li and Yu's LHC Drell-Yan
 argument already excluded the excess's rate; the LEP1 results are an independent exclusion that
@@ -225,14 +233,15 @@ events; a pre-registered, blinded analysis is in preparation in the same reposit
 **Limitations.** Hadron level only, no detector simulation; isolation from generator particles;
 a common muon identification efficiency (ALEPH's) for all experiments; OPAL's hadronic Z count
 scaled from its luminosity; ALEPH's 1996 b-tag and OPAL's vertex requirement as fixed factors;
-model III computed at three scalar masses only, with the Z Z' phi vertex taken as g^{mu nu};
-OPAL's four-fermion jet definition not yet read (section 6b); the selections and the published
-mass distributions were read from scanned papers by AI reading agents (the mass distributions,
-and L3's Higgs-search cuts, twice and independently) and have not yet been checked by a person.
-Variants bracket each selection detail we could not read. Because the predicted counts exceed the
-limits by large factors, and the comparison with the experiments' own Higgs efficiencies shows
-our selections at most about 1.6 times too efficient, none of these approximations is likely to
-change the conclusion, but a check with the experiments' own simulation would make it final.
+model III computed at three scalar masses (a scan of seven more, 15-55 GeV, is pre-registered),
+with the Z Z' phi vertex taken as g^{mu nu}; OPAL's four-fermion y_cut and muon polar-angle cut
+not stated in the paper (bracketed by variants); the selections and the published mass
+distributions were read from scanned papers by AI reading agents (the mass distributions, L3's
+Higgs-search cuts and OPAL's four-fermion jet definition each by a second or blind reading) and
+have not yet been checked by a person. Because the predicted counts exceed the limits by large
+factors, and the comparison with the experiments' own Higgs efficiencies shows our selections at
+most about 1.6 times too efficient, none of these approximations is likely to change the
+conclusion, but a check with the experiments' own simulation would make it final.
 
 ## 8. Reproducibility
 
@@ -244,7 +253,7 @@ analysis/results/lep4f-eff-v2-run.txt and lep4f-eff-v2-summary.json. Section 6:
 analysis/results/efhz/ and analysis/results/lephz/. Section 6b:
 `python run_kly.py --out OUT --nsig 8000 --workers 2` (kly 0.1.0) and
 `python run_kly4f.py --out OUT --nsig 8000 --workers 2` (kly4f 0.1.0); outputs in
-analysis/results/kly/ and analysis/results/kly4f/.
+analysis/results/kly/ and analysis/results/kly4f/. Reading notes: readings/.
 
 ## Acknowledgements and disclosure
 
@@ -270,3 +279,5 @@ scanned papers. It uses only published results and public software.
     recorded near the Z resonance", arXiv:1905.01111.
 13. CMS Collaboration, arXiv:1808.01890.
 14. C. Bierlich et al., Pythia 8.3, SciPost Phys. Codebases 8 (2022).
+15. N. Brown, W. J. Stirling, Z. Phys. C 53 (1992) 629 (the Durham algorithm reference cited by
+    OPAL in ref. 3).
