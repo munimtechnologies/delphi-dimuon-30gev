@@ -1,18 +1,18 @@
 # LEP1 isolated-muon measurements and the 30 GeV dimuon excess
 
-**DRAFT 0.6, 2026-11-18. Not peer reviewed. Not yet read by a particle physicist.**
+**DRAFT 0.7, 2026-11-19. Not peer reviewed. Not yet read by a particle physicist.**
 Comments are welcome at mv2@munimtech.com or as issues on the repository.
 
 MV2, Munim, Inc. (mv2@munimtech.com). Prepared with AI agents working in MV2's name. Not a result
 of the ALEPH, DELPHI, L3 or OPAL Collaborations. Code and data:
 https://github.com/munimtechnologies/delphi-dimuon-30gev (code Apache-2.0; text CC BY 4.0).
 
-Changes from 0.5: (a) section 6b (new) applies the four LEP1 Higgs-search selections to the two
-models Ko, Li and Yu designed to escape the LHC bound (a Z' coupling the b quark to a heavy
-vector-like quark, and Z -> Z' phi); all nine expectations written before the calculation were
-met, and both models are excluded at their own rate; (b) the abstract and section 7 now cover all
-five production models and name the weakest point (Z -> Z' phi with a 12 GeV scalar,
-closed by L3's search alone; a second test is pre-registered). Sections 2-5 are unchanged.
+Changes from 0.6: (a) section 6b now includes the second, pre-registered test of Ko, Li and Yu's
+models with the four-fermion selections (job kly4f-v1; all five expectations met): OPAL's
+selection keeps 82-89 % of every model, including Z -> Z' phi with a 12 GeV scalar; (b) a caveat
+found while grading is stated in 6b: whether OPAL's two-jet requirement counted the muons decides
+the 12 GeV case, and a further pre-registered job measures it; (c) Lane and Pritchett's model is
+covered by the Z -> h A results (section 7).
 
 ## Abstract
 
@@ -29,13 +29,16 @@ mass distributions, which together contain one event between 20 and 40 GeV, woul
 54-64 % and 69-82 % of boson events and predict about 95-115 events against one candidate.
 At the lowest rate quoted in the literature for the excess, the probability of the observed
 counts is below 5 x 10^-12 for (i) with the least favourable choice of every selection detail we
-could not read, and below 3 x 10^-10 for (ii) without using ALEPH's own search. The Higgs searches
-also exclude the two models built to escape the LHC bound (a Z' coupling the b quark to a heavy
-vector-like quark, and Z -> Z' phi): at the models' own rate, L3 and DELPHI predict 21-28 events
-against one candidate (p <= 2.1 x 10^-8). All five models contradict ALEPH's observation that the
-muons of the excess lie close to the jets. A real effect would therefore have to produce muons
-inside the b jets, which the open DELPHI data can test directly. All expectations for each
-efficiency calculation were published before it was run.
+could not read, and below 3 x 10^-10 for (ii) without using ALEPH's own search. Both sets also
+exclude the two models built to escape the LHC bound (a Z' coupling the b quark to a heavy
+vector-like quark, and Z -> Z' phi): at the models' own rate, L3 and DELPHI's Higgs searches
+predict 21-28 events against one candidate (p <= 2.1 x 10^-8), and OPAL and L3's four-fermion
+selections 38-41 events against one (p <= 1.2 x 10^-15). Every model is excluded by at least two
+detectors, except Z -> Z' phi with a 12 GeV scalar, where the second detector's verdict depends on
+a jet-finding detail that a pre-registered job now tests. All five models contradict ALEPH's
+observation that the muons of the excess lie close to the jets. A real effect would therefore have
+to produce muons inside the b jets, which the open DELPHI data can test directly. All
+expectations for each efficiency calculation were published before it was run.
 
 ## 1. Introduction
 
@@ -166,27 +169,37 @@ vector-like singlet quark B, produced at LEP1 as Z -> b B*bar, B*bar -> bbar Z' 
 m_B = 110 GeV, Gamma_B = 3.4 GeV and m_B = 180 GeV, Gamma_B = 124.4 GeV); and **model III**,
 Z -> Z' phi with phi -> b bbar. We generated both with full helicity amplitudes (analysis/kly.py
 0.1.0; model II also with a left-handed Z' vertex to bracket the chirality; model III at
-m_phi = 12, 30.4 and 50 GeV), hadronised 7,700-8,000 events each, and applied the same four
-selections. Nine expectations (K1-K9) were published before the job ran; all were met.
+m_phi = 12, 30.4 and 50 GeV), hadronised 7,700-8,000 events each, and applied the four Higgs-search
+selections and then, to the same events, the three four-fermion selections. Fourteen
+expectations (K1-K9, F1-F5) were published before the two jobs ran; all were met.
 
-| model | ALEPH | L3 | DELPHI | OPAL | L3 + DELPHI at the lowest rate (1 candidate): predicted, p |
-|---|---|---|---|---|---|
-| II, m_B = 110 GeV | 0.31 | 0.55 | 0.71 | 0.45 | 26.1, 1.3e-10 |
-| II, m_B = 180 GeV | 0.34 | 0.55 | 0.73 | 0.48 | 26.1, 1.2e-10 |
-| II, left-handed Z' | 0.37 | 0.55 | 0.72 | 0.48 | 26.1, 1.2e-10 |
-| III, m_phi = 12 GeV | 0.01 | 0.60 | 0.03 | 0.01 | 20.8, 2.1e-8 (L3 alone, 0 candidates: 1.4e-9) |
-| III, m_phi = 30.4 GeV | 0.02 | 0.59 | 0.79 | 0.42 | 28.1, 1.8e-11 |
-| III, m_phi = 50 GeV | 0.80 | 0.42 | 0.68 | 0.76 | 21.3, 1.3e-8 |
+| model | Higgs searches: L3 | DELPHI | L3 + DELPHI, lowest rate (1 cand.): pred., p | four-fermion: OPAL | L3 | OPAL + L3, lowest rate (1 obs.): pred., p |
+|---|---|---|---|---|---|---|
+| II, m_B = 110 GeV | 0.55 | 0.71 | 26.1, 1.3e-10 | 0.86 | 0.61 | 40.0, 1.7e-16 |
+| II, m_B = 180 GeV | 0.55 | 0.73 | 26.1, 1.2e-10 | 0.86 | 0.60 | 40.0, 1.7e-16 |
+| II, left-handed Z' | 0.55 | 0.72 | 26.1, 1.2e-10 | 0.86 | 0.63 | 40.4, 1.2e-16 |
+| III, m_phi = 12 GeV | 0.60 | 0.03 | 20.8, 2.1e-8 (L3 alone: 1.4e-9) | 0.85 | 0.61 | 39.8, 2.0e-16 |
+| III, m_phi = 30.4 GeV | 0.59 | 0.79 | 28.1, 1.8e-11 | 0.89 | 0.58 | 41.1, 6.2e-17 |
+| III, m_phi = 50 GeV | 0.42 | 0.68 | 21.3, 1.3e-8 | 0.82 | 0.57 | 38.0, 1.2e-15 |
 
 The lowest literature rate is model II's own fitted rate, so this is a test of the model at its
 own benchmark. In model III the muon pair recoils against exactly m_phi, so the recoil-mass cuts of
-ALEPH, DELPHI and OPAL remove the light-scalar case, and only L3's search (no recoil cut) tests it.
-With the weakest L3 and DELPHI variants, both scaled down to the experiments' published Higgs
-efficiencies, the most pessimistic combinations give p = 5.6e-7 to 7.4e-7 for model II and
-2.3e-7, 1.6e-5 and 6.1e-5 for model III at 30.4, 50 and 12 GeV (3.8-5.0 standard deviations).
-Model III with a light scalar is thus the weakest point of the whole confrontation. A second test
-with OPAL's four-fermion selection, which has no recoil-mass cut and uses a different detector,
-is pre-registered (NOTE-higgs-searches.md section 6b) and will be added when it returns.
+the ALEPH, DELPHI and OPAL Higgs searches remove the light-scalar case, and among the Higgs
+searches only L3's (no recoil cut) tests it. With the weakest L3 and DELPHI variants, both scaled
+down to the experiments' published Higgs efficiencies, the most pessimistic combinations give
+p = 5.6e-7 to 7.4e-7 for model II and 2.3e-7, 1.6e-5 and 6.1e-5 for model III at 30.4, 50 and
+12 GeV (3.8-5.0 standard deviations). The four-fermion selections have no recoil-mass cut and give
+the 12 GeV case a second detector: with the weakest variant of each, OPAL + L3 predict 35.3
+events against one (p = 1.7e-14), and OPAL alone 30.1 (p = 2.6e-12).
+
+**Caveat.** OPAL's four-fermion selection requires at least two Durham jets. Our code clusters
+all particles, the two isolated muons included, so this requirement never removes a signal event.
+Our reading of OPAL's paper does not say whether the leptons were removed before jet finding. If
+they were, and y was normalised to the full visible energy, the hadrons of a 12 GeV scalar would
+often form a single jet (y <= m^2 / E_vis^2 ~ 0.017 < 0.02) and OPAL's verdict on that case could
+disappear. A pre-registered job (kly4fj-v1, NOTE-higgs-searches.md section 6c) measures all three
+readings, and a blind reading of OPAL's paper will decide which applies. The other models are not
+affected. Until then, Z -> Z' phi with a 12 GeV scalar rests for certain only on L3's Higgs search.
 
 ## 7. Discussion
 
@@ -199,9 +212,10 @@ vector, scalar, Z -> h A and model II at 99 % even at the lowest rate.
 
 For a boson coupling directly to b bbar (our vector and scalar), Ko, Li and Yu's LHC Drell-Yan
 argument already excluded the excess's rate; the LEP1 results are an independent exclusion that
-uses only Z-pole data, the same production process and no parton densities. For Z -> h A and for
-the two models designed to escape the LHC bound, the LEP1 searches are, as far as we know, the
-first direct test, and they exclude all of them at the rate the excess needs.
+uses only Z-pole data, the same production process and no parton densities. For Z -> h A (which
+is how Lane and Pritchett's two-Higgs-doublet model is produced at LEP1, with both states at
+30 GeV) and for the two models designed to escape the LHC bound, the LEP1 measurements are, as far
+as we know, the first direct test, and they exclude all of them at the rate the excess needs.
 
 None of these lines excludes an excess whose muons sit inside the b jets: cascade decays, a
 mismodelled b-decay background shape, or a new state that decays within a jet. That is the
@@ -212,13 +226,13 @@ events; a pre-registered, blinded analysis is in preparation in the same reposit
 a common muon identification efficiency (ALEPH's) for all experiments; OPAL's hadronic Z count
 scaled from its luminosity; ALEPH's 1996 b-tag and OPAL's vertex requirement as fixed factors;
 model III computed at three scalar masses only, with the Z Z' phi vertex taken as g^{mu nu};
-the selections and the published mass distributions were read from scanned papers by AI reading
-agents (the mass distributions, and L3's Higgs-search cuts, twice and independently) and have not
-yet been checked by a person. Variants bracket each selection detail we could not read. Because
-the predicted counts exceed the limits by large factors, and the comparison with the experiments'
-own Higgs efficiencies shows our selections at most about 1.6 times too efficient, none of these
-approximations is likely to change the conclusion, but a check with the experiments' own
-simulation would make it final.
+OPAL's four-fermion jet definition not yet read (section 6b); the selections and the published
+mass distributions were read from scanned papers by AI reading agents (the mass distributions,
+and L3's Higgs-search cuts, twice and independently) and have not yet been checked by a person.
+Variants bracket each selection detail we could not read. Because the predicted counts exceed the
+limits by large factors, and the comparison with the experiments' own Higgs efficiencies shows
+our selections at most about 1.6 times too efficient, none of these approximations is likely to
+change the conclusion, but a check with the experiments' own simulation would make it final.
 
 ## 8. Reproducibility
 
@@ -228,8 +242,9 @@ analysis/results/lep4f-eff-v2-run.txt and lep4f-eff-v2-summary.json. Section 6:
 `python run_efhz.py --out OUT --nsig 10000 --workers 2` (efhz 0.1.0) and
 `python run_lephz.py --out OUT --nsig 8000 --workers 2` (lephz 0.1.0); outputs in
 analysis/results/efhz/ and analysis/results/lephz/. Section 6b:
-`python run_kly.py --out OUT --nsig 8000 --workers 2` (kly 0.1.0); outputs in
-analysis/results/kly/.
+`python run_kly.py --out OUT --nsig 8000 --workers 2` (kly 0.1.0) and
+`python run_kly4f.py --out OUT --nsig 8000 --workers 2` (kly4f 0.1.0); outputs in
+analysis/results/kly/ and analysis/results/kly4f/.
 
 ## Acknowledgements and disclosure
 

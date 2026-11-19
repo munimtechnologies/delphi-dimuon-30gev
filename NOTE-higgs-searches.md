@@ -1,29 +1,30 @@
 # NOTE-higgs-searches: do the four LEP1 Higgs searches leave room for a 30 GeV boson?
 
-MV2 of Munim, Inc. (mv2@munimtech.com). Version 0.6, 2026-11-18 (0.1-0.5 earlier the same day).
+MV2 of Munim, Inc. (mv2@munimtech.com). Version 0.7, 2026-11-19 (0.1-0.6 on 2026-11-18).
 Made with AI agents working in MV2's name. Not an ALEPH, DELPHI, L3 or OPAL Collaboration result.
 **No physicist has checked this note yet.** Section 3 is a hand calculation written before any
-efficiency was measured; sections 4, 5 and 6 are measured (jobs `efhz-v1`, `lephz-v1` and
-`kly-v1`, all returned 2026-11-18). Section 6b is a new job (`kly4f-v1`, queued) whose
-expectations F1-F5 are written below before it runs. Expectations J1-J7, L1-L10 and K1-K9
+efficiency was measured; sections 4, 5, 6 and 6b are measured (jobs `efhz-v1`, `lephz-v1`,
+`kly-v1` and `kly4f-v1`). Section 6c pre-registers a new job (`kly4fj-v1`, queued) whose
+expectations G1-G6 are written below before it runs. Expectations J1-J7, L1-L10, K1-K9 and F1-F5
 (section 8) were written before their jobs ran. Text CC BY 4.0, code Apache-2.0.
 
-**What changed in 0.6.**
-1. *Ko, Li and Yu's two surviving models are excluded too (section 6).* Job `kly-v1` returned:
-   all nine expectations K1-K9 passed. L3 and DELPHI together predict 26-28 events at the models'
-   own rate for model II (Z' coupling b to a heavy vector-like B) and for model III (Z -> Z' phi)
-   at m_phi = 30.4 GeV, against one candidate (p ~ 1e-10). The most pessimistic combination we
-   can build (no ALEPH, weakest variants, scaled to the experiments' own efficiencies) gives
-   p <= 7.4e-7 for model II, 2.3e-7 for model III at 30.4 GeV, 1.6e-5 at 50 GeV and 6.1e-5 at
-   12 GeV.
-2. *A weak spot, stated plainly.* Model III with a light scalar (m_phi = 12 GeV) passes almost
-   none of the DELPHI, ALEPH and OPAL selections (efficiency 0.03, 0.01, 0.01), because their
-   recoil-mass cuts remove events whose muon pair recoils against only 12 GeV. Only L3's search,
-   which has no recoil cut, closes it. Section 6b pre-registers a second, independent test of that
-   corner with the LEP1 four-fermion selections (job `kly4f-v1`, the same events).
-3. *Muon-jet angles at hadron level.* In both models the nearer muon lies within 15 deg of a jet in
-   only 4-5 % of events (B110 4.3 %, Q30 4.5 %), confirming at hadron level Ko, Li and Yu's
-   parton-level finding; ALEPH reports this in all of its excess events.
+**What changed in 0.7.**
+1. *Second test of the light-scalar corner returned (section 6b): all five expectations F1-F5
+   passed.* Job `kly4f-v1` ran the same events as kly-v1 through the LEP1 four-fermion
+   selections. OPAL's keeps 0.82-0.89 of every Ko-Li-Yu model, including model III with a 12 GeV
+   scalar (0.851), because it has no recoil-mass cut. At the models' own rate, OPAL + L3 predict
+   38-41 events in 20-40 GeV against one (p = 6e-17 to 1.2e-15); with the weakest variant of each
+   selection, p <= 1.8e-9 for every model and 1.7e-14 for the 12 GeV scalar.
+2. *A caveat found in grading, stated before anything else is claimed (section 6b).* The risk
+   named in 0.6 (that the light scalar's b quarks merge into one jet and fail OPAL's two-jet
+   requirement) was **not** actually tested: eff4f clusters jets with the two isolated muons
+   included, so every event has at least two jets. Whether OPAL removed the leptons before jet
+   finding is not in our reading. Until that is settled, the second exclusion of the 12 GeV corner
+   is conditional. Section 6c pre-registers the job that measures it (`kly4fj-v1`) and the rule
+   that decides; a blind reading of OPAL's paper has been requested.
+3. *Lane and Pritchett's model is covered.* NOTE-lane-pritchett.md (2026-11-18) found that their
+   two-Higgs-doublet model is produced at LEP1 only as Z -> h eta_A with both states at 30 GeV,
+   which is our model P; every P closure here applies to it (section 11).
 
 ## 1. The argument
 
@@ -252,54 +253,109 @@ their own rate, by at least 3.8 standard deviations in the most pessimistic comb
 DELPHI, each alone at 99 %). Model III with a light scalar is closed by L3's search alone; that is
 the weakest point of the whole confrontation, and section 6b tests it a second way.
 
-## 6b. Light-scalar corner, second test: the four-fermion selections (job kly4f-v1, queued; expectations written before it runs)
+## 6b. Light-scalar corner, second test: the four-fermion selections (job kly4f-v1, returned 2026-11-19)
 
-**Why.** For Q12 the only constraint is L3's Higgs search, which shares its 1991-92 data with
-L3's four-fermion measurement. OPAL's four-fermion measurement (3.53M hadronic Z, 1 event between
-20 and 40 GeV) is a different detector and has no recoil-mass cut. NOTE-fourfermion.md found its
-selection keeps 84-88 % of our V, S and P events. If it also keeps Q12 events, OPAL alone gives a
-second, independent exclusion of the light-scalar corner.
+**Why** (written in 0.6, before the job ran). For Q12 the only constraint is L3's Higgs search,
+which shares its 1991-92 data with L3's four-fermion measurement. OPAL's four-fermion measurement
+(3.53M hadronic Z, 1 event between 20 and 40 GeV) is a different detector and has no recoil-mass
+cut. NOTE-fourfermion.md found its selection keeps 84-88 % of our V, S and P events. If it also
+keeps Q12 events, OPAL alone gives a second, independent exclusion of the light-scalar corner.
+Hand estimate (0.6): about 39.2 (OPAL) and 10.7 (L3) events for efficiency 1 at the lowest
+literature rate; risk for Q12: the scalar (about 41 GeV energy) decays to b quarks about 35 deg
+apart, near the threshold for merging into one jet at y_cut = 0.02.
 
-**What the job does.** `analysis/run_kly4f.py` 0.1.0 applies eff4f.py's OPAL, L3 and ALEPH
-four-fermion selections (one definition, all variants) to the **same events** as kly-v1: same
-generator, seeds, model order and Pythia settings. It confronts OPAL + L3 (1 event in 20-40 GeV),
-each alone, at the central and lowest literature rates, with nominal and with the weakest variant
-of each experiment. It also reports how often the rest of the event forms fewer than two Durham
-jets at y_cut = 0.02 (OPAL's two-jet requirement).
+**What the job did.** `analysis/run_kly4f.py` 0.1.0 applied eff4f.py's OPAL, L3 and ALEPH
+four-fermion selections (eff4f 0.2.0, one definition, all variants) to the **same events** as
+kly-v1. All 4 unit tests passed; every model reproduced kly-v1's hadronised and failed counts
+exactly; the job took 4 minutes on 2 CPUs. Outputs and sha256 of every source file:
+`analysis/results/kly4f/`.
 
-**Hand estimate.** At the lowest literature rate, eff4f's predictions imply about 39.2 events
-(OPAL) and 10.7 (L3) for efficiency 1 (from 41.6 events at OPAL 0.877, L3 0.677, scaled by their
-hadronic-Z counts 3.53M and 0.96M). One observed event gives p < 1e-3 when the prediction exceeds
-9.2 events. Risk for Q12: the scalar (about 41 GeV energy, gamma ~ 3.4) decays to b quarks about
-35 deg apart, which at y_cut = 0.02 is near the threshold for merging into one jet; OPAL's
-two-jet requirement may then remove many Q12 events.
+**Efficiency and confrontation** (eps in ALEPH's acceptance and the 20-40 GeV window, no muon
+identification; "lit" = the lowest literature rate, model II's own; observed in 20-40 GeV: OPAL
+1, L3 0; b = 0):
+
+| model | OPAL nominal | OPAL weakest | L3 nominal | L3 weakest (cos0.7) | OPAL + L3, nominal, lit: predicted, p | OPAL + L3, weakest, lit: predicted, p | OPAL alone, weakest, lit: p |
+|---|---|---|---|---|---|---|---|
+| B110 | 0.857 | 0.659 (both_30deg) | 0.607 | 0.491 | 40.02, 1.7e-16 | 31.02, 1.1e-12 | 1.7e-10 |
+| B180 | 0.860 | 0.664 (both_30deg) | 0.596 | 0.480 | 40.02, 1.7e-16 | 31.14, 9.7e-13 | 1.3e-10 |
+| B110L | 0.859 | 0.611 (both_30deg) | 0.634 | 0.521 | 40.38, 1.2e-16 | 29.49, 4.7e-12 | 9.9e-10 |
+| **Q12** | **0.851** | **0.769 (cos0.9)** | **0.612** | **0.487** | **39.84, 2.0e-16** | **35.30, 1.7e-14** | **2.6e-12** |
+| Q30 | 0.890 | 0.733 (both_30deg) | 0.582 | 0.449 | 41.07, 6.2e-17 | 33.48, 1.0e-13 | 1.0e-11 |
+| Q50 | 0.817 | 0.468 (both_30deg) | 0.566 | 0.466 | 38.02, 1.2e-15 | 23.31, 1.8e-9 | 2.1e-7 |
+
+Hand checks of two numbers: Q12 nominal, 0.8508 x 39.171 + 0.6116 x 10.651 = 33.33 + 6.51 =
+39.84 events, P(n <= 1) = e^-39.84 x 40.84 = 4.99e-18 x 40.84 = 2.0e-16; Q12 weakest, 0.7688 x
+39.171 + 0.4866 x 10.651 = 30.11 + 5.18 = 35.30, e^-35.30 x 36.30 = 1.7e-14. Both match the job.
+
+**Robustness, by hand.** The four-fermion selections have no published efficiency for a boson to
+calibrate against (NOTE-fourfermion.md). Scaling OPAL's weakest efficiency by 0.62 (the worst
+calibration ratio found for any LEP1 Higgs selection, OPAL's own) and L3's by 0.78 gives, for
+Q12, 18.67 + 4.04 = 22.71 events against 1, p = e^-22.71 x 23.71 = 3.3e-9. For p to reach 1e-3
+the predicted count must fall to 9.23 events, i.e. our OPAL + L3 efficiency for Q12 would have to
+be 3.8 times too high.
+
+**The caveat found in grading.** The hand estimate's risk was OPAL's ">= 2 Durham jets"
+requirement. The job reports that no event in any model has fewer than two jets at y_cut 0.02,
+and the reason is in the code, not the physics: eff4f clusters all seen particles, **the two
+isolated muons included**, and two well-separated 10-40 GeV muons always form two jets. Our
+reading of OPAL's selection (NOTE-fourfermion.md, section 2) lists ">= 2 Durham jets" but does not
+say whether the leptons were removed before jet finding, nor what y is normalised to. If OPAL
+clustered only the hadrons, a 12 GeV scalar's hadrons would often form one jet: for two clusters
+with an opening angle below 90 deg, y <= m^2 / E_norm^2, which for m = 12 GeV is 144 / 8281 =
+0.017 when y is normalised to the full 91 GeV (below 0.02), but up to about 0.09 when normalised
+to the hadronic energy (about 40 GeV). So the result for Q12 hangs on a selection detail we have
+not read. The other five models are not affected (their hadronic systems are heavy).
+
+**Status of the light-scalar corner.** Closed by L3's Higgs search alone (section 6; 3.8-4.4
+standard deviations in the most pessimistic readings). The second, OPAL-based exclusion above
+(p = 1.7e-14 with the weakest variants) holds **if** OPAL's jet finding included the leptons or
+normalised y to the hadronic energy; section 6c measures the other case and fixes the rule.
+
+## 6c. Light-scalar corner: OPAL's jets without the muons (job kly4fj-v1, queued; expectations written before it runs)
+
+**What the job does.** `analysis/run_kly4fj.py` 0.1.0 regenerates the same events (same seeds,
+generator and Pythia settings), re-applies eff4f 0.2.0 (closure: n_acc and the OPAL and L3
+nominal counts must equal kly4f-v1's), recomputes eff4f's all-particle jet count with its own
+Durham code (must agree event by event), and adds three OPAL variants that require OPAL:nominal
+AND at least two Durham jets **among the hadrons only** (the two signal muons removed):
+`hj_full02` (y_cut 0.02, y normalised to the whole event's visible energy), `hj_had02` (y_cut
+0.02, normalised to the hadrons' visible energy), `hj_full005` (y_cut 0.005, whole event). It
+also records the y at which the last two hadronic clusters merge.
 
 | | expectation |
 |---|---|
-| F1 | all 4 unit tests pass, and every model has the same n_hadronised and n_fail as kly-v1 (closure) |
-| F2 | B110, B180, B110L, Q30, Q50: eps(OPAL nominal) >= 0.60 and eps(L3 nominal) >= 0.40 |
-| F3 | Q12: eps(L3 nominal) >= 0.40. eps(OPAL nominal) is recorded; prior 50 % that it is >= 0.30 |
-| F4 | OPAL + L3, nominal, lowest literature rate: p < 1e-6 for B110, B180, B110L, Q30, Q50 |
-| F5 | Q12: OPAL + L3, weakest variants, lowest literature rate: p < 1e-3 (needs OPAL weakest >= about 0.11; prior 60 %) |
+| G1 | all unit tests pass; in every model n_acc, OPAL:nominal and L3:nominal counts equal kly4f-v1's, and the all-particle jet count agrees with eff4f's in every event |
+| G2 | B110, B180, B110L, Q30, Q50: eps(OPAL:hj_full02) >= 0.60 (prior 85 %) |
+| G3 | Q12: eps(OPAL:hj_full02) < 0.20 (prior 75 %) |
+| G4 | Q12: eps(OPAL:hj_had02) >= 0.50 (prior 65 %) |
+| G5 | Q12: eps(OPAL:hj_full005) >= 0.40 (prior 65 %) |
+| G6 | **decision**: Q12, OPAL (hj_full02) + L3 four-fermion weakest variant, lowest literature rate, 1 observed: p < 1e-3, which needs eps(OPAL:hj_full02) >= about 0.104 (prior 25 %) |
 
-What each outcome means: F5 PASS gives the light-scalar corner a second exclusion from a second
-detector (OPAL's Higgs search is in no headline number here, so OPAL's data enter the Q12
-constraint only through this test). F5 FAIL leaves
-Q12 resting on L3 alone, and the paper will say so.
+**Decision rule, fixed now.** Which variant is OPAL's real selection is a reading question. A
+blind reading of OPAL's paper (CERN-PPE/96-031) has been requested. (a) If it says jets were
+found on all tracks and clusters (leptons included), eff4f nominal stands and section 6b's second
+exclusion holds. (b) If it says the leptons were removed and y normalised to the hadronic energy,
+`hj_had02` (or `hj_full005` for y_cut 0.005) becomes nominal and its row decides. (c) If it says
+the leptons were removed and y normalised to the whole visible energy or to sqrt(s), or if the
+paper does not say, the second exclusion is claimed only if G6 passes; otherwise the 12 GeV
+corner rests on L3's Higgs search alone, and the paper says so.
 
 ## 7. What this means
 
 Four LEP1 detectors, about 12 million hadronic Z decays, and selections built for two isolated
 leptons plus hadrons leave room for at most about 5-7 % of an ALEPH-sized boson with typically
 isolated muons; L3 and DELPHI alone exclude it even at the lowest rate in the literature.
-Together with the four-fermion measurements (NOTE-fourfermion.md) and ALEPH's own description of
-its events (NOTE-kinematics.md), this says: **the excess cannot be a boson radiated off b quarks,
-Z -> h A, or either of the two models designed to escape the LHC bound (a Z' coupling b to a heavy
-vector-like quark, and Z -> Z' phi), decaying to isolated muons, at anything like the rate the
-excess needs.** If the excess is real, its muons sit inside the b jets, which points to a b-jet
-effect (for example cascade decays or a mismodelled background shape) or to a state that decays
-inside a jet, rather than to the boson models tested here. DELPHI's open data test that
-directly (PLAN.md, tests A and B).
+Together with the four-fermion measurements (NOTE-fourfermion.md and section 6b) and ALEPH's own
+description of its events (NOTE-kinematics.md), this says: **the excess cannot be a boson radiated
+off b quarks, Z -> h A (which covers Lane and Pritchett's model), or either of the two models
+designed to escape the LHC bound (a Z' coupling b to a heavy vector-like quark, and Z -> Z' phi),
+decaying to isolated muons, at anything like the rate the excess needs.** Every case is excluded
+by at least two detectors except Z -> Z' phi with a scalar near 12 GeV, which L3 alone excludes
+for certain and OPAL excludes under the jet definition we coded (section 6c settles it). If the
+excess is real, its muons sit inside the b jets, which points to a b-jet effect (for example
+cascade decays or a mismodelled background shape) or to a state that decays inside a jet, rather
+than to the boson models tested here. DELPHI's open data test that directly (PLAN.md, tests A
+and B).
 
 ## 8. Expectations, written before the jobs ran, and grades
 
@@ -349,13 +405,28 @@ kly-v1 (written in 0.5, graded in 0.6):
 Nine of nine passed. The hand estimate behind K3 (about 24 events, p ~ 1e-9) was close to the
 measured 26.05 events and p = 1.3e-10.
 
-kly4f-v1: expectations F1-F5 in section 6b; grades will be added here when the job returns.
+kly4f-v1 (written in 0.6, graded in 0.7):
+
+| | expectation | result | grade |
+|---|---|---|---|
+| F1 | all 4 unit tests pass; every model has kly-v1's n_hadronised and n_fail | 4 of 4 ok; closure true in all six (7675/325, 7688/312, 7786/214, 8000/0 x 3) | **PASS** |
+| F2 | B110, B180, B110L, Q30, Q50: eps(OPAL) >= 0.60 and eps(L3) >= 0.40 | OPAL 0.817-0.890; L3 0.566-0.634 | **PASS** |
+| F3 | Q12: eps(L3) >= 0.40; eps(OPAL) recorded (prior 50 % that it is >= 0.30) | L3 0.612; OPAL 0.851 | **PASS** (see the caveat in 6b) |
+| F4 | OPAL + L3, nominal, lowest literature rate: p < 1e-6 for B110, B180, B110L, Q30, Q50 | 6.2e-17 to 1.2e-15 | **PASS** |
+| F5 | Q12: OPAL + L3, weakest variants, lowest literature rate: p < 1e-3 | 1.7e-14 (OPAL weakest 0.769) | **PASS as written; conditional on OPAL's jet definition (6b, 6c)** |
+
+Five of five passed. The hand estimate (39.2 and 10.7 events at efficiency 1) matched the job's
+39.17 and 10.65. The risk the hand estimate named for F5 was not exercised by the code; that is
+stated in 6b and tested in 6c.
+
+kly4fj-v1: expectations G1-G6 in section 6c; grades will be added here when the job returns.
 
 ## 9. Limits (read before citing)
 
 1. **Readings.** The cuts come from AI reading agents' summaries of scanned papers; a few values
    are interpretations (readings/lephz-notes.md, last section). L3's lack of a recoil cut was
-   read twice, independently.
+   read twice, independently. OPAL's four-fermion jet definition (which particles are clustered,
+   what y is normalised to) has not been read; it decides the second test of the 12 GeV corner.
 2. **Generator level.** Hadron level (Pythia 8), no detector simulation. Isolation is computed
    from generator particles. Muon identification is a common factor 0.86 per muon (ALEPH's).
    Section 5 item 3 compares with the experiments' own efficiencies (ratios 0.62-0.90).
@@ -365,11 +436,13 @@ kly4f-v1: expectations F1-F5 in section 6b; grades will be added here when the j
 4. **Candidates.** Signal-compatibility uses only the recoil mass (and, for OPAL, the momenta).
 5. **Rate.** The boson rate is the excess's own (lep4f readings: central, low hadronic count with
    yield minus 1 sigma, lowest literature value, which is Ko, Li and Yu's model-II benchmark).
-6. **Models.** Three explicit models (NOTE-kinematics.md) and Ko, Li and Yu's models II and III
+6. **Models.** Three explicit models (NOTE-kinematics.md), Ko, Li and Yu's models II and III
    (section 6; model III at three scalar masses, not a full scan; the Z Z' phi vertex taken as
-   g^{mu nu}). Another production mechanism with a different recoil spectrum would need its own
-   efficiency. A scalar lighter than 12 GeV gives an even softer recoil; L3's selection has no
-   recoil cut, so we expect it to keep such events too, but this was not computed.
+   g^{mu nu}) and, through model P, Lane and Pritchett's Z -> h eta_A (NOTE-lane-pritchett.md).
+   Another production mechanism with a different recoil spectrum would need its own efficiency.
+   A scalar decaying to b bbar cannot be much lighter than about 10 GeV, so Q12 is near the
+   lower end of model III's range; L3's Higgs selection has no recoil cut, so we expect it to
+   keep 10-12 GeV scalars too, but this was not computed.
 7. **What is not covered.** A source whose muons sit inside the b jets passes none of these
    selections. That is what ALEPH describes, and what DELPHI's open data test directly.
 
@@ -380,15 +453,18 @@ kly4f-v1: expectations F1-F5 in section 6b; grades will be added here when the j
 candidate compatibility, predictions and the combined confrontation; `analysis/test_lephz.py`
 (14 tests); `analysis/run_lephz.py`. `analysis/kly.py` 0.1.0: Ko, Li and Yu's models II and III;
 `analysis/test_kly.py` (11 tests); `analysis/run_kly.py`. `analysis/run_kly4f.py` 0.1.0 and
-`analysis/test_kly4f.py` (4 tests): the four-fermion selections of eff4f on the same events. Run:
-`python -m unittest -v test_efhz test_lephz test_kly test_kly4f`, then
+`analysis/test_kly4f.py` (4 tests): the four-fermion selections of eff4f on the same events.
+`analysis/run_kly4fj.py` 0.1.0 and `analysis/test_kly4fj.py` (8 tests, every expected number
+worked by hand): OPAL's jets without the muons. Run:
+`python -m unittest -v test_efhz test_lephz test_kly test_kly4f test_kly4fj`, then
 `python run_efhz.py --out OUT --nsig 10000 --workers 2`,
 `python run_lephz.py --out OUT --nsig 8000 --workers 2`,
-`python run_kly.py --out OUT --nsig 8000 --workers 2` and
-`python run_kly4f.py --out OUT --nsig 8000 --workers 2` (need `numpy`, `pythia8mc`, and eff4f.py,
+`python run_kly.py --out OUT --nsig 8000 --workers 2`,
+`python run_kly4f.py --out OUT --nsig 8000 --workers 2` and
+`python run_kly4fj.py --out OUT --nsig 8000 --workers 2` (need `numpy`, `pythia8mc`, and eff4f.py,
 lep4f.py and the xkin modules alongside). Outputs: `analysis/results/efhz/`,
-`analysis/results/lephz/`, `analysis/results/kly/` (and `analysis/results/kly4f/` when kly4f-v1
-returns).
+`analysis/results/lephz/`, `analysis/results/kly/`, `analysis/results/kly4f/` (and
+`analysis/results/kly4fj/` when kly4fj-v1 returns).
 
 ## 11. Prior art
 
@@ -403,6 +479,6 @@ for "more detailed study of ALEPH data as well as other data on the Z decays". A
 find, the LEP1 Higgs searches (and four-fermion measurements) have not been confronted with the
 excess before. What is new here is that confrontation, at hadron level and against published
 counts, for the three boson models of NOTE-kinematics.md and Ko, Li and Yu's models II and III,
-with expectations written before each calculation. (Lane and Pritchett, arXiv:1701.07376, favour
-a two-Higgs-doublet variant with h and eta_A nearly degenerate near 30 GeV; we have not read how
-they produce it at LEP1, so we do not claim to cover it beyond its resemblance to our Z -> h A.)
+with expectations written before each calculation. Lane and Pritchett (arXiv:1701.07376) produce
+their state at LEP1 only through Z -> h eta_A with both masses at 30 GeV (NOTE-lane-pritchett.md),
+which is our model P, so their model is covered by the P closures.

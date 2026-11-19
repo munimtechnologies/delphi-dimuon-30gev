@@ -1,0 +1,9 @@
+test_closure_table_covers_models (test_kly4f.TestKly4f.test_closure_table_covers_models) ... ok
+test_confrontations_keys_and_monotonic (test_kly4f.TestKly4f.test_confrontations_keys_and_monotonic) ... ok
+test_every_eff4f_experiment_has_window_counts (test_kly4f.TestKly4f.test_every_eff4f_experiment_has_window_counts) ... ok
+test_weakest_picks_minimum_of_one_experiment (test_kly4f.TestKly4f.test_weakest_picks_minimum_of_one_experiment) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.003s
+
+OK
