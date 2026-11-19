@@ -1,0 +1,19 @@
+{
+ "tool": "mv2 envpool 0.1.0 (numbers worked by hand, recomputed by stats/test_envpool.py)",
+ "made_by": "MV2 of Munim, Inc. (made with AI agents)",
+ "note": "No DELPHI data used. Pseudo-experiments with a true ALEPH-sized signal (mu = 1), scenario C2_9495_f1.5, from jobs dimu-envtoys-v1, -v2 (seed 20271119) and -v3 (seed 20281119); identical code (sha256 envtoys.py 7259a115..., bkgsys.py 6bf2cb86...).",
+ "batches": {
+  "v1": {"fix3|tagged": [62, 1, 1.0236], "fix3|combined": [62, 2, 0.9977], "old|tagged": [62, 2, 0.9943], "old|combined": [62, 4, 0.8791]},
+  "v2": {"fix3|tagged": [60, 4, 0.9457], "fix3|combined": [60, 2, 0.9938], "old|tagged": [60, 2, 1.0024], "old|combined": [60, 3, 0.9174]},
+  "v3": {"fix3|tagged": [44, 1, 0.9561], "fix3|combined": [44, 0, 1.0763], "old|tagged": [44, 1, 0.968], "old|combined": [44, 1, 0.9455]},
+  "columns": ["n", "n_EXCLUDED", "muhat_mean"]
+ },
+ "pooled": {
+  "fix3|tagged": {"test": "A", "n": 166, "n_EXCLUDED": 6, "p_EXCLUDED": 0.036145, "muhat_mean": 0.977552, "cp95_lower_bracket": [0.012, 0.015], "cp95_upper_bracket": [0.075, 0.080]},
+  "fix3|combined": {"test": "B", "n": 166, "n_EXCLUDED": 4, "p_EXCLUDED": 0.024096, "muhat_mean": 1.017124, "cp95_lower_bracket": [0.005, 0.008], "cp95_upper_bracket": [0.060, 0.062]},
+  "old|tagged": {"n": 166, "n_EXCLUDED": 5, "p_EXCLUDED": 0.030120, "muhat_mean": 0.990257},
+  "old|combined": {"n": 166, "n_EXCLUDED": 8, "p_EXCLUDED": 0.048193, "muhat_mean": 0.910543}
+ },
+ "rule": "criterion (b) of amendment 0.12 / N7 of amendment 0.17: pooled point estimate P(EXCLUDED | mu = 1) <= 0.07 for tests A and B, graded only with >= 150 toys per test",
+ "grades": {"N7": "PASS", "N9": "PASS", "N10": "PASS"}
+}

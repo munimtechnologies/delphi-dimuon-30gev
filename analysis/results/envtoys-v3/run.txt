@@ -1,0 +1,108 @@
+ASIMOV C2_9495_f1.5 fix3  | A spur +0.0001 ul 1.6041 mh1 1.0001 | B spur -0.0010 ul 1.0566 mh1 0.9990
+ASIMOV C2_9495_f1.5 old   | A spur +0.0001 ul 1.4022 mh1 1.0001 | B spur -0.2552 ul 0.9113 mh1 0.7326
+ASIMOV degrees: T old 1 | U old 1 (sec 5650)
+PROGRESS mu1 5 mu0 0 t 7862 s
+PROGRESS mu1 10 mu0 0 t 7961 s
+PROGRESS mu1 15 mu0 0 t 10997 s
+PROGRESS mu1 20 mu0 0 t 11065 s
+PROGRESS mu1 25 mu0 0 t 14144 s
+PROGRESS mu1 30 mu0 0 t 14144 s
+PROGRESS mu1 35 mu0 0 t 17464 s
+PROGRESS mu1 40 mu0 0 t 17464 s
+PROGRESS mu1 42 mu0 0 t 18141 s
+PROGRESS mu1 44 mu0 0 t 18166 s
+
+TOYS C2_9495_f1.5
+TOYS mu=1 fix3|combined  n 44 muhat 1.076 +- 0.4781 | P(excl) 0.000 (0.0, 0.0804) P(compat) 0.409 | ul_med 2.0516
+TOYS mu=1 fix3|tagged    n 44 muhat 0.956 +- 0.7716 | P(excl) 0.023 (0.0006, 0.1202) P(compat) 0.091 | ul_med 2.3527
+TOYS mu=1 old|combined   n 44 muhat 0.946 +- 0.4662 | P(excl) 0.023 (0.0006, 0.1202) P(compat) 0.432 | ul_med 1.8226
+TOYS mu=1 old|tagged     n 44 muhat 0.968 +- 0.6435 | P(excl) 0.023 (0.0006, 0.1202) P(compat) 0.114 | ul_med 2.2036
+CRITERION_B fix3 UNDETERMINED | old UNDETERMINED
+SUMMARY_JSON_BEGIN
+{
+ "tool": "mv2 envtoys 0.1.0",
+ "envcast": "mv2 envcast 0.1.0",
+ "bkgsys": "mv2 bkgsys 0.1.0",
+ "made_by": "MV2 of Munim, Inc. (made with AI agents)",
+ "scenario": "C2_9495_f1.5",
+ "note": "No DELPHI data used. Truths and yields of combcast 0.1.0.",
+ "p_max": 0.07,
+ "n_min": 150,
+ "toys": {
+  "mu=1": {
+   "fix3|combined": {
+    "n": 44,
+    "muhat_mean": 1.0763,
+    "muhat_std": 0.4781,
+    "ul_median": 2.0516,
+    "z0_median": 2.0689,
+    "n_EXCLUDED": 0,
+    "p_EXCLUDED": 0.0,
+    "n_COMPATIBLE": 18,
+    "p_COMPATIBLE": 0.4091,
+    "n_INCONCLUSIVE": 26,
+    "p_INCONCLUSIVE": 0.5909,
+    "p_EXCLUDED_cp95": [
+     0.0,
+     0.0804
+    ]
+   },
+   "fix3|tagged": {
+    "n": 44,
+    "muhat_mean": 0.9561,
+    "muhat_std": 0.7716,
+    "ul_median": 2.3527,
+    "z0_median": 1.176,
+    "n_EXCLUDED": 1,
+    "p_EXCLUDED": 0.0227,
+    "n_COMPATIBLE": 4,
+    "p_COMPATIBLE": 0.0909,
+    "n_INCONCLUSIVE": 39,
+    "p_INCONCLUSIVE": 0.8864,
+    "p_EXCLUDED_cp95": [
+     0.0006,
+     0.1202
+    ]
+   },
+   "old|combined": {
+    "n": 44,
+    "muhat_mean": 0.9455,
+    "muhat_std": 0.4662,
+    "ul_median": 1.8226,
+    "z0_median": 2.0522,
+    "n_EXCLUDED": 1,
+    "p_EXCLUDED": 0.0227,
+    "n_COMPATIBLE": 19,
+    "p_COMPATIBLE": 0.4318,
+    "n_INCONCLUSIVE": 24,
+    "p_INCONCLUSIVE": 0.5455,
+    "p_EXCLUDED_cp95": [
+     0.0006,
+     0.1202
+    ]
+   },
+   "old|tagged": {
+    "n": 44,
+    "muhat_mean": 0.968,
+    "muhat_std": 0.6435,
+    "ul_median": 2.2036,
+    "z0_median": 1.3019,
+    "n_EXCLUDED": 1,
+    "p_EXCLUDED": 0.0227,
+    "n_COMPATIBLE": 5,
+    "p_COMPATIBLE": 0.1136,
+    "n_INCONCLUSIVE": 38,
+    "p_INCONCLUSIVE": 0.8636,
+    "p_EXCLUDED_cp95": [
+     0.0006,
+     0.1202
+    ]
+   }
+  }
+ },
+ "criterion_b_fix3": "UNDETERMINED",
+ "criterion_b_old": "UNDETERMINED",
+ "mean_sec_per_toy": 568.3,
+ "wall_s": 18165.7
+}
+SUMMARY_JSON_END

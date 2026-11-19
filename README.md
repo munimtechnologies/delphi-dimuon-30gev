@@ -83,13 +83,17 @@ rule (M6 failed). Degree 3 passes in all twelve scenarios.
 [PLAN-amendment-0.16.md](PLAN-amendment-0.16.md): job `dimu-envtoys-v1` ran 62 pseudo-experiments
 with a true ALEPH-sized boson and 30 without (too slow for the planned 200). Degree 3 is unbiased
 (mean fitted signal 1.00 and 0.02) and falsely excluded a real boson in 2 of 62.
-[PLAN-amendment-0.17.md](PLAN-amendment-0.17.md): the top-up `dimu-envtoys-v2` added 60 toys
-(N6 and N8 passed). Pooled, degree 3 falsely excludes a real boson in 5 of 122 (b-tagged test) and
-4 of 122 (combined test) pseudo-experiments, below the 7 % limit, but the rule written first needs
-150 toys, so a third top-up (`dimu-envtoys-v3`) is queued. **A sensitivity limit reported before
-unblinding:** with no boson present, DELPHI's combined test excludes an ALEPH-sized one in only
-about 43 % of pseudo-experiments, so an INCONCLUSIVE result is the most likely outcome if the
-excess is not real.
+[PLAN-amendment-0.17.md](PLAN-amendment-0.17.md): the top-up `dimu-envtoys-v2` added 60 toys.
+[PLAN-amendment-0.18.md](PLAN-amendment-0.18.md) (**settled, 2026-11-19**): with the third top-up
+`dimu-envtoys-v3` (44 toys) the pool reaches the 150 toys the rule needs. Degree 3 falsely
+excludes a real ALEPH-sized boson in **6 of 166** (b-tagged test, 3.6 %) and **4 of 166**
+(combined test, 2.4 %) pseudo-experiments, below the pre-registered 7 % limit, and is unbiased
+(mean fitted signal 0.98 and 1.02). Criterion (b) passes (N7, N9, N10 all passed), so the fixed
+degree-3 background is the background treatment of plan v1.0. Stated plainly: for the b-tagged
+test the upper end of the exact 95 % interval (0.075-0.080) is still just above 7 %. **A
+sensitivity limit reported before unblinding:** with no boson present, DELPHI's combined test
+excludes an ALEPH-sized one in only about 43 % of pseudo-experiments, so an INCONCLUSIVE result is
+the most likely outcome if the excess is not real.
 
 **What "ALEPH-sized" means (plan v0.11, section 5f).** The expected signal is one written
 formula in produced Z decays (`analysis/nexp.py`). ALEPH's paper leaves its hadronic event count
@@ -103,7 +107,8 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   selection and tests are frozen and published here as plan v1.0). Amendments
   [0.12](PLAN-amendment-0.12.md), [0.13](PLAN-amendment-0.13.md),
   [0.14](PLAN-amendment-0.14.md), [0.15](PLAN-amendment-0.15.md),
-  [0.16](PLAN-amendment-0.16.md) and [0.17](PLAN-amendment-0.17.md).
+  [0.16](PLAN-amendment-0.16.md), [0.17](PLAN-amendment-0.17.md) and
+  [0.18](PLAN-amendment-0.18.md).
 - [paper/](paper/): the draft paper on the LEP1 isolated-muon result (not peer reviewed).
 - [NOTE-kinematics.md](NOTE-kinematics.md), [NOTE-fourfermion.md](NOTE-fourfermion.md),
   [NOTE-higgs-searches.md](NOTE-higgs-searches.md): the three external tests, each with its
@@ -135,9 +140,10 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   Voigt signal, log-Legendre background with a fixed degree rule, q0, asymptotic CLs),
   `dimucomb.py` (test B), `forecast.py`, `combcast.py`, `bkgsys.py` (spurious-signal test and
   discrete-profiling envelope), `envcast.py`, `envtoys.py` and `bbspur.py` (background-treatment
-  scoring). [stats/results/bbspur/](stats/results/bbspur/) holds the output of `dimu-bbspur-v1`.
-  Tests: `python -m unittest -v test_dimustat test_dimucomb test_bkgsys test_envtoys test_bbspur`
-  (needs `numpy`, `scipy`; `pythia8mc` for forecast and bbspur).
+  scoring), `envpool.py` (pools the toy batches and grades criterion (b); pure Python).
+  [stats/results/bbspur/](stats/results/bbspur/) holds the output of `dimu-bbspur-v1`.
+  Tests: `python -m unittest -v test_dimustat test_dimucomb test_bkgsys test_envtoys test_bbspur
+  test_envpool` (needs `numpy`, `scipy`; `pythia8mc` for forecast and bbspur).
 - [delsim/](delsim/): the signal through DELPHI's own detector simulation (`run_delsim.sh`,
   `runsim -gext`, `sigana.py` for resolution and efficiencies). Tests:
   `python -m unittest -v test_sigana`.
@@ -151,7 +157,8 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   four-fermion selections), `iso4f.py` (isolated pairs in simulation).
   [analysis/results/](analysis/results/) holds the output of `lep4f-eff-v2`, of
   `dimu-envcast-v1` (`envcast/`), `dimu-envtoys-v1` (`envtoys/`), `dimu-envtoys-v2`
-  (`envtoys-v2/`), `efhz-v1` (`efhz/`), `lephz-v1` (`lephz/`) and `kly-v1` (`kly/`). Tests:
+  (`envtoys-v2/`), `dimu-envtoys-v3` (`envtoys-v3/`), the pooled grade (`envtoys-pool/`),
+  `efhz-v1` (`efhz/`), `lephz-v1` (`lephz/`) and `kly-v1` (`kly/`). Tests:
   `python -m unittest -v test_dimusel test_btagcal test_nexp test_lep4f test_iso4f test_eff4f
   test_efhz test_lephz test_kly test_kly4f`. Runs: `python run_eff4f.py --out OUT --nsig 10000 --workers 2`,
   `python run_efhz.py --out OUT --nsig 10000 --workers 2`,
@@ -163,7 +170,7 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
 
 ## Status
 
-Plan v0.11 plus amendments 0.12-0.17, 2026-11-19. No DELPHI dimuon mass from real data has been
+Plan v0.11 plus amendments 0.12-0.18, 2026-11-19. No DELPHI dimuon mass from real data has been
 looked at yet. Returned and graded: the kinematic study (xkin-v1, E1-E3 passed), the analysis-code
 tests (dimusel, btagcal, sigana, nexp), the test-B forecast (combcast-v1: background flaw found,
 amendment 0.12), the four-fermion limits (lep4f-v1: 11/11 tests), the four-fermion efficiencies
@@ -173,8 +180,8 @@ bias of amendment 0.13), the background-treatment scoring (dimu-envcast-v1, amen
 (**efhz-v1: J1, J3, J4, J5 passed; J2, J6, J7 failed for the scalar model**), the four LEP1
 Higgs searches (**lephz-v1: L1-L10 all passed**), Ko, Li and Yu's models (**kly-v1: K1-K9 all
 passed**) and the toys (**dimu-envtoys-v1: N0, N4, N5 passed; N2, N3 failed as written**,
-amendment 0.16; **dimu-envtoys-v2: N6, N8 passed; N1/N7 undetermined at 122 of 150 toys**,
-amendment 0.17). Still queued: the DELPHI probe, ntuple, validation and detector-simulation jobs,
-the four-fermion simulation (fourf), dimu-envtoys-v3 and kly4f-v1. Each will be graded against the
-expectations written before it ran. Results, positive, negative or inconclusive, will all be
-published here.
+amendment 0.16; **dimu-envtoys-v2: N6, N8 passed**, amendment 0.17; **dimu-envtoys-v3 and the
+pool: N7 (criterion (b)), N9, N10 passed**, amendment 0.18). Still queued: the DELPHI probe,
+ntuple, validation and detector-simulation jobs, the four-fermion simulation (fourf) and kly4f-v1.
+Each will be graded against the expectations written before it ran. Results, positive, negative
+or inconclusive, will all be published here.
