@@ -13,7 +13,11 @@ confrontations at the lowest literature rate (Ko, Li and Yu's model-II benchmark
   L3 Higgs search alone (0 candidates), weakest variant x 0.78 (calibration ratio, section 5);
   OPAL four-fermion alone (1 event in 20-40 GeV), weakest variant x 0.62;
   OPAL + L3 four-fermion, nominal, weakest, and weakest x (0.62, 0.78).
-Expectations S1-S6 are in NOTE-higgs-searches.md section 6d, written before this job ran.
+Expectations S1-S7 are in NOTE-higgs-searches.md section 6d, written before this job ran.
+
+0.1.1 (2026-11-19): klyscan-v1 stopped at import with a SyntaxError (a dict() keyword containing
+'-'). The thresholds are now a dict literal with string keys. Nothing else changed: same masses,
+seeds, settings, selections and expectations.
 
 Needs kly.py, lephz.py, efhz.py, eff4f.py, lep4f.py, run_kly4f.py and xkin's xme.py, evana.py,
 fadgen.py, run_xkin.py next to it (the job fetches the published ones), numpy, pythia8mc.
@@ -30,7 +34,7 @@ import time
 
 import numpy as np
 
-VERSION = "mv2 klyscan 0.1.0"
+VERSION = "mv2 klyscan 0.1.1"
 ORDER = ("B110", "B180", "B110L", "Q12", "Q30", "Q50")     # run_kly / run_kly4f model order
 SCAN = (15.0, 20.0, 25.0, 35.0, 40.0, 45.0, 55.0)
 # NOTE-higgs-searches section 3 / section 6: predicted events for efficiency 1 at the lowest
@@ -89,6 +93,12 @@ def lam_needed(k, p):
         else:
             hi = mid
     return hi
+
+
+def thresholds():
+    """Pre-registered reference thresholds (string keys; 0.1.0 used invalid dict() keywords)."""
+    return {"L3H_eps_weakest_for_p1e-3": math.log(1000.0) / (L3H_LIT_EPS1 * CAL["L3H"]),
+            "lam_needed_1obs_p1e-3": lam_needed(1, 1e-3)}
 
 
 def weakest_of(eps, prefix):
@@ -228,8 +238,7 @@ def main():
     out = dict(tool=VERSION, kly=kly.VERSION, lephz=lephz.VERSION, eff4f=eff4f.VERSION,
                made_by='MV2 of Munim, Inc. (made with AI agents)',
                question="Ko-Li-Yu model III between m_phi = 12, 30.4 and 50 GeV",
-               thresholds=dict(L3H_eps_weakest_for_p1e-3=math.log(1000.0) / (L3H_LIT_EPS1 * CAL["L3H"]),
-                               lam_needed_1obs_p1e-3=lam_needed(1, 1e-3)),
+               thresholds=thresholds(),
                models={})
     for label, c4, chz, st in results:
         print('TASK', json.dumps(st, default=str), flush=True)

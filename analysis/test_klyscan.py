@@ -24,6 +24,18 @@ class TestPoisson(unittest.TestCase):
         self.assertAlmostEqual(r.lam_needed(1, 1e-3), 9.2334, delta=0.002)
 
 
+class TestThresholds(unittest.TestCase):
+    def test_thresholds_dict(self):
+        # 0.1.1 fix: string keys; values as in TestL3Higgs.test_threshold and test_lam_needed
+        t = r.thresholds()
+        self.assertEqual(sorted(t), ["L3H_eps_weakest_for_p1e-3", "lam_needed_1obs_p1e-3"])
+        self.assertAlmostEqual(t["L3H_eps_weakest_for_p1e-3"], 0.26178, places=4)
+        self.assertAlmostEqual(t["lam_needed_1obs_p1e-3"], 9.2334, delta=0.002)
+
+    def test_version(self):
+        self.assertEqual(r.VERSION, "mv2 klyscan 0.1.1")
+
+
 class TestL3Higgs(unittest.TestCase):
     def test_threshold(self):
         # p < 1e-3 with 0 candidates needs lam >= 6.907755; 33.83 x 0.78 = 26.3874 per unit eps;
