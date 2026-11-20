@@ -1,0 +1,23 @@
+test_made_up_spectrum (test_emuframe.TestAlephDriver.test_made_up_spectrum) ... ok
+test_z_bi_larger_off_sample_is_more_significant (test_emuframe.TestBasics.test_z_bi_larger_off_sample_is_more_significant) ... ok
+test_z_bi_small_cases (test_emuframe.TestBasics.test_z_bi_small_cases) ... ok
+test_z_from_p (test_emuframe.TestBasics.test_z_from_p) ... ok
+test_labels (test_emuframe.TestDecisions.test_labels) ... ok
+test_window (test_emuframe.TestDecisions.test_window) ... ok
+test_bb_and_exact (test_emuframe.TestGaussianLimit.test_bb_and_exact) ... ok
+test_large_template_limit (test_emuframe.TestGaussianLimit.test_large_template_limit) ... ok
+test_median_expected_limit (test_emuframe.TestGaussianLimit.test_median_expected_limit) ... ok
+test_asimov_signal_recovered (test_emuframe.TestLikelihood.test_asimov_signal_recovered) ... ok
+test_mu0_ratio_is_n_over_m (test_emuframe.TestLikelihood.test_mu0_ratio_is_n_over_m) ... ok
+test_t_hat_is_maximum (test_emuframe.TestLikelihood.test_t_hat_is_maximum) ... ok
+test_t_hat_stationary (test_emuframe.TestLikelihood.test_t_hat_stationary) ... ok
+test_t_hat_zero_template (test_emuframe.TestLikelihood.test_t_hat_zero_template) ... ok
+test_cauchy_limit (test_emuframe.TestVoigt.test_cauchy_limit) ... ok
+test_gaussian_limit (test_emuframe.TestVoigt.test_gaussian_limit) ... ok
+test_sums_to_one (test_emuframe.TestVoigt.test_sums_to_one) ... ok
+test_symmetric (test_emuframe.TestVoigt.test_symmetric) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.919s
+
+OK

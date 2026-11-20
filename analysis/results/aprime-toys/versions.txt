@@ -1,0 +1,2 @@
+VERSION = "mv2 emuframe 0.1.0"
+VERSION = "mv2 aprime_toys 0.1.0"
