@@ -9,33 +9,33 @@ By MV2 of Munim, Inc. (mv2@munimtech.com). The work is made with AI agents worki
 name. It is not a DELPHI, ALEPH, L3 or OPAL Collaboration result, and neither these
 collaborations nor CERN endorse it. **No physicist has checked these results yet.**
 
-**Newest step (2026-11-20): where does the rising muon/electron ratio come from?** Amendment
-[0.25](PLAN-amendment-0.25.md) asked whether the rise is in ALEPH's own simulation, in its
-di-electrons too, or in neither. The code's closure check passed (C0: it reproduces 2.664, 1.621,
-0.0266 and 2.256; the data slope is 0.027 +- 0.012 per GeV; output in
-[analysis/results/apcross-closure/](analysis/results/apcross-closure/)), and two blind readings of
-ALEPH's figures came in: its simulation (Fig. 4, `data/aleph-mc4.json`) and its di-electrons
-(Fig. 25, 243 pairs, `data/aleph-ee25.json`). Four empty simulation bins at 46-49 GeV make the
-pre-registered gate M0 **fail as written**; [amendment 0.26](PLAN-amendment-0.26.md) fixes, before
-any fit, how such bins are filled (secondary grades M1z-M3z, with a sensitivity fill;
-[stats/apcross_m0z.py](stats/apcross_m0z.py)). Plain sums on the readings, not a test: above 25
-GeV the ratio rises from 1.08 to 1.69 in the muon data, but only from 1.06 to 1.09 in ALEPH's
-simulation and from 0.80 to 0.84 in its di-electrons. Job `apcross-v1` grades it. Section 8 of
-the amendment pre-registers the next question, before its readings exist: do ALEPH's
-**same-sign** muon pairs rise against simulation too (a muon-identification or fake-muon effect,
-test S1), or only the opposite-sign ones (S2)?
+**Newest result (2026-11-20): with a smooth background that keeps its counting error, ALEPH's
+excess is 3.1-3.4 sigma local, not 2.66, if the muon/electron ratio is constant**
+([NOTE-aprime.md](NOTE-aprime.md) 0.4, section 9; pre-registered in
+[amendment 0.24](PLAN-amendment-0.24.md)). Job `aprime-smooth-v1` fitted a smooth (log-cubic)
+background jointly to ALEPH's muon pairs and its electron-muon template, so the template's
+counting error is kept and its smoothness used, and calibrated every method on 10,000
+background-only pseudo-experiments. The primary method gives **Z0 = 3.13, toy-calibrated 3.35**;
+the pre-registered headline K1 ("below 3.0") **failed**, as our own written expectation (3-4)
+said it probably would. Our earlier 2.66 came from a conservative bin-by-bin method and is
+withdrawn as a headline. Calibrated, every method on this reading lies between 2.3 and 3.4 sigma,
+far below the published 5.35. Raw output: [analysis/results/aprime-smooth/](analysis/results/aprime-smooth/).
 
-**Result (2026-11-20): ALEPH's excess leans on a constant muon/electron pair ratio, and
-its own data say the ratio rises with mass** ([NOTE-aprime.md](NOTE-aprime.md) 0.3, section 8;
-pre-registered in [amendment 0.23](PLAN-amendment-0.23.md)). ALEPH's background is its electron-muon
-pairs scaled by one factor for all masses. Job `aprime-ext-v1` refitted the blind reading of
-ALEPH's Fig. 5 with a ratio that may change log-linearly with mass. The muon pairs rise against the
-template (slope 0.027 per GeV, 2.3 sigma at zero signal; pre-registered X2, "below 2 sigma":
-**failed**), and with that slope free the excess falls from **2.66 to 1.62 sigma** in 15-50 GeV
-(X1 passed) and to 1.35 sigma in 5-50 GeV (X3 passed). Seen after the output, and not a test: in
-15-50 GeV a broad rise and a narrow peak are almost interchangeable (with the peak floated the
-slope adds only 0.8 sigma), and outside the peak window above 25 GeV the muon pairs exceed the
-template by about 1.5 on both sides (72 against 46.8).
+**The open question: the ratio.** All of that assumes, as ALEPH did, that muon pairs and
+electron-muon pairs keep one ratio at all masses. Our earlier job `aprime-ext-v1` found the data
+prefer a ratio rising with mass (2.3 sigma), and with that rise the conservative method's excess
+falls to 1.62 sigma (NOTE-aprime sec. 8). [Amendment 0.27](PLAN-amendment-0.27.md) pre-registers
+the combined test, a smooth background **and** a rising ratio (job `aprime-slsm-v1`, L0-L5;
+[stats/aprime_slsm.py](stats/aprime_slsm.py)), and the test of where a rise would come from: do
+ALEPH's **same-sign** muon pairs rise against simulation as its opposite-sign pairs do (a
+muon-identification or fake-muon effect), or not (job `dmcratio-v1`,
+[stats/dmcratio.py](stats/dmcratio.py))? Two new blind readings are committed exactly as read:
+ALEPH's opposite- and same-sign muon pairs against simulation (Fig. 21, `data/aleph-dmc21.json`)
+and its electron-muon pairs against simulation (Fig. 3, `data/aleph-emu3.json`). Twenty
+simulation values sit below the bottom of Fig. 21's log axis, so that test's gate G0 **fails as
+written**; amendment 0.27 fixes their fill before any fit and discloses the plain sums we saw.
+Earlier, amendment [0.26](PLAN-amendment-0.26.md) set up the same comparison for ALEPH's
+simulation (Fig. 4) and di-electrons (Fig. 25); job `apcross-v1` grades it.
 
 **Also new (2026-11-20): the Z -> Z' phi escape model is closed at every scalar mass from
 12 to 55 GeV** ([NOTE-higgs-searches.md](NOTE-higgs-searches.md) 0.10, section 6d). Ko, Li and
@@ -47,24 +47,21 @@ model at p < 1e-3 in the most pessimistic reading (weakest selection variant, sc
 worst calibration ratio, lowest rate in the literature); the weakest point is 55 GeV, near the
 kinematic end (p = 2.2e-4 and 3.9e-4). Raw output: [analysis/results/klyscan/](analysis/results/klyscan/).
 
-**How significant is ALEPH's excess when its background template's own counting error is
-included? (2026-11-19/20)** ([NOTE-aprime.md](NOTE-aprime.md) sections 1-7,
-pre-registered in [amendment 0.19](PLAN-amendment-0.19.md)). ALEPH built its background from the
-same events' electron-muon pairs and treated that template as exact. Refitting a blind per-bin
-reading of ALEPH's Fig. 5 with the template's Poisson error kept bin by bin (Barlow-Beeston) gives
-**Z0 = 2.66** (pre-registered headline P3, "at least 3.0": **failed**); 10,000 background-only
-pseudo-experiments confirm that this method is calibrated (toy-calibrated 2.60). Treating the
-binned, unsmoothed template as exact gives 4.18, but that method produced false 3-sigma excesses in
-4.7 % of the pseudo-experiments, 35 times the nominal rate. **The calibration toys graded on
-2026-11-20 (C1, C2, C4 passed) add a caveat:** a template smoothed with a 1 GeV kernel, as ALEPH
-smoothed its own, inflates false excesses far less (2-sigma rate 3.8-4.4 % against 2.3 %), and the
-bin-by-bin method ignores the background's smoothness, so in that respect **2.66 is conservative**.
-[Amendment 0.24](PLAN-amendment-0.24.md) pre-registers the deciding test: a smooth background
-fitted jointly to both spectra, so that its counting error is kept and its smoothness used, with
-every method calibrated on 10,000 toys at the figure's scale (job `aprime-smooth-v1`, queued; our
-own expectation, written first, is 3-4 sigma). It assumes a constant ratio; the result above
-pulls the other way. Limits: a figure reading, not ALEPH's unbinned fit; no look-elsewhere
-correction.
+**How significant is ALEPH's excess in its own frame? The record so far (2026-11-19/20)**
+([NOTE-aprime.md](NOTE-aprime.md), pre-registered in amendments [0.19](PLAN-amendment-0.19.md),
+[0.23](PLAN-amendment-0.23.md) and [0.24](PLAN-amendment-0.24.md)). ALEPH built its background from
+the same events' electron-muon pairs and treated that template as exact. On a blind per-bin reading
+of ALEPH's Fig. 5:
+
+| background | ratio | Z0 asymptotic | toy-calibrated |
+|---|---|---|---|
+| template as exact (binned) | constant | 4.18 | 2.33-2.46 |
+| template's error kept bin by bin (conservative) | constant | 2.66 | 2.60-2.74 |
+| smooth, fitted to both spectra (primary since 0.24) | constant | **3.13** | **3.35** |
+| template's error kept bin by bin | rising with mass | 1.62 | not run |
+| smooth, fitted to both spectra | rising with mass | queued (`aprime-slsm-v1`) | queued |
+
+Limits: a figure reading, not ALEPH's unbinned fit; no look-elsewhere correction.
 
 **Main result so far: the excess is not a boson decaying to isolated muons. Every
 model we tested is excluded by at least two LEP detectors.**
@@ -159,7 +156,8 @@ tagged one). Test C (to be pre-registered in plan v1.0) uses isolated muon pairs
 with the four-fermion background from DELPHI's own EXCALIBUR simulation. DELPHI's open data exist
 only in DELPHI's own formats (RAW, DSTO, LONG, SHORT, XSHORT; checked on the CERN Open Data portal
 2026-11-19), so these tests need the DELPHI software container. Section 8 of NOTE-aprime adds a
-requirement for A': DELPHI's own muon/electron ratio must be checked for a mass dependence.
+requirement for A': DELPHI's own muon/electron ratio must be checked for a mass dependence, and
+section 9 suggests a smooth joint fit beside the bin-by-bin one.
 
 **Two flaws caught before unblinding, and the fix chosen by a written rule.**
 [PLAN-amendment-0.12.md](PLAN-amendment-0.12.md): in the not-b-tagged spectrum, the
@@ -207,19 +205,25 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   and [0.22](PLAN-amendment-0.22.md) (the fit table's scale), [0.23](PLAN-amendment-0.23.md)
   (ALEPHLOW2 applied; mass-dependent ratio pre-registered), [0.24](PLAN-amendment-0.24.md)
   (smooth background with its counting error, tests K0-K4), [0.25](PLAN-amendment-0.25.md)
-  (the rising ratio in ALEPH's simulation and di-electrons, tests C0, M0-M3, E0-E3) and
-  [0.26](PLAN-amendment-0.26.md) (C0 passed; M0 failed as written; empty-bin rule, M1z-M3z).
+  (the rising ratio in ALEPH's simulation and di-electrons, tests C0, M0-M3, E0-E3),
+  [0.26](PLAN-amendment-0.26.md) (C0 passed; M0 failed as written; empty-bin rule, M1z-M3z;
+  same-sign test G0-G1, D1-D2, S1-S2 pre-registered) and [0.27](PLAN-amendment-0.27.md) (K1 failed:
+  3.1-3.4 sigma with a constant ratio; G0 failed as written; OFF rule; smooth background with a
+  rising ratio, L0-L5).
 - [paper/](paper/): the draft paper on the LEP1 isolated-muon result (not peer reviewed).
 - [NOTE-kinematics.md](NOTE-kinematics.md), [NOTE-fourfermion.md](NOTE-fourfermion.md),
   [NOTE-higgs-searches.md](NOTE-higgs-searches.md) (0.10), [NOTE-lane-pritchett.md](NOTE-lane-pritchett.md):
   the external tests, each with its pre-registered expectations, grades and limits.
   [NOTE-injet.md](NOTE-injet.md): the single-jet mass bound, ALEPH's electron-muon background
   frame, L3's sensitivity, the pre-registered test A', and the graded figure reading (R1, R2).
-  [NOTE-aprime.md](NOTE-aprime.md) 0.3: A'-ALEPH graded (P1-P4) with its 10,000 toys, the
-  calibration toys on made-up spectra graded (C1-C5), and the mass-dependent ratio graded (X0-X3).
+  [NOTE-aprime.md](NOTE-aprime.md) 0.4: A'-ALEPH graded (P1-P4) with its 10,000 toys, the
+  calibration toys on made-up spectra graded (C1-C5), the mass-dependent ratio graded (X0-X3) and
+  the smooth background graded (K0-K4).
 - [data/](data/): blind readings of ALEPH's figures, committed exactly as read
   (`aleph-fig5.json`, 15-50 GeV; `aleph-fitfig.json`, the fit figure; `aleph-low2.json`, 5-15 GeV;
-  `aleph-mc4.json`, the simulation-only comparison; `aleph-ee25.json`, the di-electrons).
+  `aleph-mc4.json`, the simulation-only comparison; `aleph-ee25.json`, the di-electrons;
+  `aleph-dmc21.json`, opposite- and same-sign muon pairs against simulation; `aleph-emu3.json`,
+  electron-muon pairs against simulation).
 - [readings/](readings/): notes from the published LEP1 papers, made by AI agents reading the
   scanned papers (including [opal4f-jets-notes.md](readings/opal4f-jets-notes.md), OPAL's
   four-fermion jet definition, and [aleph-figs-notes.md](readings/aleph-figs-notes.md), three of
@@ -257,13 +261,16 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   amendment 0.23), `aprime_smooth.py` (A'-ALEPH with smoothed templates and a joint smooth fit,
   toy-calibrated, amendment 0.24), `aprime_cross.py` (the ratio's slope in ALEPH's simulation and
   di-electrons, amendment 0.25; pure Python), `apcross_m0z.py` (amendment 0.26: runs
-  aprime_cross unchanged and adds the empty-bin fills and the slope with the signal floated) and
-  `fit_table_check.py`.
+  aprime_cross unchanged and adds the empty-bin fills and the slope with the signal floated),
+  `dmcratio.py` (amendment 0.27: opposite- and same-sign muon pairs and electron-muon pairs against
+  ALEPH's simulation; pure Python, uses aprime_cross), `aprime_slsm.py` (amendment 0.27: the smooth
+  joint fit with a rising ratio, toy-calibrated; uses aprime_smooth) and `fit_table_check.py`.
   [stats/results/bbspur/](stats/results/bbspur/) holds the output of `dimu-bbspur-v1`.
   Tests: `python -m unittest -v test_dimustat test_dimucomb test_bkgsys test_envtoys test_bbspur
   test_envpool test_emuframe test_aprime_ext test_aprime_smooth test_aprime_cross test_apcross_m0z
-  test_fit_table_check` (needs `numpy`, `scipy`; `pythia8mc` for forecast and bbspur;
-  `test_emuframe`, `test_aprime_ext`, `test_aprime_cross` and `test_apcross_m0z` need nothing).
+  test_dmcratio test_aprime_slsm test_fit_table_check` (needs `numpy`, `scipy`; `pythia8mc` for
+  forecast and bbspur; `test_emuframe`, `test_aprime_ext`, `test_aprime_cross`, `test_apcross_m0z`
+  and `test_dmcratio` need nothing).
 - [delsim/](delsim/): the signal through DELPHI's own detector simulation (`run_delsim.sh`,
   `runsim -gext`, `sigana.py` for resolution and efficiencies). Tests:
   `python -m unittest -v test_sigana`.
@@ -282,8 +289,8 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   (`envtoys-v2/`), `dimu-envtoys-v3` (`envtoys-v3/`), the pooled grade (`envtoys-pool/`),
   `efhz-v1` (`efhz/`), `lephz-v1` (`lephz/`), `kly-v1` (`kly/`), `kly4f-v1` (`kly4f/`),
   `kly4fj-v1` (`kly4fj/`), `klyscan-v2` (`klyscan/`), NOTE-injet (`injet/`), `aprime-aleph-v1`
-  (`aprime-aleph/`), `aprime-toys-v1` (`aprime-toys/`), `aprime-ext-v1` (`aprime-ext/`) and
-  `apcross-closure-v1` (`apcross-closure/`). Tests:
+  (`aprime-aleph/`), `aprime-toys-v1` (`aprime-toys/`), `aprime-ext-v1` (`aprime-ext/`),
+  `apcross-closure-v1` (`apcross-closure/`) and `aprime-smooth-v1` (`aprime-smooth/`). Tests:
   `python -m unittest -v test_dimusel test_btagcal test_nexp test_lep4f test_iso4f test_eff4f
   test_efhz test_lephz test_kly test_kly4f test_kly4fj test_klyscan test_injet`. Runs: `python run_eff4f.py --out OUT --nsig 10000 --workers 2`,
   `python run_efhz.py --out OUT --nsig 10000 --workers 2`,
@@ -297,7 +304,7 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
 
 ## Status
 
-Plan v0.11 plus amendments 0.12-0.26, 2026-11-20, NOTE-injet 0.2, NOTE-aprime 0.3 and
+Plan v0.11 plus amendments 0.12-0.27, 2026-11-20, NOTE-injet 0.2, NOTE-aprime 0.4 and
 NOTE-higgs-searches 0.10. No DELPHI dimuon mass from real data has been looked at yet. Returned and
 graded: the kinematic study (xkin-v1, E1-E3 passed), the analysis-code tests (dimusel, btagcal,
 sigana, nexp), the test-B forecast (combcast-v1: background flaw found, amendment 0.12), the
@@ -314,9 +321,12 @@ passed; kly4fj-v1: G1, G2 passed, G3 met, G4-G6 not met; klyscan-v2: S1-S7 all p
 failed as written by 0.2 events**, NOTE-injet sec. 7), **A'-ALEPH (aprime-aleph-v1: P0, P1, P4
 passed; P2 and the headline P3 failed, Z0 = 2.66)**, the A' calibration toys (**aprime-toys-v1:
 C1, C2, C4 passed**), the mass-dependent ratio (**aprime-ext-v1: X0, X1, X3 passed; X2 failed;
-Z0 with a free slope 1.62**) and the cross-check code's closure (**apcross-closure-v1: C0
-passed**; M0 failed as written, amendment 0.26). Still queued: the DELPHI probe, ntuple,
-validation and detector-simulation jobs, the four-fermion simulation (fourf), the smooth-background
-test (aprime-smooth-v1, K0-K4) and the simulation and di-electron cross-check (apcross-v1, M1z-M3z,
-E0-E3). Each will be graded against the expectations written before it ran. Results, positive,
-negative or inconclusive, will all be published here.
+Z0 with a free slope 1.62**), the cross-check code's closure (**apcross-closure-v1: C0
+passed**; M0 failed as written, amendment 0.26) and the smooth background (**aprime-smooth-v1: K0,
+K2, K3 passed; the headline K1 and K4 failed; Z0 3.13, calibrated 3.35**). G0 of the same-sign test
+failed as written (amendment 0.27). Still queued: the DELPHI probe, ntuple, validation and
+detector-simulation jobs, the four-fermion simulation (fourf), the simulation and di-electron
+cross-check (apcross-v1, M1z-M3z, E0-E3), the same-sign test (dmcratio-v1, D1z-S2z) and the smooth
+background with a rising ratio (aprime-slsm-v1, L0-L5). Each will be graded against the
+expectations written before it ran. Results, positive, negative or inconclusive, will all be
+published here.

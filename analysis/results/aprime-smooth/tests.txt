@@ -1,0 +1,15 @@
+test_asimov_background_only (test_aprime_smooth.TestParFit.test_asimov_background_only) ... ok
+test_asimov_signal_recovered (test_aprime_smooth.TestParFit.test_asimov_signal_recovered) ... ok
+test_gradient (test_aprime_smooth.TestParFit.test_gradient) ... ok
+test_signal_gives_significance (test_aprime_smooth.TestParFit.test_signal_gives_significance) ... ok
+test_floor (test_aprime_smooth.TestPure.test_floor) ... ok
+test_grade_rules (test_aprime_smooth.TestPure.test_grade_rules) ... ok
+test_smooth_flat_stays_flat_in_middle (test_aprime_smooth.TestPure.test_smooth_flat_stays_flat_in_middle) ... ok
+test_smooth_keeps_total (test_aprime_smooth.TestPure.test_smooth_keeps_total) ... ok
+test_z_from_count (test_aprime_smooth.TestPure.test_z_from_count) ... ok
+test_small_toy_run (test_aprime_smooth.TestToyDriver.test_small_toy_run) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 1.301s
+
+OK

@@ -1,0 +1,16 @@
+{
+ "job": "aprime-smooth-v1",
+ "rules": "PLAN-amendment-0.24.md sec. 3 (thresholds unchanged)",
+ "graded": "2026-11-20",
+ "graded_by": "AI agents working in MV2's name; not checked by a physicist",
+ "source_file": "analysis/results/aprime-smooth/aprime_smooth.json",
+ "grades": {
+  "K0": {"grade": "PASS", "prior": 0.90, "result": "closure bb 2.6640, exact 4.1783; toys' bb rate of Z0>=2 0.0198 in [0.015, 0.031]"},
+  "K1": {"grade": "FAIL", "prior_pass": 0.30, "result": "par3 toy-calibrated Z 3.353 (4 of 10,000 toys), asymptotic 3.134; threshold below 3.0"},
+  "K2": {"grade": "PASS", "prior": 0.80, "result": "par3 toys' rate of Z0>=2 0.0184 in [0.012, 0.035]"},
+  "K3": {"grade": "PASS", "prior": 0.80, "result": "par3 mu=0 deviance 60.29, toy p 0.539 >= 0.01"},
+  "K4": {"grade": "FAIL", "prior": 0.50, "result": "kde1 calibrated 3.036 vs par3 3.353, difference 0.317 > 0.3"}
+ },
+ "headline": "With a constant mu mu / e mu ratio and a smooth background fitted jointly to both spectra, the excess is 3.13 sigma local (asymptotic), 3.35 toy-calibrated (about 3.2-3.5 given 4 toys). The 2.66 of NOTE-aprime 0.1 is a conservative method's figure and is withdrawn as a headline.",
+ "not_adopted": "The pre-written clause 'most of the gap between 2.66 and 4-5 sigma was lost information, not template noise' is not supported: calibrated, every method lies in 2.3-3.4 sigma."
+}

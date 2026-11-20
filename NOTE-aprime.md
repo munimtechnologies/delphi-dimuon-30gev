@@ -1,17 +1,24 @@
-# NOTE-aprime 0.3: ALEPH's 30 GeV excess with its background template's own counting error
+# NOTE-aprime 0.4: ALEPH's 30 GeV excess with its background template's own counting error
 
 MV2 of Munim, Inc. (mv2@munimtech.com). 2026-11-20. Made with AI agents working in MV2's name; **not
 yet checked by a physicist**. Text CC BY 4.0; code Apache-2.0. Not a result of the ALEPH
 Collaboration.
 
-Version 0.3 adds section 8 (job `aprime-ext-v1`, amendment 0.23, graded: with a mu mu / e mu
-ratio allowed to change with mass, the excess falls from 2.66 to 1.62 sigma). Version 0.2 added
-section 7 (the calibration toys of amendment 0.19 sec. 4, job `aprime-toys-v1`) and changed what
-section 6 says about the 35-fold inflation. **Status of the headline:** the 2.66 sigma of section 3
-is the figure of a method that ignores the background's smoothness, so in that respect it is
-conservative; amendment 0.24 (job `aprime-smooth-v1`, still queued) decides that. Section 8 shows
-a second assumption, a mass-independent mu mu / e mu ratio, that the excess leans on in the other
-direction. Amendment 0.25 pre-registers the test of where the rising ratio comes from.
+Version 0.4 adds section 9 (job `aprime-smooth-v1`, amendment 0.24, graded: with a smooth
+background fitted jointly to both spectra, which keeps the template's counting error and uses its
+smoothness, the excess is **3.13 sigma local, 3.35 toy-calibrated**, with a constant mu mu / e mu
+ratio; the headline K1, "below 3.0", **failed**). Version 0.3 added section 8 (job
+`aprime-ext-v1`, amendment 0.23: with a mu mu / e mu ratio allowed to change with mass and the
+bin-by-bin background, the excess falls from 2.66 to 1.62 sigma). Version 0.2 added section 7 (the
+calibration toys).
+
+**Status of the headline (0.4).** The 2.66 sigma of section 3 is the figure of a conservative
+method; it is **not** our best estimate and we withdraw it as a headline. With a constant ratio,
+the methods that use the background's smoothness give 3.0-3.4 sigma local once calibrated by toys
+(section 9). With a ratio that rises with mass, as the data prefer at about 2.3 sigma (section 8),
+the bin-by-bin method gives 1.62. The two assumptions have not yet been combined in one model;
+amendment 0.27 sec. 6 pre-registers that test (job `aprime-slsm-v1`), and amendment 0.26-0.27 test
+where the rising ratio comes from. No number here says whether the excess is real.
 
 This note grades test **A'-ALEPH** (PLAN amendment 0.19 sec. 3, P1-P4, written before the input
 existed) and reports the toys of amendment 0.20 sec. 3 (rules written before any fit). Job
@@ -93,7 +100,7 @@ The profile scans in mu have single, clean minima (bb near 0.75-1.0, exact near 
   4.7 % of background-only experiments, 35 times the nominal 0.135 %. Calibrated by toys, its
   4.18 sigma is worth 2.46 sigma, in line with "bb".
 - These toys were drawn from the "bb" mu = 0 fit, which copies the reading's bin-to-bin bumps into
-  the truth. A smooth truth is used in amendment 0.24.
+  the truth. A smooth truth is used in amendment 0.24 (section 9).
 
 ## 5. What this means (amendment 0.19's meaning, written before the fit)
 
@@ -103,8 +110,8 @@ look-elsewhere correction. Neither outcome says whether the excess is real.*
 
 Section 7 qualifies this (added in 0.2, after the toys): the "binned frame" in that sentence
 matters. "bb" treats every bin's background as unrelated to its neighbours. A method that uses the
-background's smoothness can be both calibrated and more powerful, so whether the excess is above or
-below 3 sigma local is **not yet decided**; amendment 0.24 decides it.
+background's smoothness can be both calibrated and more powerful. Section 9 (0.4) shows that it
+is: with a constant ratio, such a method gives 3.35 sigma calibrated.
 
 ## 6. Limits
 
@@ -120,7 +127,8 @@ below 3 sigma local is **not yet decided**; amendment 0.24 decides it.
   the paper does not explain the factor (amendments 0.20-0.23). Our test uses the figures' scale,
   which reproduces Heister's Z_Bi (2.48 against 2.63).
 - No look-elsewhere correction is applied; with one, the number would be lower.
-- Sections 3-7 assume, as Heister does, one mu mu / e mu ratio for all masses. Section 8 tests that.
+- Sections 3-7 and 9 assume, as Heister does, one mu mu / e mu ratio for all masses. Section 8
+  tests that.
 
 ## 7. Calibration toys of amendment 0.19 sec. 4 (job `aprime-toys-v1`, graded 2026-11-20)
 
@@ -168,7 +176,7 @@ Consequence for this note: section 6's statement that the 35-fold inflation is a
 for Heister's method is confirmed and sharpened. With a kernel near 1 GeV the inflation is small.
 So the gap between Heister's 5.35 and our 2.66 cannot be put down mostly to template noise until a
 method that uses smoothness and keeps the template's error has been calibrated on the reading
-itself. That is amendment 0.24.
+itself. That is amendment 0.24 (section 9).
 
 ## 8. A mass-dependent mu mu / e mu ratio (amendment 0.23, job `aprime-ext-v1`, graded 2026-11-20)
 
@@ -243,9 +251,100 @@ errors" (his Fig. 4). Real sources of a rise exist (hadrons faking muons more of
 momentum; same-flavour pairs from virtual photons radiated in Z -> q qbar, which give e e and
 mu mu but no e mu). Amendment 0.25 pre-registers two blind readings that tell these apart:
 ALEPH's own simulation (Fig. 4) and ALEPH's di-electrons, against the same e mu template.
+Amendments 0.26 sec. 8 and 0.27 add the same-sign muon pairs.
 
 ### 8e. Limits of section 8
 
 The same reading limits as section 6. A log-linear ratio is one shape among many. The 5-15 GeV
 bins come from a second reading of the same figure. The meaning in 8c was written before the job
 but after the binned ratios had been seen (amendment 0.23 says so). No look-elsewhere correction.
+The bin-by-bin background used here is the conservative one (section 9); amendment 0.27 sec. 6
+repeats the slope test with the smooth background.
+
+## 9. A smooth background that keeps its counting error (amendment 0.24, job `aprime-smooth-v1`, graded 2026-11-20)
+
+Job `aprime-smooth-v1` (python:3.12, stats/aprime_smooth.py 0.1.0, 10,000 background-only toys,
+6,978 s, peak memory 0.07 GB; emuframe 0.1.0 fetched and blob-checked; unit tests passed). Input:
+the Fig. 5 reading, 15-50 GeV, constant mu mu / e mu ratio. Raw outputs, unedited:
+[analysis/results/aprime-smooth/](analysis/results/aprime-smooth/) (`aprime_smooth.json`,
+`toys.csv`, `run.txt`, `tests.txt`, `fetch.txt`, `compile.txt`, `sha256.txt`, `job.json`, and our
+grades `grades-aprime-smooth.json`).
+
+Toys were drawn from the par3 mu = 0 joint fit to the reading, a smooth truth (r = 0.640; 362.0
+muon pairs and 565.7 e mu pairs expected; background under 29-32 GeV 20.3 muon pairs, where 33
+are seen).
+
+### 9a. Every method, observed and calibrated
+
+| method | background | Z0 asymptotic | mu_hat | toys >= observed (of 10,000) | toy-calibrated Z | rate Z0 >= 2 | rate Z0 >= 3 |
+|---|---|---|---|---|---|---|---|
+| bb | free per bin | 2.664 | 0.813 | 31 | 2.74 | 0.0198 | 0.0017 |
+| exact | template as exact (floored at 0.5) | 3.955 | 0.904 | 98 | 2.33 | 0.1653 | 0.0459 |
+| kde05 | 0.5 GeV kernel, as exact | 3.887 | 0.889 | 41 | 2.64 | 0.1028 | 0.0211 |
+| kde1 | 1 GeV kernel, as exact | 3.796 | 0.860 | 12 | 3.04 | 0.0571 | 0.0079 |
+| kde2 | 2 GeV kernel, as exact | 3.598 | 0.805 | 5 | 3.29 | 0.0262 | 0.0020 |
+| par2 | joint log-quadratic | 3.258 | 0.799 | 8 | 3.16 | 0.0347 | 0.0020 |
+| **par3** | **joint log-cubic (primary)** | **3.134** | **0.801** | **4** | **3.35** | **0.0184** | **0.0009** |
+| par4 | joint log-quartic | 3.157 | 0.809 | 4 | 3.35 | 0.0192 | 0.0011 |
+| nominal | | | | | | 0.0228 | 0.00135 |
+
+par3 goodness of fit (mu = 0, both spectra): deviance 60.29 against a toy mean of 61.74, toy
+p = 0.539. Mean fitted mu in the toys (no signal): 0.093.
+
+### 9b. Grades (amendment 0.24 sec. 3, thresholds unchanged)
+
+| | statement | prior | result | grade |
+|---|---|---|---|---|
+| K0 | gate: closure 2.664 / 4.178 within 0.005; toys' bb rate of Z0 >= 2 in [0.015, 0.031] | 90 % | 2.664 / 4.178; 0.0198 | **PASS** |
+| K1 | **main**: par3 toy-calibrated Z below 3.0 | 30 % | **3.35** | **FAIL** |
+| K2 | par3 calibrated: rate of Z0 >= 2 in [0.012, 0.035] | 80 % | 0.0184 | **PASS** |
+| K3 | par3 describes the reading: deviance toy p >= 0.01 | 80 % | 0.539 | **PASS** |
+| K4 | kde1, calibrated, within 0.3 of par3 | 50 % | 3.04 vs 3.35 (0.32) | **FAIL** |
+
+Expectations met: 3 of the 3 written with a prior above 50 % (K0, K2, K3), and the written rough
+expectation for par3 ("between 3 and 4", amendment 0.24 sec. 3) was met. K1's 30 % was a stated
+minority view; it did not happen.
+
+### 9c. Meaning (written in amendment 0.24 sec. 4 before the job ran), applied
+
+K1 FAIL. Amendment 0.24 wrote for this case: *NOTE-aprime 0.1's 2.66 is the figure of a method
+that discards the background's smoothness, not the honest significance. With the template's
+counting error kept and its smoothness used, the local excess is at least 3 sigma, and most of the
+gap between 2.66 and 4-5 sigma was lost information, not template noise. We will say so in
+NOTE-aprime and in any article before it is published.*
+
+We say so: **with a constant ratio, the excess in ALEPH's own frame is 3.1 sigma local
+(asymptotic) and 3.35 sigma toy-calibrated, not 2.66.** The draft article "drops to 2.6 sigma" is
+withdrawn. The last clause written in advance ("most of the gap ... was lost information, not
+template noise") is **not** supported by the numbers, and we do not adopt it: the exact-type
+methods still lose most of their apparent significance to template noise once calibrated (exact
+3.95 -> 2.33, kde05 3.89 -> 2.64, kde1 3.80 -> 3.04). Calibrated, every method lies between 2.3 and
+3.4 sigma; the gap to Heister's 5.35 is mostly not recovered by any calibrated method on this
+reading.
+
+K4 FAIL by 0.02 is within the toys' own counting error (4 and 12 toys beyond the observed values),
+so it says little beyond this: a 1 GeV-smoothed template treated as exact is close to, but slightly
+weaker than, the joint fit.
+
+### 9d. Observations made after seeing the output (not tests)
+
+1. **Toy precision.** par3's calibrated 3.35 rests on 4 toys of 10,000; a Poisson 68 % interval on
+   that count (about 2.1-7.2) puts the calibrated Z at about 3.2-3.5. Asymptotically it is 3.13.
+   Either way it is above 3.0, and so are par2 and par4.
+2. **The toy truth matters by about 0.1.** "bb" calibrated on this smooth truth gives 2.74,
+   against 2.60 on the "bb" truth of section 4.
+3. **Size of the excess.** With the par3 background, the 29-32 GeV window holds 20.3 expected
+   muon pairs against 33 seen (about 12.7 excess), against 15.4 from the raw scaled template
+   (17.6 excess).
+4. **Everything in this section assumes a constant ratio.** Section 8 found, with the
+   conservative background, that the data prefer a rising ratio (2.26 sigma at zero signal) and
+   that with it the excess falls to 1.62. Amendment 0.27 sec. 6 pre-registers the same slope
+   with the smooth background (job `aprime-slsm-v1`, L0-L5). Until it is graded, the honest
+   summary is: **3.1-3.4 sigma local with a constant ratio; lower if the ratio rises, by an amount
+   the next job measures.**
+
+### 9e. Limits of section 9
+
+The same reading limits as section 6. A log-polynomial is one family of smooth shapes (par2 and
+par4 shown). The toy truth is fitted to the reading. Toy-calibrated values beyond 3 sigma rest on
+few toys (9d.1). No look-elsewhere correction is applied; with one, every number would be lower.

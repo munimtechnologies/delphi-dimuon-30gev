@@ -1,0 +1,157 @@
+emuframe blob d55c900fdb45aa9f8a6099a142079a510c3afdfa
+mv2 aprime_smooth 0.1.0 with mv2 emuframe 0.1.0; sum n 362, sum v 300.9
+CLOSURE bb=2.6640 exact=4.1783
+OBS bb Z0=2.6640 mu_hat=0.8129
+OBS exact Z0=3.9545 mu_hat=0.9036
+OBS kde05 Z0=3.8868 mu_hat=0.8888
+OBS kde1 Z0=3.7958 mu_hat=0.8598
+OBS kde2 Z0=3.5975 mu_hat=0.8051
+OBS par2 Z0=3.2583 mu_hat=0.7995
+OBS par3 Z0=3.1340 mu_hat=0.8014
+OBS par4 Z0=3.1570 mu_hat=0.8086
+TRUTH par3 mu=0: r=0.6399 sum T=565.7 sum rT=362.0 window rT=20.31 n=33
+toys done 500 of 10000 385 s
+toys done 1000 of 10000 716 s
+toys done 1500 of 10000 1071 s
+toys done 2000 of 10000 1390 s
+toys done 2500 of 10000 1752 s
+toys done 3000 of 10000 2092 s
+toys done 3500 of 10000 2441 s
+toys done 4000 of 10000 2802 s
+toys done 4500 of 10000 3147 s
+toys done 5000 of 10000 3537 s
+toys done 5500 of 10000 3890 s
+toys done 6000 of 10000 4221 s
+toys done 6500 of 10000 4584 s
+toys done 7000 of 10000 4926 s
+toys done 7500 of 10000 5263 s
+toys done 8000 of 10000 5592 s
+toys done 8500 of 10000 5930 s
+toys done 9000 of 10000 6258 s
+toys done 9500 of 10000 6627 s
+toys done 10000 of 10000 6978 s
+{
+ "rates": {
+  "bb": {
+   "p_ge2": 0.0198,
+   "p_ge3": 0.0017,
+   "mean_Z": 0.36781722856961
+  },
+  "exact": {
+   "p_ge2": 0.1653,
+   "p_ge3": 0.0459,
+   "mean_Z": 0.9548967696126803
+  },
+  "kde05": {
+   "p_ge2": 0.1028,
+   "p_ge3": 0.0211,
+   "mean_Z": 0.7214773136020389
+  },
+  "kde1": {
+   "p_ge2": 0.0571,
+   "p_ge3": 0.0079,
+   "mean_Z": 0.5089859950551531
+  },
+  "kde2": {
+   "p_ge2": 0.0262,
+   "p_ge3": 0.002,
+   "mean_Z": 0.34232329258838945
+  },
+  "par2": {
+   "p_ge2": 0.0347,
+   "p_ge3": 0.002,
+   "mean_Z": 0.514616107541051
+  },
+  "par3": {
+   "p_ge2": 0.0184,
+   "p_ge3": 0.0009,
+   "mean_Z": 0.37461640071455016
+  },
+  "par4": {
+   "p_ge2": 0.0192,
+   "p_ge3": 0.0011,
+   "mean_Z": 0.37601514446439016
+  }
+ },
+ "calibrated": {
+  "bb": {
+   "p": 0.0031,
+   "Z": 2.7370121664846616,
+   "lower_bound": false,
+   "k": 31,
+   "n": 10000,
+   "Z_asym": 2.6640384798138936
+  },
+  "exact": {
+   "p": 0.0098,
+   "Z": 2.3339183061836266,
+   "lower_bound": false,
+   "k": 98,
+   "n": 10000,
+   "Z_asym": 3.954541663745666
+  },
+  "kde05": {
+   "p": 0.0041,
+   "Z": 2.643721889635497,
+   "lower_bound": false,
+   "k": 41,
+   "n": 10000,
+   "Z_asym": 3.886773547948786
+  },
+  "kde1": {
+   "p": 0.0012,
+   "Z": 3.0356723666270735,
+   "lower_bound": false,
+   "k": 12,
+   "n": 10000,
+   "Z_asym": 3.7958489612645723
+  },
+  "kde2": {
+   "p": 0.0005,
+   "Z": 3.2905267314918953,
+   "lower_bound": false,
+   "k": 5,
+   "n": 10000,
+   "Z_asym": 3.5975013692350806
+  },
+  "par2": {
+   "p": 0.0008,
+   "Z": 3.155906757921816,
+   "lower_bound": false,
+   "k": 8,
+   "n": 10000,
+   "Z_asym": 3.258343350766449
+  },
+  "par3": {
+   "p": 0.0004,
+   "Z": 3.352794780504829,
+   "lower_bound": false,
+   "k": 4,
+   "n": 10000,
+   "Z_asym": 3.1339963632770744
+  },
+  "par4": {
+   "p": 0.0004,
+   "Z": 3.352794780504829,
+   "lower_bound": false,
+   "k": 4,
+   "n": 10000,
+   "Z_asym": 3.157006555457425
+  }
+ },
+ "gof": {
+  "dev_obs": 60.287257722772324,
+  "k": 5389,
+  "p": 0.5389,
+  "dev_toy_mean": 61.73886868190034
+ },
+ "grades": {
+  "K0": "PASS",
+  "K1": "FAIL",
+  "K2": "PASS",
+  "K3": "PASS",
+  "K4": "FAIL"
+ },
+ "mean_mu_par3_toys": 0.09347238017602459
+}
+APSMOOTH: closure bb=2.664 ex=4.178 | bb 2.66->2.74 p2=0.0198 p3=0.0017 | exact 3.95->2.33 p2=0.1653 p3=0.0459 | kde05 3.89->2.64 p2=0.1028 p3=0.0211 | kde1 3.80->3.04 p2=0.0571 p3=0.0079 | kde2 3.60->3.29 p2=0.0262 p3=0.0020 | par2 3.26->3.16 p2=0.0347 p3=0.0020 | par3 3.13->3.35 p2=0.0184 p3=0.0009 | par4 3.16->3.35 p2=0.0192 p3=0.0011 | par3 mu_hat=0.801 gof p=0.539 | K0 PASS K1 FAIL K2 PASS K3 PASS K4 FAIL
