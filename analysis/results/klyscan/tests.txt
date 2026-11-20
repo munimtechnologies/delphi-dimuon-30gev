@@ -1,0 +1,20 @@
+test_q12_l3_alone_nominal (test_klyscan.TestL3Higgs.test_q12_l3_alone_nominal) ... ok
+test_q12_pessimistic (test_klyscan.TestL3Higgs.test_q12_pessimistic) ... ok
+test_threshold (test_klyscan.TestL3Higgs.test_threshold) ... ok
+test_labels (test_klyscan.TestLabelsSeeds.test_labels) ... ok
+test_register_fake (test_klyscan.TestLabelsSeeds.test_register_fake) ... ok
+test_seeds (test_klyscan.TestLabelsSeeds.test_seeds) ... ok
+test_weakest (test_klyscan.TestLabelsSeeds.test_weakest) ... ok
+test_lam_needed (test_klyscan.TestPoisson.test_lam_needed) ... ok
+test_p_le_0 (test_klyscan.TestPoisson.test_p_le_0) ... ok
+test_p_le_1 (test_klyscan.TestPoisson.test_p_le_1) ... ok
+test_eff4f_confront (test_klyscan.TestPublishedModules.test_eff4f_confront) ... ok
+test_kly_register (test_klyscan.TestPublishedModules.test_kly_register) ... ok
+test_lephz_keys (test_klyscan.TestPublishedModules.test_lephz_keys) ... ok
+test_thresholds_dict (test_klyscan.TestThresholds.test_thresholds_dict) ... ok
+test_version (test_klyscan.TestThresholds.test_version) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.002s
+
+OK

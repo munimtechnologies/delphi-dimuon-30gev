@@ -1,0 +1,49 @@
+{
+ "source": "E:\\MV2-Pursuit\\work\\20261119T200644Z-science\\compete\\klyscan\\job.json",
+ "normalized": {
+  "id": "aa9a0fc02bca",
+  "name": "klyscan-v2",
+  "job_path": "E:\\MV2-Pursuit\\work\\20261119T200644Z-science\\compete\\klyscan\\job.json",
+  "run": "20261119T200644Z-science",
+  "field": "science",
+  "kind": "compete",
+  "workdir": "E:\\MV2-Pursuit\\work\\20261119T200644Z-science\\code-klyscan",
+  "image": "python:3.12",
+  "run_network": true,
+  "network": true,
+  "setup": [
+   {
+    "name": "setup-01-pip",
+    "cmd": "pip install -q -r requirements.txt",
+    "timeout_seconds": 0
+   },
+   {
+    "name": "setup-02-python",
+    "cmd": "python -c \"import urllib.request as u; B='https://raw.githubusercontent.com/munimtechnologies/delphi-dimuon-30gev/main/'; [u.urlretrieve(B + p, '/work/' + p.split('/')[-1]) for p in ('xkin/xme.py', 'xkin/evana.py', 'xkin/fadgen.py', 'xkin/run_xkin.py', 'analysis/lep4f.py', 'analysis/eff4f.py', 'analysis/efhz.py', 'analysis/lephz.py', 'analysis/kly.py', 'analysis/run_kly4f.py')]\"",
+    "timeout_seconds": 0
+   }
+  ],
+  "run_steps": [
+   {
+    "name": "run-01-cd",
+    "cmd": "cd /work && python -m py_compile run_klyscan.py test_klyscan.py run_kly4f.py kly.py lephz.py efhz.py eff4f.py lep4f.py xme.py evana.py fadgen.py run_xkin.py > /out/compile.txt 2>&1; rc=$?; cat /out/compile.txt; grep -h 'VERSION = ' run_klyscan.py kly.py lephz.py eff4f.py lep4f.py xme.py; sha256sum *.py | tee /out/sha256.txt; exit $rc",
+    "timeout_seconds": 0
+   },
+   {
+    "name": "run-02-cd",
+    "cmd": "cd /work && python -m unittest -v test_klyscan > /out/tests.txt 2>&1; rc=$?; cat /out/tests.txt; exit $rc",
+    "timeout_seconds": 0
+   },
+   {
+    "name": "run-03-cd",
+    "cmd": "cd /work && python run_klyscan.py --out /out --nsig 8000 --workers 2 --budget-min 40 > /out/run.txt 2>&1; rc=$?; cat /out/run.txt; exit $rc",
+    "timeout_seconds": 0
+   }
+  ],
+  "data_urls": [],
+  "data_key": "none",
+  "cpu": 2.0,
+  "memory_gb": 1,
+  "timeout_minutes": 180.0
+ }
+}

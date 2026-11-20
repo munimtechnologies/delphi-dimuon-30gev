@@ -9,7 +9,17 @@ By MV2 of Munim, Inc. (mv2@munimtech.com). The work is made with AI agents worki
 name. It is not a DELPHI, ALEPH, L3 or OPAL Collaboration result, and neither these
 collaborations nor CERN endorse it. **No physicist has checked these results yet.**
 
-**Newest results (2026-11-19/20): how significant is ALEPH's excess when its background
+**Newest result (2026-11-20): the Z -> Z' phi escape model is closed at every scalar mass from
+12 to 55 GeV** ([NOTE-higgs-searches.md](NOTE-higgs-searches.md) 0.10, section 6d). Ko, Li and
+Yu's model III had been computed at three scalar masses. Job `klyscan-v2` added seven more (15,
+20, 25, 35, 40, 45 and 55 GeV) through both the four LEP1 Higgs-search selections and the three
+four-fermion selections. All seven expectations S1-S7, written before the job ran, passed. At
+every mass, L3's Higgs search alone and OPAL's four-fermion measurement alone each exclude the
+model at p < 1e-3 in the most pessimistic reading (weakest selection variant, scaled down to the
+worst calibration ratio, lowest rate in the literature); the weakest point is 55 GeV, near the
+kinematic end (p = 2.2e-4 and 3.9e-4). Raw output: [analysis/results/klyscan/](analysis/results/klyscan/).
+
+**Also new (2026-11-19/20): how significant is ALEPH's excess when its background
 template's own counting error is included?** ([NOTE-aprime.md](NOTE-aprime.md) 0.2,
 pre-registered in [amendment 0.19](PLAN-amendment-0.19.md)). ALEPH built its background from the
 same events' electron-muon pairs and treated that template as exact. Refitting a blind per-bin
@@ -54,24 +64,24 @@ of LEP1 measurements selected exactly that signature, and both rule the boson ou
    written beforehand passed. With the weakest selection variants, scaled down to the
    experiments' own published Higgs efficiencies, the most pessimistic combination we can build
    still has p = 1.5e-6 (scalar, 4.7 standard deviations).
-3. **The models built to escape the LHC (jobs `kly-v1` and `kly4f-v1`; all fourteen
-   expectations K1-K9 and F1-F5 passed).** Ko, Li and Yu (arXiv:1610.07526) proposed two models
-   that avoid the LHC Drell-Yan bound: a Z' coupling the b quark to a heavy vector-like B quark
-   (model II), and Z -> Z' phi (model III). At model II's own benchmark rate, L3's and DELPHI's
-   Higgs searches predict **21-28 events against one candidate (p = 2e-11 to 2e-8)**, and OPAL's
-   and L3's four-fermion selections, applied to the same events, **38-41 events against one
-   (p = 6e-17 to 1e-15)**. Model III with a light 12 GeV scalar escapes the DELPHI, ALEPH and OPAL
-   Higgs searches (their recoil-mass cuts), but not L3's Higgs search (3.8-4.4 standard deviations
-   in the most pessimistic readings) nor OPAL's four-fermion selection (OPAL alone, weakest
-   variant scaled down by the worst calibration ratio: p = 1.5e-7). The OPAL result depended on
-   whether OPAL counted the muons when it required two jets; we found that while grading and
-   published it as a condition. **A reading of OPAL's paper made blind to this repository settled
-   it on 2026-11-19: OPAL clustered all tracks and clusters, leptons included**
+3. **The models built to escape the LHC (jobs `kly-v1`, `kly4f-v1` and `klyscan-v2`; all
+   twenty-one expectations K1-K9, F1-F5 and S1-S7 passed).** Ko, Li and Yu (arXiv:1610.07526)
+   proposed two models that avoid the LHC Drell-Yan bound: a Z' coupling the b quark to a heavy
+   vector-like B quark (model II), and Z -> Z' phi (model III). At model II's own benchmark rate,
+   L3's and DELPHI's Higgs searches predict **21-28 events against one candidate (p = 2e-11 to
+   2e-8)**, and OPAL's and L3's four-fermion selections, applied to the same events, **38-41 events
+   against one (p = 6e-17 to 1e-15)**. Model III with a light 12 GeV scalar escapes the DELPHI,
+   ALEPH and OPAL Higgs searches (their recoil-mass cuts), but not L3's Higgs search (3.8-4.4
+   standard deviations in the most pessimistic readings) nor OPAL's four-fermion selection (OPAL
+   alone, weakest variant scaled down by the worst calibration ratio: p = 1.5e-7). The OPAL result
+   depended on whether OPAL counted the muons when it required two jets; we found that while
+   grading and published it as a condition. **A reading of OPAL's paper made blind to this
+   repository settled it on 2026-11-19: OPAL clustered all tracks and clusters, leptons included**
    ([readings/opal4f-jets-notes.md](readings/opal4f-jets-notes.md)), exactly as coded. The
    sensitivity check `kly4fj-v1` measured what hung on that sentence: had OPAL removed the muons
    first, it would keep only 0.8 % of the 12 GeV scalar's events (that case would then rest on L3
-   alone), while every other model stays excluded. A scan of the scalar mass from 15 to 55 GeV
-   (`klyscan-v2`, expectations S1-S7 written first) is queued.
+   alone), while every other model stays excluded. **The mass scan `klyscan-v2` (2026-11-20)
+   closes model III at every computed scalar mass from 12 to 55 GeV by two detectors, each alone.**
 4. **Lane and Pritchett's model** ([NOTE-lane-pritchett.md](NOTE-lane-pritchett.md)) is produced
    at LEP1 only as Z -> h eta_A with both states at 30 GeV: the Z -> h A case already excluded.
 
@@ -172,7 +182,7 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   (smooth background with its counting error, tests K0-K4).
 - [paper/](paper/): the draft paper on the LEP1 isolated-muon result (not peer reviewed).
 - [NOTE-kinematics.md](NOTE-kinematics.md), [NOTE-fourfermion.md](NOTE-fourfermion.md),
-  [NOTE-higgs-searches.md](NOTE-higgs-searches.md), [NOTE-lane-pritchett.md](NOTE-lane-pritchett.md):
+  [NOTE-higgs-searches.md](NOTE-higgs-searches.md) (0.10), [NOTE-lane-pritchett.md](NOTE-lane-pritchett.md):
   the external tests, each with its pre-registered expectations, grades and limits.
   [NOTE-injet.md](NOTE-injet.md): the single-jet mass bound, ALEPH's electron-muon background
   frame, L3's sensitivity, the pre-registered test A', and the graded figure reading (R1, R2).
@@ -232,14 +242,14 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
   `lephz.py` (the LEP1 Higgs-search selections), `kly.py` and `run_kly.py` (Ko, Li and Yu's
   models II and III through the same selections), `run_kly4f.py` (the same events through the
   four-fermion selections), `run_kly4fj.py` (OPAL's two-jet requirement without the muons, now a
-  sensitivity check), `run_klyscan.py` (model III at seven more scalar masses),
+  sensitivity check), `run_klyscan.py` 0.1.1 (model III at seven more scalar masses),
   `iso4f.py` (isolated pairs in simulation), `injet.py` (NOTE-injet's bounds; pure Python).
   [analysis/results/](analysis/results/) holds the output of `lep4f-eff-v2`, of
   `dimu-envcast-v1` (`envcast/`), `dimu-envtoys-v1` (`envtoys/`), `dimu-envtoys-v2`
   (`envtoys-v2/`), `dimu-envtoys-v3` (`envtoys-v3/`), the pooled grade (`envtoys-pool/`),
   `efhz-v1` (`efhz/`), `lephz-v1` (`lephz/`), `kly-v1` (`kly/`), `kly4f-v1` (`kly4f/`),
-  `kly4fj-v1` (`kly4fj/`), NOTE-injet (`injet/`), `aprime-aleph-v1` (`aprime-aleph/`) and
-  `aprime-toys-v1` (`aprime-toys/`). Tests:
+  `kly4fj-v1` (`kly4fj/`), `klyscan-v2` (`klyscan/`), NOTE-injet (`injet/`), `aprime-aleph-v1`
+  (`aprime-aleph/`) and `aprime-toys-v1` (`aprime-toys/`). Tests:
   `python -m unittest -v test_dimusel test_btagcal test_nexp test_lep4f test_iso4f test_eff4f
   test_efhz test_lephz test_kly test_kly4f test_kly4fj test_klyscan test_injet`. Runs: `python run_eff4f.py --out OUT --nsig 10000 --workers 2`,
   `python run_efhz.py --out OUT --nsig 10000 --workers 2`,
@@ -253,23 +263,23 @@ readings, and EXCLUDED or COMPATIBLE is claimed only if both agree.
 
 ## Status
 
-Plan v0.11 plus amendments 0.12-0.24, 2026-11-20, NOTE-injet 0.2 and NOTE-aprime 0.2. No DELPHI
-dimuon mass from real data has been looked at yet. Returned and graded: the kinematic study
-(xkin-v1, E1-E3 passed), the analysis-code tests (dimusel, btagcal, sigana, nexp), the test-B
-forecast (combcast-v1: background flaw found, amendment 0.12), the four-fermion limits (lep4f-v1:
-11/11 tests), the four-fermion efficiencies (**lep4f-eff-v2: H1-H7 passed**), the test-A forecast
-(dimu-forecast-v2: its Asimov part found the bias of amendment 0.13), the background-treatment
-scoring (dimu-envcast-v1, amendment 0.14; and **dimu-bbspur-v1: M1-M5 passed, M6 failed**,
-amendment 0.15), ALEPH's Higgs-search efficiency (**efhz-v1: J1, J3, J4, J5 passed; J2, J6, J7
-failed for the scalar model**), the four LEP1 Higgs searches (**lephz-v1: L1-L10 all passed**), Ko,
-Li and Yu's models (**kly-v1: K1-K9 all passed; kly4f-v1: F1-F5 all passed; kly4fj-v1: G1, G2
-passed, G3 met, G4-G6 not met**), the toys (**dimu-envtoys-v1: N0, N4, N5 passed; N2, N3 failed as
-written**, amendment 0.16; **dimu-envtoys-v2: N6, N8 passed**, amendment 0.17; **dimu-envtoys-v3
-and the pool: N7 (criterion (b)), N9, N10 passed**, amendment 0.18), the blind reading of ALEPH's
-figures (**R2 passed; R1 failed as written by 0.2 events**, NOTE-injet sec. 7), **A'-ALEPH
-(aprime-aleph-v1: P0, P1, P4 passed; P2 and the headline P3 failed, Z0 = 2.66)** and the A'
-calibration toys (**aprime-toys-v1: C1, C2, C4 passed**). Still queued: the DELPHI probe, ntuple,
-validation and detector-simulation jobs, the four-fermion simulation (fourf), klyscan-v2, the
-mass-dependent-ratio check (aprime-ext-v1, X0-X3) and the smooth-background test (aprime-smooth-v1,
-K0-K4). Each will be graded against the expectations written before it ran. Results, positive,
-negative or inconclusive, will all be published here.
+Plan v0.11 plus amendments 0.12-0.24, 2026-11-20, NOTE-injet 0.2, NOTE-aprime 0.2 and
+NOTE-higgs-searches 0.10. No DELPHI dimuon mass from real data has been looked at yet. Returned and
+graded: the kinematic study (xkin-v1, E1-E3 passed), the analysis-code tests (dimusel, btagcal,
+sigana, nexp), the test-B forecast (combcast-v1: background flaw found, amendment 0.12), the
+four-fermion limits (lep4f-v1: 11/11 tests), the four-fermion efficiencies (**lep4f-eff-v2: H1-H7
+passed**), the test-A forecast (dimu-forecast-v2: its Asimov part found the bias of amendment
+0.13), the background-treatment scoring (dimu-envcast-v1, amendment 0.14; and **dimu-bbspur-v1:
+M1-M5 passed, M6 failed**, amendment 0.15), ALEPH's Higgs-search efficiency (**efhz-v1: J1, J3,
+J4, J5 passed; J2, J6, J7 failed for the scalar model**), the four LEP1 Higgs searches (**lephz-v1:
+L1-L10 all passed**), Ko, Li and Yu's models (**kly-v1: K1-K9 all passed; kly4f-v1: F1-F5 all
+passed; kly4fj-v1: G1, G2 passed, G3 met, G4-G6 not met; klyscan-v2: S1-S7 all passed**), the toys
+(**dimu-envtoys-v1: N0, N4, N5 passed; N2, N3 failed as written**, amendment 0.16;
+**dimu-envtoys-v2: N6, N8 passed**, amendment 0.17; **dimu-envtoys-v3 and the pool: N7 (criterion
+(b)), N9, N10 passed**, amendment 0.18), the blind reading of ALEPH's figures (**R2 passed; R1
+failed as written by 0.2 events**, NOTE-injet sec. 7), **A'-ALEPH (aprime-aleph-v1: P0, P1, P4
+passed; P2 and the headline P3 failed, Z0 = 2.66)** and the A' calibration toys (**aprime-toys-v1:
+C1, C2, C4 passed**). Still queued: the DELPHI probe, ntuple, validation and detector-simulation
+jobs, the four-fermion simulation (fourf), the mass-dependent-ratio check (aprime-ext-v1, X0-X3) and
+the smooth-background test (aprime-smooth-v1, K0-K4). Each will be graded against the expectations
+written before it ran. Results, positive, negative or inconclusive, will all be published here.
