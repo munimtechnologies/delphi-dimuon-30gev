@@ -1,0 +1,75 @@
+{
+ "contract": "mv2-compete-result-v1",
+ "name": "aprime-slsm-v1",
+ "id": "8fd839860ce3",
+ "field": "science",
+ "run": "20261120T093144Z-science",
+ "kind": "compete",
+ "status": "failed",
+ "reason": "run step exited 124",
+ "host": "tango",
+ "image": "python:3.12",
+ "started_at": "2026-11-20T10:54:22.645034+00:00",
+ "finished_at": "2026-11-20T17:18:19.138385+00:00",
+ "duration_seconds": 23036,
+ "limits": {
+  "cpu": 2.0,
+  "memory_gb": 1.0,
+  "timeout_minutes": 360.0
+ },
+ "peak_memory_gb": 0.07,
+ "network": {
+  "setup": true,
+  "run": true
+ },
+ "steps": [
+  {
+   "step": "setup-01-pip",
+   "cmd": "pip install -q numpy scipy",
+   "exit": 0,
+   "seconds": 9
+  },
+  {
+   "step": "run-01-cd",
+   "cmd": "cd /work && python -m py_compile aprime_slsm.py test_aprime_slsm.py fetch_smooth.py > /out/compile.txt 2>&1; rc=$?; cat /out/compile.txt; exit $rc",
+   "exit": 0,
+   "seconds": 0
+  },
+  {
+   "step": "run-02-cd",
+   "cmd": "cd /work && python fetch_smooth.py > /out/fetch.txt 2>&1; rc=$?; cat /out/fetch.txt; sha256sum aprime_slsm.py test_aprime_slsm.py aprime_smooth.py aleph-fig5.json | tee /out/sha256.txt; exit $rc",
+   "exit": 0,
+   "seconds": 0
+  },
+  {
+   "step": "run-03-cd",
+   "cmd": "cd /work && python -m unittest -v test_aprime_slsm > /out/tests.txt 2>&1; rc=$?; cat /out/tests.txt; exit $rc",
+   "exit": 0,
+   "seconds": 2
+  },
+  {
+   "step": "run-04-cd",
+   "cmd": "cd /work && python aprime_slsm.py --fig5 aleph-fig5.json --emuframe /work/emuframe.py --out /out --ntoys 10000 --workers 2 > /out/run.txt 2>&1; rc=$?; tail -n 60 /out/run.txt; exit $rc",
+   "exit": 124,
+   "seconds": 22811
+  }
+ ],
+ "out_files": [
+  "aprime_slsm.json",
+  "compile.txt",
+  "fetch.txt",
+  "run.txt",
+  "sha256.txt",
+  "tests.txt"
+ ],
+ "out_files_total": 6,
+ "out_skipped": [],
+ "upload_skipped": [],
+ "summary_tail": "",
+ "paths": {
+  "workdir": "/work (copy of E:\\MV2-Pursuit\\work\\20261120T093144Z-science\\slsm)",
+  "out": "/out -> out/",
+  "data": "/data (docker volume mv2c-data-none, kept for later jobs)"
+ },
+ "note": ""
+}

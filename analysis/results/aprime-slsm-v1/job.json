@@ -1,0 +1,49 @@
+{
+ "source": "E:\\MV2-Pursuit\\work\\20261120T093144Z-science\\compete\\slsm\\job.json",
+ "normalized": {
+  "id": "8fd839860ce3",
+  "name": "aprime-slsm-v1",
+  "job_path": "E:\\MV2-Pursuit\\work\\20261120T093144Z-science\\compete\\slsm\\job.json",
+  "run": "20261120T093144Z-science",
+  "field": "science",
+  "kind": "compete",
+  "workdir": "E:\\MV2-Pursuit\\work\\20261120T093144Z-science\\slsm",
+  "image": "python:3.12",
+  "run_network": true,
+  "network": true,
+  "setup": [
+   {
+    "name": "setup-01-pip",
+    "cmd": "pip install -q numpy scipy",
+    "timeout_seconds": 0
+   }
+  ],
+  "run_steps": [
+   {
+    "name": "run-01-cd",
+    "cmd": "cd /work && python -m py_compile aprime_slsm.py test_aprime_slsm.py fetch_smooth.py > /out/compile.txt 2>&1; rc=$?; cat /out/compile.txt; exit $rc",
+    "timeout_seconds": 0
+   },
+   {
+    "name": "run-02-cd",
+    "cmd": "cd /work && python fetch_smooth.py > /out/fetch.txt 2>&1; rc=$?; cat /out/fetch.txt; sha256sum aprime_slsm.py test_aprime_slsm.py aprime_smooth.py aleph-fig5.json | tee /out/sha256.txt; exit $rc",
+    "timeout_seconds": 0
+   },
+   {
+    "name": "run-03-cd",
+    "cmd": "cd /work && python -m unittest -v test_aprime_slsm > /out/tests.txt 2>&1; rc=$?; cat /out/tests.txt; exit $rc",
+    "timeout_seconds": 0
+   },
+   {
+    "name": "run-04-cd",
+    "cmd": "cd /work && python aprime_slsm.py --fig5 aleph-fig5.json --emuframe /work/emuframe.py --out /out --ntoys 10000 --workers 2 > /out/run.txt 2>&1; rc=$?; tail -n 60 /out/run.txt; exit $rc",
+    "timeout_seconds": 0
+   }
+  ],
+  "data_urls": [],
+  "data_key": "none",
+  "cpu": 2.0,
+  "memory_gb": 1,
+  "timeout_minutes": 360.0
+ }
+}

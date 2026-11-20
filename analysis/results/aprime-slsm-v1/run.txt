@@ -1,0 +1,12 @@
+emuframe blob d55c900fdb45aa9f8a6099a142079a510c3afdfa
+mv2 aprime_slsm 0.1.0 with mv2 aprime_smooth 0.1.0 and mv2 emuframe 0.1.0; sum n 362, sum v 300.9
+CLOSURE par3 ParFit 3.1340, SlopeFit b=0 3.1340 (want 3.1340)
+OBS const Z0=3.1340 mu=0.801 | slope Z0=2.2953 mu=0.690 b=0.0107 | slope at mu=0 b=0.0266 [0.014853925783743501, 0.038383577453620824] Z=2.256 | slope signal floated b=0.0107 Z=0.733 (7 s)
+toys done 500 of 10000 2124 s
+toys done 1000 of 10000 4473 s
+toys done 1500 of 10000 6419 s
+toys done 2000 of 10000 8393 s
+toys done 2500 of 10000 10341 s
+toys done 3000 of 10000 14369 s
+toys done 3500 of 10000 17630 s
+toys done 4000 of 10000 20129 s

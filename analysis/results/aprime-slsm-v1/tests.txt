@@ -1,0 +1,13 @@
+test_b0_matches_parfit (test_aprime_slsm.TestFit.test_b0_matches_parfit) ... ok
+test_gradient (test_aprime_slsm.TestFit.test_gradient) ... ok
+test_recovers_slope_on_asimov (test_aprime_slsm.TestFit.test_recovers_slope_on_asimov) ... ok
+test_grade (test_aprime_slsm.TestPure.test_grade) ... ok
+test_grade_gate (test_aprime_slsm.TestPure.test_grade_gate) ... ok
+test_interval (test_aprime_slsm.TestPure.test_interval) ... ok
+test_signed (test_aprime_slsm.TestPure.test_signed) ... ok
+test_z_from_count (test_aprime_slsm.TestPure.test_z_from_count) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 1.395s
+
+OK

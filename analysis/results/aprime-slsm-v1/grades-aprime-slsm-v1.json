@@ -1,0 +1,29 @@
+{
+ "job": "aprime-slsm-v1",
+ "status": "run step exited 124 (6 h job limit) after 4000 of 10000 toys; no toy was written",
+ "pre_registration": "PLAN-amendment-0.27.md section 6",
+ "graded_in": "PLAN-amendment-0.29.md section 3",
+ "graded_by": "AI agents working in MV2's name, 2026-11-20; not checked by a physicist",
+ "observed": {
+  "closure_parfit": 3.1339963632770744,
+  "closure_b0": 3.1339963632740275,
+  "Z0_const": 3.1339963632740275,
+  "Z0_slope_free": 2.2952839457044156,
+  "mu_hat_slope_free": 0.6895341288262247,
+  "b_hat_signal_floated": 0.01071107817529385,
+  "b_mu0": 0.026634170820862495,
+  "b_mu0_1sigma": [0.014853925783743501, 0.038383577453620824],
+  "Z_slope_mu0": 2.256383272568956,
+  "Z_slope_signal_floated": 0.733253475356642,
+  "window_29_32_bkg": 23.155803822200962,
+  "window_29_32_n": 33
+ },
+ "grades": {
+  "L0": "PASS (closure 3.1340 and 3.1340 against 3.1340, tol 0.005; 8 unit tests OK)",
+  "L1": "NOT GRADED (needs toys; re-run as aprime-slsm-v2, amendment 0.29)",
+  "L2": "NOT GRADED (needs toys)",
+  "L3": "PASS (b = 0.0266 > 0, signed Z 2.256 >= 2.0)",
+  "L4": "NOT GRADED (needs toys)",
+  "L5": "NOT GRADED (needs toys)"
+ }
+}
