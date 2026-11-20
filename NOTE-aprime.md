@@ -1,24 +1,27 @@
-# NOTE-aprime 0.4: ALEPH's 30 GeV excess with its background template's own counting error
+# NOTE-aprime 0.5: ALEPH's 30 GeV excess with its background template's own counting error
 
 MV2 of Munim, Inc. (mv2@munimtech.com). 2026-11-20. Made with AI agents working in MV2's name; **not
 yet checked by a physicist**. Text CC BY 4.0; code Apache-2.0. Not a result of the ALEPH
 Collaboration.
 
-Version 0.4 adds section 9 (job `aprime-smooth-v1`, amendment 0.24, graded: with a smooth
-background fitted jointly to both spectra, which keeps the template's counting error and uses its
-smoothness, the excess is **3.13 sigma local, 3.35 toy-calibrated**, with a constant mu mu / e mu
-ratio; the headline K1, "below 3.0", **failed**). Version 0.3 added section 8 (job
-`aprime-ext-v1`, amendment 0.23: with a mu mu / e mu ratio allowed to change with mass and the
-bin-by-bin background, the excess falls from 2.66 to 1.62 sigma). Version 0.2 added section 7 (the
-calibration toys).
+Version 0.5 adds section 10 (job `apcross-v1`: ALEPH's own simulation and its di-electrons show
+**no** rise of the ratio, but neither differs from the muon data by 2 sigma) and section 11 (job
+`dmcratio-v1`: against ALEPH's simulation, **same-sign muon pairs rise with the same slope as
+opposite-sign pairs** and e mu pairs do not; whether each rise alone reaches 2 sigma depends on
+simulation values hidden below a log axis). Version 0.4 added section 9 (the smooth background:
+**3.13 sigma local, 3.35 toy-calibrated** with a constant mu mu / e mu ratio). Version 0.3 added
+section 8 (a ratio rising with mass, bin-by-bin background: 2.66 -> 1.62 sigma). Version 0.2 added
+section 7 (the calibration toys).
 
-**Status of the headline (0.4).** The 2.66 sigma of section 3 is the figure of a conservative
-method; it is **not** our best estimate and we withdraw it as a headline. With a constant ratio,
-the methods that use the background's smoothness give 3.0-3.4 sigma local once calibrated by toys
-(section 9). With a ratio that rises with mass, as the data prefer at about 2.3 sigma (section 8),
-the bin-by-bin method gives 1.62. The two assumptions have not yet been combined in one model;
-amendment 0.27 sec. 6 pre-registers that test (job `aprime-slsm-v1`), and amendment 0.26-0.27 test
-where the rising ratio comes from. No number here says whether the excess is real.
+**Status of the headline (0.5).** With a constant ratio, the methods that use the background's
+smoothness give 3.0-3.4 sigma local once calibrated by toys (section 9). The muon data prefer a
+ratio that rises with mass (section 8); ALEPH's simulation does not predict that rise and its
+di-electrons do not share it (section 10), but its **same-sign** muon pairs, where ALEPH claims no
+excess, rise against the simulation as the opposite-sign pairs do (section 11). If that common rise
+is real it is a property of muon pairs in general, and ALEPH's constant-ratio background
+under-predicts them at high mass. Amendment 0.28 pre-registers the test that sizes it (job
+`sscontrol-v1`), and amendment 0.27 sec. 6 the smooth background with a rising ratio (job
+`aprime-slsm-v1`). No number here says whether the excess is real.
 
 This note grades test **A'-ALEPH** (PLAN amendment 0.19 sec. 3, P1-P4, written before the input
 existed) and reports the toys of amendment 0.20 sec. 3 (rules written before any fit). Job
@@ -127,8 +130,8 @@ is: with a constant ratio, such a method gives 3.35 sigma calibrated.
   the paper does not explain the factor (amendments 0.20-0.23). Our test uses the figures' scale,
   which reproduces Heister's Z_Bi (2.48 against 2.63).
 - No look-elsewhere correction is applied; with one, the number would be lower.
-- Sections 3-7 and 9 assume, as Heister does, one mu mu / e mu ratio for all masses. Section 8
-  tests that.
+- Sections 3-7 and 9 assume, as Heister does, one mu mu / e mu ratio for all masses. Sections 8,
+  10 and 11 test that.
 
 ## 7. Calibration toys of amendment 0.19 sec. 4 (job `aprime-toys-v1`, graded 2026-11-20)
 
@@ -249,9 +252,9 @@ Heister states that the lepton identification efficiencies do not depend on the 
 5-50 GeV, and that in ALEPH's simulation the muon pairs agree with the e mu pairs "within their
 errors" (his Fig. 4). Real sources of a rise exist (hadrons faking muons more often at high
 momentum; same-flavour pairs from virtual photons radiated in Z -> q qbar, which give e e and
-mu mu but no e mu). Amendment 0.25 pre-registers two blind readings that tell these apart:
-ALEPH's own simulation (Fig. 4) and ALEPH's di-electrons, against the same e mu template.
-Amendments 0.26 sec. 8 and 0.27 add the same-sign muon pairs.
+mu mu but no e mu). Amendment 0.25 pre-registered two blind readings that tell these apart:
+ALEPH's own simulation (Fig. 4) and ALEPH's di-electrons, against the same e mu template (graded in
+section 10). Amendments 0.26 sec. 8 and 0.27 add the same-sign muon pairs (section 11).
 
 ### 8e. Limits of section 8
 
@@ -348,3 +351,118 @@ weaker than, the joint fit.
 The same reading limits as section 6. A log-polynomial is one family of smooth shapes (par2 and
 par4 shown). The toy truth is fitted to the reading. Toy-calibrated values beyond 3 sigma rest on
 few toys (9d.1). No look-elsewhere correction is applied; with one, every number would be lower.
+
+## 10. Does ALEPH's simulation, or do its di-electrons, show the rise? (amendments 0.25-0.26, job `apcross-v1`, graded 2026-11-20)
+
+Job `apcross-v1` (python:3.12, stats/apcross_m0z.py 0.1.0 on stats/aprime_cross.py 0.1.0
+unchanged, 54 s; unit tests passed). Inputs: the Fig. 5 reading, the blind reading of Heister's
+Fig. 4 (ALEPH simulation only: opposite-sign mu mu against e mu, `data/aleph-mc4.json`) and of his
+di-electron spectrum (Fig. 25, 243 pairs in 15-50 GeV, `data/aleph-ee25.json`). Model "bb", ratio
+r exp(b (x - 30.40)), 15-50 GeV, zero signal unless stated. Raw outputs, unedited:
+[analysis/results/apcross/](analysis/results/apcross/) (`apcross_m0z.json`, `aprime_cross.json`,
+`run.txt`, `tests.txt`, `fetch.txt`, `compile.txt`, `sha256.txt`, `job.json`, and our grades
+`grades-apcross.json`).
+
+### 10a. Slopes (per GeV)
+
+| spectrum against the e mu template | b | 1 sigma | Z_slope |
+|---|---|---|---|
+| data mu mu (Fig. 5) | 0.0266 | 0.0118 | 2.26 |
+| simulation mu mu (Fig. 4), empty bins -> 0 | -0.0048 | 0.0123 | -0.39 |
+| simulation mu mu, empty bins -> e mu value | -0.0007 | 0.0120 | -0.06 |
+| data e e (Fig. 25) | -0.0080 | 0.0141 | -0.57 |
+
+### 10b. Grades (amendment 0.25 sec. 3 thresholds; fills of amendment 0.26 sec. 4)
+
+| | statement | prior (0.25 / after reading) | result | grade |
+|---|---|---|---|---|
+| C0 | closure of aprime_cross | 95 % | 2.664 / 1.621 / 0.0266 / 2.256 | **PASS** |
+| M0 | every simulation value readable (as written) | - | four empty bins at 46-49 GeV | **FAIL** |
+| M1 | **main**: b_MC >= 0.0133 | 35 % / 10 % | -0.0048 (zero), -0.0007 (other) | **FAIL** (both fills) |
+| M2 | abs(b_data - b_MC) / sigma < 2 | 60 % / 60 % | 1.84 (zero), 1.63 (other) | **PASS** (both) |
+| M3 | Z0(bb) with b fixed at b_MC below 2.0 | 35 % / 10 % | 2.92 (zero), 2.70 (other) | **FAIL** (both) |
+| E0 | every e e count readable | 85 % | 243 pairs, all readable | **PASS** |
+| E1 | **main**: e e rise, b_ee > 0 and Z >= 2.0 | 40 % / 10 % | -0.0080, Z -0.57 | **FAIL** |
+| E2 | abs(b_data - b_ee) / sigma < 2 | 65 % / 60 % | 1.89 | **PASS** |
+
+No grade depends on the empty-bin fill. Expectations met: all six written after the readings were
+seen (amendment 0.26 sec. 5); of the amendment 0.25 priors, M2, E0, E2 (above 50 %) were met, and
+M1, M3, E1 (35-40 %) did not happen.
+
+Information: with the signal floated the data's slope falls to b = 0.0120 (Z 0.79) and the
+di-electrons' to -0.0282 (Z -1.58). The di-electron excess at ALEPH's e e mass is 9.6 events with a
+constant ratio (Z0 1.37), against 23.2 expected from the muon excess if electrons and muons
+coupled alike (Heister's own e e fit: 8.0 +- 4.5).
+
+### 10c. Meaning (amendment 0.26 sec. 6, written before the job ran), applied
+
+**M1 FAIL**: *ALEPH's own simulation does not predict the rise. The constant ratio ALEPH assumed is
+what its simulation supports, so the slope result of section 8 (2.66 -> 1.62) is not a
+simulation-backed background correction; it is a feature of the muon data.* Adopted. The clause
+that followed ("then 2.66 stays our best number for the excess in ALEPH's own frame") was written
+before section 9 existed; section 9 replaced 2.66 by 3.1-3.4 (constant ratio), so that clause is
+**not** adopted. **E1 FAIL with E2 PASS**: *the di-electrons cannot tell.* Adopted: their slope is
+flat, but it differs from the muons' by 1.89 sigma, short of 2.
+
+In plain words: neither ALEPH's simulation nor its di-electrons rise, and the muon data do; but
+the simulation and di-electron samples are too small for either difference to reach 2 sigma.
+M2 PASS means the simulation does not contradict the data's slope either.
+
+## 11. Do same-sign muon pairs rise against simulation too? (amendments 0.26 sec. 8 and 0.27, job `dmcratio-v1`, graded 2026-11-20)
+
+Job `dmcratio-v1` (python:3.12, stats/dmcratio.py 0.1.0 on aprime_cross 0.1.0 unchanged, 55 s;
+unit tests passed). Inputs: the blind readings of Heister's Fig. 21 (opposite- and same-sign muon
+pairs, each against ALEPH's stacked simulation, log axis; `data/aleph-dmc21.json`) and Fig. 3 (e mu
+data against simulation; `data/aleph-emu3.json`). Each spectrum: data against simulation used as
+pseudo-counts at the data's size, model "bb", ratio r exp(b (x - 30.40)), 15-50 GeV, zero signal.
+Twenty simulation values lie below the bottom of Fig. 21's log axis; amendment 0.27 fixed, before
+any fit, two fills (OFF -> 0, secondary grades; OFF -> 0.29, sensitivity). Raw outputs, unedited:
+[analysis/results/dmcratio/](analysis/results/dmcratio/) (`dmcratio.json`, `run.txt`, `tests.txt`,
+`fetch.txt`, `compile.txt`, `sha256.txt`, `job.json`, and our grades `grades-dmcratio.json`).
+
+### 11a. Slopes against ALEPH's simulation (per GeV)
+
+| spectrum | OFF -> 0: b | Z | OFF -> 0.29: b | Z | data / simulation, 15-25 -> 25-50 GeV (OFF -> 0) |
+|---|---|---|---|---|---|
+| opposite-sign mu mu | 0.0280 +- 0.0134 | 2.10 | 0.0218 +- 0.0130 | 1.68 | 1.017 -> 1.355 |
+| same-sign mu mu | 0.0409 +- 0.0184 | 2.25 | 0.0238 +- 0.0170 | 1.41 | 0.953 -> 1.324 |
+| e mu | 0.0001 +- 0.0111 | 0.01 | same | same | 1.058 -> 0.939 |
+| pull OS - SS | -0.57 | | -0.09 | | |
+
+### 11b. Grades (amendment 0.26 sec. 8 thresholds; fills of amendment 0.27 sec. 4)
+
+| | statement | prior | OFF -> 0 | OFF -> 0.29 | grade |
+|---|---|---|---|---|---|
+| G0 | every value readable (as written) | 75 % | - | - | **FAIL** (20 hidden values) |
+| G1 | Fig. 3 data within 0.6 of Fig. 5's e mu in >= 30 of 35 bins | 70 % | 35 of 35 | | **PASS** |
+| D1 | opposite-sign rise: b > 0 and Z >= 2.0 | 50 % (0.26) / 70 % (0.27) | PASS (2.10) | FAIL (1.68) | **reading-dependent** |
+| D2 | e mu follow simulation: abs(Z) < 2.0 | 75 % | PASS | PASS | **PASS** |
+| S1 | **main**: same-sign share the rise: b > 0, Z >= 2.0, pull < 2 | 25 % / 40 % | PASS (2.25, -0.57) | FAIL (1.41) | **reading-dependent** |
+| S2 | opposite-sign only: Z_SS < 1.0 and pull >= 2.0 | 30 % / 15 % | FAIL | FAIL | **FAIL** |
+
+Information: opposite-sign minus e mu slope 0.0280 (pull 1.61; 0.0218, pull 1.27 with OFF ->
+0.29). Opposite-sign slope with ALEPH's signal floated: b = 0.0192, Z 1.13 (OFF -> 0).
+
+### 11c. Meaning (amendment 0.26 sec. 8, written before the readings), applied
+
+*S1 PASS: the rise is a muon-identification or fake-muon effect that ALEPH's simulation does not
+model.* S1 passes only with the hidden values at zero, so this meaning is **not adopted as a
+result**. *S2 PASS: the rise is in opposite-sign pairs only.* S2 fails under both fills, so there
+is **no sign** that the rise belongs to opposite-sign pairs alone.
+
+What holds under both fills, stated as observations on graded outputs: the same-sign pairs, where
+ALEPH claims no excess, rise against the simulation with the same slope as the opposite-sign pairs
+(pulls -0.57 and -0.09), and the e mu pairs do not rise. What does not hold under both: whether
+either rise alone reaches 2 sigma. The hidden values matter because a few single events above
+38 GeV sit in bins whose simulation is drawn below the axis. Amendment 0.28 removes them (a window
+where every value is readable, 15-38 GeV), combines both charges, and uses the same-sign pairs as a
+control sample to constrain the ratio's slope under the excess (job `sscontrol-v1`, W0-W5).
+
+### 11d. Limits of sections 10-11
+
+Readings by AI agents of published figures. ALEPH's simulation histograms are normalised; used as
+pseudo-counts at the data's size, their noise is overstated if the simulation sample is larger
+than the data, which makes every slope here less significant than it would be with the true
+simulation size. A log-linear ratio is one shape. The fills, the window of amendment 0.28 and the
+priors marked "after reading" were written after the readings were seen. No look-elsewhere
+correction.

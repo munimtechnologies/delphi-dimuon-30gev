@@ -1,0 +1,10 @@
+python 3.12.15
+mv2 apcross_m0z 0.1.0 on mv2 aprime_cross 0.1.0
+CLOSURE: PASS got {"Z0_const": 2.6640384798147467, "Z0_slope": 1.621431986648286, "b_mu0": 0.026633969098712747, "Z_slope": 2.256379371992658}
+DATA SLOPE: b=0.02663 [0.0148, 0.0384] sigma_b=0.0118 Z=2.256 (25 s)
+MC: {"M0": "FAIL (unreadable value in 46-47)"}
+EE: {"E0": "PASS", "E1": "FAIL", "E2_pull": 1.885907891013061, "E2": "PASS"}
+APCROSS: C0 PASS Z0c=2.664 Z0s=1.621 b=0.0266 Zs=2.256 sb=0.0118 | MC M0 FAIL (unreadable value in 46-47) | EE sum=243 b=-0.0080 sb=0.0141 Zs=-0.57 q1525=0.800 q2550=0.836 pull=1.8859 Nc=9.59 Ns=15.70 Z0c=1.37 Z0s=2.01 | E0 PASS E1 FAIL E2 PASS
+MC-zero: zero b=-0.0048 sb=0.0123 Zs=-0.39 r1525=1.063 r2550=1.090 pull=1.844 Z0fix=2.916 M1 FAIL M2 PASS M3 FAIL (52 s)
+MC-other: other b=-0.0007 sb=0.0120 Zs=-0.06 r1525=1.063 r2550=1.114 pull=1.626 Z0fix=2.702 M1 FAIL M2 PASS M3 FAIL (54 s)
+APCROSS2: C0 PASS | M0(0.25) FAIL (unreadable value in 46-47) | Mz b=-0.0048 sb=0.0123 Zs=-0.39 r1525=1.063 r2550=1.090 pull=1.844 Z0fix=2.916 M1 FAIL M2 PASS M3 FAIL | Mf b=-0.0007 sb=0.0120 Zs=-0.06 r1525=1.063 r2550=1.114 pull=1.626 Z0fix=2.702 M1 FAIL M2 PASS M3 FAIL | agree M1 FAIL M2 PASS M3 FAIL | EE E0 PASS E1 FAIL E2 PASS b=-0.0080 sb=0.0141 Zs=-0.57 pull=1.886 | DEG data Zs=0.79 mu=0.813/0.655 ee Zs=-1.58 | UNIV ee_expected=23.21 ee_fitted=9.59

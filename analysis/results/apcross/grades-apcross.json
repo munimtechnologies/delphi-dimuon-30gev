@@ -1,0 +1,29 @@
+{
+ "job": "apcross-v1",
+ "rules": "PLAN-amendment-0.25.md sec. 3 (thresholds) and PLAN-amendment-0.26.md sec. 3-4 (empty-bin fills, written before any fit)",
+ "graded": "2026-11-20",
+ "graded_by": "AI agents working in MV2's name; not checked by a physicist",
+ "source_files": ["analysis/results/apcross/apcross_m0z.json", "analysis/results/apcross/aprime_cross.json", "analysis/results/apcross/run.txt"],
+ "grades": {
+  "C0": {"grade": "PASS", "prior": 0.95, "result": "Z0 const 2.664, Z0 slope 1.621, b 0.02663, Z_slope 2.256"},
+  "M0_as_written": {"grade": "FAIL", "result": "unreadable simulated mu mu values in 46-49 GeV (no marker drawn)"},
+  "M1z": {"grade": "FAIL", "prior_after_reading": 0.10, "prior_0.25": 0.35, "result": "b_MC -0.0048 +- 0.0123 per GeV < 0.0133"},
+  "M2z": {"grade": "PASS", "prior_after_reading": 0.60, "prior_0.25": 0.60, "result": "pull (b_data - b_MC) 1.844 < 2"},
+  "M3z": {"grade": "FAIL", "prior_after_reading": 0.10, "prior_0.25": 0.35, "result": "Z0(bb) with slope fixed at b_MC 2.916, not below 2.0"},
+  "M1f": {"grade": "FAIL", "result": "b_MC -0.0007 +- 0.0120"},
+  "M2f": {"grade": "PASS", "result": "pull 1.626"},
+  "M3f": {"grade": "FAIL", "result": "Z0 2.702"},
+  "agreement": "M1 FAIL, M2 PASS, M3 FAIL under both fills (not reading-dependent)",
+  "E0": {"grade": "PASS", "prior": 0.85, "result": "243 di-electron pairs in 15-50 GeV, all readable"},
+  "E1": {"grade": "FAIL", "prior_after_reading": 0.10, "prior_0.25": 0.40, "result": "b_ee -0.0080 +- 0.0141, Z_slope -0.57"},
+  "E2": {"grade": "PASS", "prior_after_reading": 0.60, "prior_0.25": 0.65, "result": "pull (b_data - b_ee) 1.886 < 2"}
+ },
+ "information": {
+  "data_slope_signal_floated": {"b": 0.0120, "Z": 0.79, "mu_hat_const": 0.813, "mu_hat_slope": 0.655},
+  "ee_slope_signal_floated": {"b": -0.0282, "Z": -1.58},
+  "ee_signal_events": {"constant_ratio": 9.59, "free_slope": 15.70, "Z0_const": 1.37, "Z0_slope": 2.01},
+  "ee_expected_from_mumu_under_universality": 23.21
+ },
+ "headline": "ALEPH's own simulation predicts no rise of the mu mu / e mu ratio (b_MC about -0.005 +- 0.012 per GeV) and ALEPH's di-electrons do not rise against the e mu template (b_ee -0.008 +- 0.014), while the muon data rise (0.027 +- 0.012). Neither difference reaches 2 sigma (pulls 1.84 and 1.89), so the simulation and the electrons can neither confirm nor rule out the data's rise; with the simulation's slope the excess is 2.7-2.9 sigma in the conservative bin-by-bin frame.",
+ "meaning_applied": "Amendment 0.26 sec. 6, 'M1z FAIL': ALEPH's simulation does not predict the rise; the 2.66 -> 1.62 slope result is a feature of the muon data, not a simulation-backed background correction. Its last clause ('2.66 stays our best number') is superseded by NOTE-aprime 0.4 sec. 9 (3.1-3.4 sigma with the smooth background) and is not adopted. 'E1 FAIL with E2 PASS': the di-electrons cannot tell."
+}

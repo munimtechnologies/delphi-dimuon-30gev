@@ -1,0 +1,29 @@
+test_lnl_identical (test_aprime_cross.TestAgainstPublishedModules.test_lnl_identical) ... ok
+test_signal_template_identical (test_aprime_cross.TestAgainstPublishedModules.test_signal_template_identical) ... ok
+test_no_slope_gives_zero (test_aprime_cross.TestFits.test_no_slope_gives_zero) ... ok
+test_signal_recovered_constant_ratio (test_aprime_cross.TestFits.test_signal_recovered_constant_ratio) ... ok
+test_slope_recovered (test_aprime_cross.TestFits.test_slope_recovered) ... ok
+test_mc_flat_fails_m1 (test_aprime_cross.TestGrades.test_mc_flat_fails_m1) ... ok
+test_mc_slope_grades (test_aprime_cross.TestGrades.test_mc_slope_grades) ... ok
+test_misaligned_ee_fails_gate (test_aprime_cross.TestGrades.test_misaligned_ee_fails_gate) ... ok
+test_unreadable_bin_fails_gate (test_aprime_cross.TestGrades.test_unreadable_bin_fails_gate) ... ok
+test_fixed_slope_is_kept (test_aprime_cross.TestPieces.test_fixed_slope_is_kept) ... ok
+test_merge_and_common_edges (test_aprime_cross.TestPieces.test_merge_and_common_edges) ... ok
+test_t_hat_stationary (test_aprime_cross.TestPieces.test_t_hat_stationary) ... ok
+test_template_sums_in_norm_range (test_aprime_cross.TestPieces.test_template_sums_in_norm_range) ... ok
+test_nm_and_off (test_dmcratio.TestFill.test_nm_and_off) ... ok
+test_unmarked_null_raises (test_dmcratio.TestFill.test_unmarked_null_raises) ... ok
+test_g0 (test_dmcratio.TestGates.test_g0) ... ok
+test_g1 (test_dmcratio.TestGates.test_g1) ... ok
+test_window (test_dmcratio.TestGates.test_window) ... ok
+test_agreement (test_dmcratio.TestGrades.test_agreement) ... ok
+test_no_interval (test_dmcratio.TestGrades.test_no_interval) ... ok
+test_os_only (test_dmcratio.TestGrades.test_os_only) ... ok
+test_ratio_sums (test_dmcratio.TestGrades.test_ratio_sums) ... ok
+test_shared_rise (test_dmcratio.TestGrades.test_shared_rise) ... ok
+test_slope_sign_on_made_up_spectra (test_dmcratio.TestWithAprimeCross.test_slope_sign_on_made_up_spectra) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 7.029s
+
+OK

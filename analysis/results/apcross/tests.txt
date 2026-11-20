@@ -1,0 +1,25 @@
+test_lnl_identical (test_aprime_cross.TestAgainstPublishedModules.test_lnl_identical) ... ok
+test_signal_template_identical (test_aprime_cross.TestAgainstPublishedModules.test_signal_template_identical) ... ok
+test_no_slope_gives_zero (test_aprime_cross.TestFits.test_no_slope_gives_zero) ... ok
+test_signal_recovered_constant_ratio (test_aprime_cross.TestFits.test_signal_recovered_constant_ratio) ... ok
+test_slope_recovered (test_aprime_cross.TestFits.test_slope_recovered) ... ok
+test_mc_flat_fails_m1 (test_aprime_cross.TestGrades.test_mc_flat_fails_m1) ... ok
+test_mc_slope_grades (test_aprime_cross.TestGrades.test_mc_slope_grades) ... ok
+test_misaligned_ee_fails_gate (test_aprime_cross.TestGrades.test_misaligned_ee_fails_gate) ... ok
+test_unreadable_bin_fails_gate (test_aprime_cross.TestGrades.test_unreadable_bin_fails_gate) ... ok
+test_fixed_slope_is_kept (test_aprime_cross.TestPieces.test_fixed_slope_is_kept) ... ok
+test_merge_and_common_edges (test_aprime_cross.TestPieces.test_merge_and_common_edges) ... ok
+test_t_hat_stationary (test_aprime_cross.TestPieces.test_t_hat_stationary) ... ok
+test_template_sums_in_norm_range (test_aprime_cross.TestPieces.test_template_sums_in_norm_range) ... ok
+test_both_null_and_unknown_fill_raise (test_apcross_m0z.TestFill.test_both_null_and_unknown_fill_raise) ... ok
+test_emu_null_filled_from_mumu (test_apcross_m0z.TestFill.test_emu_null_filled_from_mumu) ... ok
+test_other (test_apcross_m0z.TestFill.test_other) ... ok
+test_zero (test_apcross_m0z.TestFill.test_zero) ... ok
+test_agreement (test_apcross_m0z.TestHelpers.test_agreement) ... ok
+test_degeneracy (test_apcross_m0z.TestHelpers.test_degeneracy) ... ok
+test_zero_fill_passes_gate_where_raw_fails (test_apcross_m0z.TestWithAprimeCross.test_zero_fill_passes_gate_where_raw_fails) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 5.936s
+
+OK

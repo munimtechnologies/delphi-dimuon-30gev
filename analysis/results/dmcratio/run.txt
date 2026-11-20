@@ -1,0 +1,8 @@
+python 3.12.15
+mv2 dmcratio 0.1.0 on mv2 aprime_cross 0.1.0
+C0 PASS {"Z0_const": 2.6640384798147467, "Z0_slope": 1.621431986648286, "b_mu0": 0.026633969098712747, "Z_slope": 2.256379371992658} (25 s)
+G0 as written: FAIL (os_mc 8 unreadable, ss_mc 12 unreadable) | G1 PASS (35 of 35 within 0.6, max diff 0.20) | OS data = Fig. 5 n in 35 of 35 bins
+EMU: emu b=0.0001 sb=0.0111 Zs=0.01 r=1.058->0.939 (27 s)
+FILL zero: OS b=0.0280 sb=0.0134 Zs=2.10 r=1.017->1.355 | SS b=0.0409 sb=0.0184 Zs=2.25 r=0.953->1.324 | pull OS-SS -0.565 | D1 PASS D2 PASS S1 PASS S2 FAIL (29 s)
+FILL ceil: OS b=0.0218 sb=0.0130 Zs=1.68 r=1.017->1.315 | SS b=0.0238 sb=0.0170 Zs=1.41 r=0.953->1.210 | pull OS-SS -0.090 | D1 FAIL D2 PASS S1 FAIL S2 FAIL (32 s)
+DMCRATIO: C0 PASS | G0(as written) FAIL | G1 PASS 35/35 | emu b=0.0001 sb=0.0111 Zs=0.01 r=1.058->0.939 | z: OS b=0.0280 sb=0.0134 Zs=2.10 r=1.017->1.355 | SS b=0.0409 sb=0.0184 Zs=2.25 r=0.953->1.324 | pull -0.565 | c: OS Zs=1.68 SS Zs=1.41 pull -0.090 | agree D1 reading-dependent (zero: PASS, ceil: FAIL) D2 PASS S1 reading-dependent (zero: PASS, ceil: FAIL) S2 FAIL | OS-emu 0.0280 pull 1.606 | OS sig-floated b=0.0192 Zs=1.13 mu 0.683/0.411 Z0 1.95/0.82

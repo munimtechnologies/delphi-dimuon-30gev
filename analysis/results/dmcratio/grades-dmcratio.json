@@ -1,0 +1,27 @@
+{
+ "job": "dmcratio-v1",
+ "rules": "PLAN-amendment-0.26.md sec. 8 (tests and thresholds) and PLAN-amendment-0.27.md sec. 4 (OFF fills, written after the readings and before any fit)",
+ "graded": "2026-11-20",
+ "graded_by": "AI agents working in MV2's name; not checked by a physicist",
+ "source_files": ["analysis/results/dmcratio/dmcratio.json", "analysis/results/dmcratio/run.txt"],
+ "grades": {
+  "C0": {"grade": "PASS", "result": "aprime_cross closure 2.664 / 1.621 / 0.02663 / 2.256"},
+  "G0_as_written": {"grade": "FAIL", "prior": 0.75, "result": "20 simulation values below the log axis (OS 8, SS 12)"},
+  "G1": {"grade": "PASS", "prior": 0.70, "result": "35 of 35 Fig. 3 data bins within 0.6 of Fig. 5's e mu reading (max 0.2)"},
+  "D1z": {"grade": "PASS", "prior_after_reading": 0.70, "result": "b_OS 0.0280 +- 0.0134, Z 2.10"},
+  "D1c": {"grade": "FAIL", "result": "b_OS 0.0218 +- 0.0130, Z 1.68"},
+  "D2": {"grade": "PASS", "prior_after_reading": 0.75, "result": "b_emu 0.0001 +- 0.0111, Z 0.01 (no OFF value; same under both fills)"},
+  "S1z": {"grade": "PASS", "prior_after_reading": 0.40, "result": "b_SS 0.0409 +- 0.0184, Z 2.25, pull OS-SS -0.57"},
+  "S1c": {"grade": "FAIL", "result": "b_SS 0.0238 +- 0.0170, Z 1.41, pull OS-SS -0.09"},
+  "S2z": {"grade": "FAIL", "prior_after_reading": 0.15, "result": "Z_SS 2.25 not < 1; pull -0.57"},
+  "S2c": {"grade": "FAIL", "result": "Z_SS 1.41 not < 1; pull -0.09"},
+  "agreement": {"D1": "reading-dependent (zero PASS, ceil FAIL)", "D2": "PASS", "S1": "reading-dependent (zero PASS, ceil FAIL)", "S2": "FAIL"}
+ },
+ "information": {
+  "ratio_sums_zero_fill": {"OS": "1.017 -> 1.355", "SS": "0.953 -> 1.324", "emu": "1.058 -> 0.939"},
+  "os_minus_emu": {"zero": {"diff": 0.0280, "pull": 1.61}, "ceil": {"diff": 0.0218, "pull": 1.27}},
+  "os_slope_signal_floated_zero_fill": {"b": 0.0192, "Z": 1.13, "mu_hat_const": 0.683, "mu_hat_slope": 0.411, "Z0_const": 1.95, "Z0_slope": 0.82}
+ },
+ "headline": "Against ALEPH's own simulation, same-sign muon pairs rise with mass with the same slope as opposite-sign pairs under both fills (pulls -0.57 and -0.09), while e mu pairs follow the simulation (Z 0.01). The rise is not opposite-sign only (S2 fails under both fills). Whether each rise alone reaches 2 sigma depends on the 20 simulation values hidden below the log axis (Z 2.10 / 2.25 with OFF -> 0, 1.68 / 1.41 with OFF -> 0.29), so D1 and S1 are reading-dependent.",
+ "meaning_applied": "Amendment 0.26 sec. 8: S1 PASS would mean a muon-identification or fake-muon effect that ALEPH's simulation does not model. S1 is reading-dependent, so this meaning is NOT adopted as a result; it holds under the zero fill only. S2 FAIL under both fills: there is no sign that the rise is in opposite-sign pairs only. Amendment 0.28 removes the fill dependence (window where every value is readable) and turns the same-sign control into a constraint on the excess."
+}
