@@ -1,15 +1,17 @@
-# NOTE-aprime 0.2: ALEPH's 30 GeV excess with its background template's own counting error
+# NOTE-aprime 0.3: ALEPH's 30 GeV excess with its background template's own counting error
 
 MV2 of Munim, Inc. (mv2@munimtech.com). 2026-11-20. Made with AI agents working in MV2's name; **not
 yet checked by a physicist**. Text CC BY 4.0; code Apache-2.0. Not a result of the ALEPH
 Collaboration.
 
-Version 0.2 adds section 7 (the calibration toys of amendment 0.19 sec. 4, job `aprime-toys-v1`,
-graded) and changes what section 6 says about the 35-fold inflation. **Status of the headline:**
-the 2.66 sigma of section 3 is the figure of a method that ignores the background's smoothness, so
-it is conservative. Amendment 0.24 pre-registers the test with a smooth background that keeps the
-template's counting error (job `aprime-smooth-v1`, queued). Until it is graded, 2.66 should be read
-as a lower figure, not as the significance.
+Version 0.3 adds section 8 (job `aprime-ext-v1`, amendment 0.23, graded: with a mu mu / e mu
+ratio allowed to change with mass, the excess falls from 2.66 to 1.62 sigma). Version 0.2 added
+section 7 (the calibration toys of amendment 0.19 sec. 4, job `aprime-toys-v1`) and changed what
+section 6 says about the 35-fold inflation. **Status of the headline:** the 2.66 sigma of section 3
+is the figure of a method that ignores the background's smoothness, so in that respect it is
+conservative; amendment 0.24 (job `aprime-smooth-v1`, still queued) decides that. Section 8 shows
+a second assumption, a mass-independent mu mu / e mu ratio, that the excess leans on in the other
+direction. Amendment 0.25 pre-registers the test of where the rising ratio comes from.
 
 This note grades test **A'-ALEPH** (PLAN amendment 0.19 sec. 3, P1-P4, written before the input
 existed) and reports the toys of amendment 0.20 sec. 3 (rules written before any fit). Job
@@ -118,6 +120,7 @@ below 3 sigma local is **not yet decided**; amendment 0.24 decides it.
   the paper does not explain the factor (amendments 0.20-0.23). Our test uses the figures' scale,
   which reproduces Heister's Z_Bi (2.48 against 2.63).
 - No look-elsewhere correction is applied; with one, the number would be lower.
+- Sections 3-7 assume, as Heister does, one mu mu / e mu ratio for all masses. Section 8 tests that.
 
 ## 7. Calibration toys of amendment 0.19 sec. 4 (job `aprime-toys-v1`, graded 2026-11-20)
 
@@ -166,3 +169,83 @@ for Heister's method is confirmed and sharpened. With a kernel near 1 GeV the in
 So the gap between Heister's 5.35 and our 2.66 cannot be put down mostly to template noise until a
 method that uses smoothness and keeps the template's error has been calibrated on the reading
 itself. That is amendment 0.24.
+
+## 8. A mass-dependent mu mu / e mu ratio (amendment 0.23, job `aprime-ext-v1`, graded 2026-11-20)
+
+Job `aprime-ext-v1` (python:3.12, stats/aprime_ext.py 0.1.0, 80 s; 10 of 10 unit tests on made-up
+inputs passed; emuframe 0.1.0 fetched, blob d55c900f checked). Inputs: the Fig. 5 reading
+(15-50 GeV) and the ALEPHLOW2 reading (5-15 GeV: 421 muon pairs, 440.4 scaled e mu). The ratio is
+r_i = r exp(b (x_i - 30.40 GeV)), b free in [-0.2, 0.2] per GeV. Raw outputs, unedited:
+[analysis/results/aprime-ext/](analysis/results/aprime-ext/) (`aprime_ext.json`, `run.txt`,
+`tests.txt`, `fetch.txt`, `sha256.txt`, `job.json`, and our grades `grades-aprime-ext.json`).
+
+### 8a. Every fit
+
+| range | ratio | Z0 bb | Z0 exact | mu_hat bb (events) | b at mu = 0, bb (per GeV) |
+|---|---|---|---|---|---|
+| 15-50 GeV | constant | **2.664** | 4.178 | 0.813 (26.3) | - |
+| 15-50 GeV | log-linear | **1.621** | 2.997 | 0.655 (21.2) | 0.0266 |
+| 5-50 GeV | constant | 3.309 | 4.932 | 0.930 (30.0) | - |
+| 5-50 GeV | log-linear | **1.352** | 2.614 | 0.517 (16.7) | 0.0249 |
+
+| slope at mu = 0, signed Z (1 dof) | bb | exact |
+|---|---|---|
+| 15-50 GeV | 2.256 | 2.934 |
+| 5-50 GeV | 3.961 | 4.991 |
+
+Split test (bb, mu = 0, one ratio below 15 GeV and another above): r = 0.5085 (5-15 GeV) against
+0.6399 (15-50 GeV), Z = 2.55 (the by-hand 2.5 of amendment 0.23 was not a prediction for it).
+
+### 8b. Grades (amendment 0.23 sec. 3, thresholds unchanged)
+
+| | statement | prior | result | grade |
+|---|---|---|---|---|
+| X0 | gate: constant ratio, 15-50 GeV, reproduces Z0(bb) 2.664 and Z0(exact) 4.178 within 0.005 | 90 % | 2.664 / 4.178 | **PASS** |
+| X1 | **main**: Z0(bb), free slope, 15-50 GeV, below 3.0 | 90 % | **1.621** | **PASS** |
+| X2 | abs(Z_slope(bb, 15-50 GeV, mu = 0)) < 2.0 | 50 % | 2.256 | **FAIL** |
+| X3 | Z0(bb), free slope, 5-50 GeV, below 3.0 | 85 % | 1.352 | **PASS** |
+
+Expectations met: 3 of the 3 written with a prior above 50 % (X2's 50 % was no expectation).
+
+### 8c. Meaning (written in amendment 0.23 before the job ran), applied
+
+X1 PASS with Z0(bb) much lower than 2.66, and X2 FAIL. Amendment 0.23 wrote for this case:
+*in ALEPH's own frame, the excess leans on the assumption that the mu mu / e mu ratio does not
+change with mass, and the data themselves show that it does. The most economical reading is then
+a lepton-flavour-dependent background shape, not a particle.* We apply it as written, with the
+qualifications of 8d. As before, nothing here says whether the excess is real; only data ALEPH did
+not use can say that.
+
+### 8d. Observations made after seeing the output (not tests)
+
+1. **In 15-50 GeV alone, a slope and a bump are almost interchangeable.** With the signal floated,
+   adding the slope gains only 2 Delta lnL = 0.62 (bb; Z 0.79) and 0.13 (exact), from the
+   `lnL_best` values in `aprime_ext.json`. Slope and signal together against neither give
+   2 Delta lnL = 7.72 (bb, 2 dof). So the 15-50 GeV reading says "the muon pairs rise above the
+   e mu template towards 30 GeV and beyond", but on its own it cannot say whether as a narrow
+   peak or as a broad rise. Including 5-15 GeV, the slope is preferred even with the signal
+   floated (2 Delta lnL 6.58, bb), but below 15 GeV other things change the ratio too: the muon
+   and electron momentum cuts differ (2.5 against 2 GeV), and Heister notes that ALEPH's
+   simulation puts Upsilon resonances into the muon pairs near 10 GeV.
+2. **Plain counts from the reading show the same thing.** Muon pairs over scaled e mu: 15-25 GeV
+   257 / 238.7 = 1.08; 25-29 GeV 45 / 29.0 = 1.55; 29-32 GeV 33 / 15.4 = 2.14; 32-50 GeV
+   27 / 17.8 = 1.52. Outside the signal window, above 25 GeV, the muon pairs exceed the template by
+   about 1.5 on both sides of the peak (72 against 46.8). Scaled to its neighbours rather than to
+   the 15-50 GeV average (1.20), the background under 29-32 GeV would be about 23.7, and the excess
+   about 9 events instead of 17.6.
+3. **Size of the slope.** b = 0.0266 per GeV means the ratio rises by a factor of 1.30 every
+   10 GeV; at 30.4 GeV it is 0.80, against Heister's constant 0.532 (= 1 / (2 x 0.94)).
+
+**The question this raises, which a physicist would ask first:** is the rising ratio expected?
+Heister states that the lepton identification efficiencies do not depend on the pair mass in
+5-50 GeV, and that in ALEPH's simulation the muon pairs agree with the e mu pairs "within their
+errors" (his Fig. 4). Real sources of a rise exist (hadrons faking muons more often at high
+momentum; same-flavour pairs from virtual photons radiated in Z -> q qbar, which give e e and
+mu mu but no e mu). Amendment 0.25 pre-registers two blind readings that tell these apart:
+ALEPH's own simulation (Fig. 4) and ALEPH's di-electrons, against the same e mu template.
+
+### 8e. Limits of section 8
+
+The same reading limits as section 6. A log-linear ratio is one shape among many. The 5-15 GeV
+bins come from a second reading of the same figure. The meaning in 8c was written before the job
+but after the binned ratios had been seen (amendment 0.23 says so). No look-elsewhere correction.

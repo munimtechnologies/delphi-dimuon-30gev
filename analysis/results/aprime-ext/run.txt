@@ -1,0 +1,14 @@
+emuframe blob d55c900fdb45aa9f8a6099a142079a510c3afdfa
+mv2 aprime_ext 0.1.0 with mv2 emuframe 0.1.0; 15-50: sum n 362, sum v 300.9; 5-15: sum n 421, sum v 440.4
+FIT 15-50 bb const: Z0=2.664 mu_hat=0.813 r_hat=0.5935 b_hat=0.0000 b_mu0=0.0000 dll_mu1=0.351 (0 s)
+FIT 15-50 exact const: Z0=4.178 mu_hat=0.960 r_hat=0.5851 b_hat=0.0000 b_mu0=0.0000 dll_mu1=0.020 (0 s)
+FIT 15-50 bb slope: Z0=1.621 mu_hat=0.655 r_hat=0.6688 b_hat=0.0120 b_mu0=0.0266 dll_mu1=0.829 (11 s)
+FIT 15-50 exact slope: Z0=2.997 mu_hat=0.893 r_hat=0.6146 b_hat=0.0048 b_mu0=0.0267 dll_mu1=0.102 (4 s)
+SLOPE 15-50: Z_slope_bb=2.256 Z_slope_exact=2.934
+FIT 5-50 bb const: Z0=3.309 mu_hat=0.930 r_hat=0.5401 b_hat=0.0000 b_mu0=0.0000 dll_mu1=0.054 (0 s)
+FIT 5-50 exact const: Z0=4.932 mu_hat=1.073 r_hat=0.5368 b_hat=0.0000 b_mu0=0.0000 dll_mu1=0.072 (0 s)
+FIT 5-50 bb slope: Z0=1.352 mu_hat=0.517 r_hat=0.7363 b_hat=0.0194 b_mu0=0.0249 dll_mu1=1.748 (14 s)
+FIT 5-50 exact slope: Z0=2.614 mu_hat=0.704 r_hat=0.7017 b_hat=0.0167 b_mu0=0.0247 dll_mu1=0.920 (5 s)
+SLOPE 5-50: Z_slope_bb=3.961 Z_slope_exact=4.991
+SPLIT: {"model": "bb", "cut": 15.0, "r_lo": 0.5084835742504872, "r_hi": 0.6399241990341036, "r_all": 0.5618365049124869, "n_lo": 421, "m_lo": 827.952, "n_hi": 362, "m_hi": 565.692, "Z_split": 2.5511773959544324}
+APEXT: X0 bb=2.664 ex=4.178 | 15-50 slope Z0bb=1.621 Z0ex=2.997 b=0.0266 muhat=0.655 Zslope=2.26 | 5-50 const Z0bb=3.309 Z0ex=4.932 | slope Z0bb=1.352 Z0ex=2.614 b=0.0249 muhat=0.517 Zslope=3.96 | split r_lo=0.5085 r_hi=0.6399 Z=2.55 | X0 PASS X1 PASS X2 FAIL X3 PASS

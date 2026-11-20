@@ -1,0 +1,15 @@
+test_const_profile_matches_emuframe (test_aprime_ext.TestFits.test_const_profile_matches_emuframe) ... ok
+test_signal_recovered_with_slope (test_aprime_ext.TestFits.test_signal_recovered_with_slope) ... ok
+test_slope_recovered_at_mu0 (test_aprime_ext.TestFits.test_slope_recovered_at_mu0) ... ok
+test_slope_z_zero_without_slope (test_aprime_ext.TestFits.test_slope_z_zero_without_slope) ... ok
+test_split_recovers_two_ratios (test_aprime_ext.TestFits.test_split_recovers_two_ratios) ... ok
+test_closure_gate (test_aprime_ext.TestGrades.test_closure_gate) ... ok
+test_combine_readings (test_aprime_ext.TestLikelihoodPieces.test_combine_readings) ... ok
+test_constant_ratio_matches_emuframe (test_aprime_ext.TestLikelihoodPieces.test_constant_ratio_matches_emuframe) ... ok
+test_signal_tail_below_15_is_small_and_positive (test_aprime_ext.TestLikelihoodPieces.test_signal_tail_below_15_is_small_and_positive) ... ok
+test_signal_template_matches_emuframe_on_15_50 (test_aprime_ext.TestLikelihoodPieces.test_signal_template_matches_emuframe_on_15_50) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 7.416s
+
+OK

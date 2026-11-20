@@ -1,0 +1,32 @@
+{
+ "job": "aprime-ext-v1",
+ "module": "stats/aprime_ext.py 0.1.0 (emuframe 0.1.0, blob d55c900f)",
+ "preregistration": "PLAN-amendment-0.23.md sec. 3",
+ "graded_in": "NOTE-aprime.md 0.3 sec. 8",
+ "graded_at": "2026-11-20",
+ "grades": {
+  "X0": {"statement": "constant ratio 15-50 GeV reproduces Z0(bb) 2.664 and Z0(exact) 4.178 within 0.005", "prior": 0.90, "result": "2.664 / 4.178", "grade": "PASS"},
+  "X1": {"statement": "Z0(bb), free slope, 15-50 GeV, below 3.0 (main)", "prior": 0.90, "result": 1.621, "grade": "PASS"},
+  "X2": {"statement": "abs(Z_slope(bb, 15-50 GeV, mu = 0)) < 2.0", "prior": 0.50, "result": 2.256, "grade": "FAIL"},
+  "X3": {"statement": "Z0(bb), free slope, 5-50 GeV, below 3.0", "prior": 0.85, "result": 1.352, "grade": "PASS"}
+ },
+ "headline_numbers": {
+  "Z0_bb_15_50_const": 2.664, "Z0_bb_15_50_slope": 1.621,
+  "Z0_exact_15_50_const": 4.178, "Z0_exact_15_50_slope": 2.997,
+  "Z0_bb_5_50_const": 3.309, "Z0_bb_5_50_slope": 1.352,
+  "Z0_exact_5_50_const": 4.932, "Z0_exact_5_50_slope": 2.614,
+  "b_mu0_bb_15_50_per_GeV": 0.0266, "Z_slope_bb_15_50": 2.256, "Z_slope_exact_15_50": 2.934,
+  "b_mu0_bb_5_50_per_GeV": 0.0249, "Z_slope_bb_5_50": 3.961, "Z_slope_exact_5_50": 4.991,
+  "split_r_5_15": 0.5085, "split_r_15_50": 0.6399, "split_Z": 2.551
+ },
+ "post_hoc_not_tests": {
+  "slope_with_signal_floated_2dlnL_bb_15_50": 0.623, "slope_with_signal_floated_Z_bb_15_50": 0.789,
+  "slope_with_signal_floated_2dlnL_exact_15_50": 0.133,
+  "slope_and_signal_vs_neither_2dlnL_bb_15_50": 7.720,
+  "slope_with_signal_floated_2dlnL_bb_5_50": 6.575,
+  "counts_n_over_v": {"15-25": [257, 238.7], "25-29": [45, 29.0], "29-32": [33, 15.4], "32-50": [27, 17.8]},
+  "source": "lnL_best / lnL_mu0 values in aprime_ext.json; counts from data/aleph-fig5.json"
+ },
+ "meaning_applied": "X1 PASS with Z0(bb) much lower than 2.66 and X2 FAIL: in ALEPH's own frame the excess leans on a mass-independent mu mu / e mu ratio, and the reading shows the ratio rising with mass (amendment 0.23 sec. 3, written before the job).",
+ "limits": "Blind AI reading of a published figure; log-linear ratio is one shape; no look-elsewhere correction; not checked by a physicist; made with AI agents."
+}
