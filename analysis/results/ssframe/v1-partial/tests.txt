@@ -1,0 +1,16 @@
+test_gradient (test_ssframe.TestConstrainedFit.test_gradient) ... ok
+test_limits (test_ssframe.TestConstrainedFit.test_limits) ... ok
+test_set_constraint (test_ssframe.TestConstrainedFit.test_set_constraint) ... ok
+test_clamp (test_ssframe.TestPure.test_clamp) ... ok
+test_gate_fails (test_ssframe.TestPure.test_gate_fails) ... ok
+test_gate_pass (test_ssframe.TestPure.test_gate_pass) ... ok
+test_grades (test_ssframe.TestPure.test_grades) ... ok
+test_lower_bound (test_ssframe.TestPure.test_lower_bound) ... ok
+test_prefix (test_ssframe.TestPure.test_prefix) ... ok
+test_too_few_toys (test_ssframe.TestPure.test_too_few_toys) ... ok
+test_z_from_count (test_ssframe.TestPure.test_z_from_count) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 43.146s
+
+OK

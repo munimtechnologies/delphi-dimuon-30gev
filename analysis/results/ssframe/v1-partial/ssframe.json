@@ -1,0 +1,112 @@
+{
+ "version": "mv2 ssframe 0.1.0",
+ "aprime_slsm": "mv2 aprime_slsm 0.1.0",
+ "aprime_smooth": "mv2 aprime_smooth 0.1.0",
+ "sscontrol": "mv2 sscontrol 0.1.0",
+ "dmcratio": "mv2 dmcratio 0.1.0",
+ "aprime_cross": "mv2 aprime_cross 0.1.0",
+ "emuframe": "mv2 emuframe 0.1.0",
+ "seed": 20261122,
+ "ntoys_requested": 6000,
+ "budget_s": 13000.0,
+ "min_toys": 1000,
+ "observed": {
+  "control": {
+   "dmc_closure": {
+    "b_os_zero": 0.028042226136997687,
+    "b_ss_zero": 0.04094099040998987,
+    "want": {
+     "b_os_zero": 0.028042226136997687,
+     "b_ss_zero": 0.04094099040998987
+    }
+   },
+   "dmc_closure_ok": true,
+   "window_hi": 38.0,
+   "window_ok": true,
+   "b_ctrl": 0.03451240557324002,
+   "sigma_ctrl": 0.022177302283724717,
+   "ss": {
+    "b_hat": 0.03873158526861547,
+    "sigma_b": 0.018716037139196902,
+    "Z_slope": 2.090088618023867,
+    "b_lo": 0.02012553191581991,
+    "b_hi": 0.05755760619421371
+   },
+   "emu": {
+    "b_hat": 0.0042191796953754464,
+    "sigma_b": 0.011897171528893065,
+    "Z_slope": 0.35472349530616776,
+    "b_lo": -0.007671165967653124,
+    "b_hi": 0.016123177090133004
+   }
+  },
+  "closure_b0": 3.1339963632740275,
+  "closure_free": 2.2952839457044156,
+  "closure_loose": 2.295285241079751,
+  "free": {
+   "Z0": 2.2952839457044156,
+   "mu_hat": 0.6895341288262247,
+   "b_hat": 0.01071107817529385,
+   "b_mu0": 0.026634170820862495
+  },
+  "constrained": {
+   "Z0": 2.133875152356371,
+   "mu_hat": 0.618421211158359,
+   "b_hat": 0.017672247898070686,
+   "b_mu0": 0.028372339307169227,
+   "r_hat": 0.7047777043643968,
+   "lnL1": 2103.203039316388,
+   "lnL0": 2100.926327733466,
+   "b_ctrl": 0.03451240557324002,
+   "sigma_ctrl": 0.022177302283724717,
+   "pull_b_mu0": -0.27686263132990757,
+   "pull_b_best": -0.7593420272549489
+  },
+  "fixed": {
+   "b_ctrl": {
+    "b": 0.03451240557324002,
+    "Z0": 1.691735045502236,
+    "mu_hat": 0.45097318773051337
+   },
+   "b_ctrl-1s": {
+    "b": 0.012335103289515304,
+    "Z0": 2.5932946548196356,
+    "mu_hat": 0.6728361826857987
+   },
+   "b_ctrl+1s": {
+    "b": 0.05668970785696474,
+    "Z0": 0.871584892560954,
+    "mu_hat": 0.2389110209675119
+   }
+  },
+  "truth": {
+   "a": [
+    1.8749659516483,
+    -3.4481824865276938,
+    -1.4638853113541297,
+    -0.4138245447637312
+   ],
+   "r": 0.8135558641379436,
+   "b": 0.028372339307169227,
+   "sum_T": 565.691979909056,
+   "sum_lam_n": 361.9999970844916,
+   "window_29_32": {
+    "bkg": 23.34317639235274,
+    "n": 33
+   }
+  },
+  "dev0": 55.21769407098982
+ },
+ "grades": {
+  "P0": "PASS",
+  "P1": "NOT GRADABLE (only 309 toys in the finished prefix, fewer than 1000)",
+  "P2": "NOT GRADABLE (only 309 toys in the finished prefix, fewer than 1000)",
+  "P3": "NOT GRADABLE (only 309 toys in the finished prefix, fewer than 1000)",
+  "P4": "NOT GRADABLE (only 309 toys in the finished prefix, fewer than 1000)"
+ },
+ "stats": null,
+ "elapsed_s": 13032.639046907425,
+ "ntoys": 309,
+ "finished_any_order": 309,
+ "stopped": "time budget 13000 s reached"
+}

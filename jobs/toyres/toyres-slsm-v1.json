@@ -1,0 +1,19 @@
+{
+  "name": "toyres-slsm-v1",
+  "kind": "compete",
+  "workdir": "E:\\MV2-Pursuit\\work\\20261121T090657Z-science\\toyres",
+  "image": "python:3.12",
+  "setup": ["pip install -q numpy scipy"],
+  "run": [
+    "cd /work && python -m py_compile toyresume.py test_toyresume.py fetch_mods.py > /out/compile.txt 2>&1; rc=$?; cat /out/compile.txt; exit $rc",
+    "cd /work && python fetch_mods.py slsm > /out/fetch.txt 2>&1; rc=$?; cat /out/fetch.txt; sha256sum toyresume.py test_toyresume.py fetch_mods.py aprime_slsm.py aprime_smooth.py slsm_chunk.py aleph-fig5.json prior-slsm.csv | tee /out/sha256.txt; exit $rc",
+    "cd /work && python -m unittest -v test_toyresume > /out/tests.txt 2>&1; rc=$?; cat /out/tests.txt; exit $rc",
+    "cd /work && python toyresume.py --kind slsm --prior prior-slsm.csv --fig5 aleph-fig5.json --emuframe /work/emuframe.py --out /out --ntoys 10000 --workers 4 --budget-s 16000 > /out/run.txt 2>&1; rc=$?; tail -n 90 /out/run.txt; exit $rc"
+  ],
+  "network": true,
+  "data_urls": [],
+  "data_key": "none",
+  "cpu": 4,
+  "memory_gb": 1,
+  "timeout_minutes": 360
+}

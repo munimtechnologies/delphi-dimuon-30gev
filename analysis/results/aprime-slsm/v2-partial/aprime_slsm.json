@@ -1,0 +1,112 @@
+{
+ "version": "mv2 aprime_slsm 0.1.0",
+ "wrapper": "mv2 slsm_chunk 0.1.0",
+ "aprime_smooth": "mv2 aprime_smooth 0.1.0",
+ "emuframe": "mv2 emuframe 0.1.0",
+ "seed": 20261121,
+ "pivot": 30.4,
+ "deg": 3,
+ "b_bounds": [
+  -0.2,
+  0.2
+ ],
+ "ntoys_requested": 10000,
+ "budget_s": 19800.0,
+ "min_toys": 1000,
+ "observed": {
+  "closure_parfit": 3.1339963632770744,
+  "closure_b0": 3.1339963632740275,
+  "const": {
+   "Z0": 3.1339963632740275,
+   "mu_hat": 0.8014024222661648,
+   "lnL1": 2103.340838968396,
+   "lnL0": 2098.4298723658885
+  },
+  "slope": {
+   "Z0": 2.2952839457044156,
+   "mu_hat": 0.6895341288262247,
+   "b_hat": 0.01071107817529385,
+   "b_mu0": 0.026634170820862495,
+   "r_hat": 0.6593451268033019,
+   "lnL1": 2103.609669297957,
+   "lnL0": 2100.975505102253
+  },
+  "slope_mu0": {
+   "b_hat": 0.026634170820862495,
+   "Z": 2.256383272568956,
+   "b_lo": 0.014853925783743501,
+   "b_hi": 0.038383577453620824,
+   "sigma_b": 0.011764825834938661
+  },
+  "slope_signal_floated": {
+   "b_hat": 0.01071107817529385,
+   "Z": 0.733253475356642
+  },
+  "truth": {
+   "a": [
+    1.8833741637311512,
+    -3.4319967983315576,
+    -1.4602317328921155,
+    -0.41373877939548637
+   ],
+   "r": 0.801775823671137,
+   "b": 0.026634170820862495,
+   "sum_T": 565.6920020328965,
+   "sum_lam_n": 362.0000001211323,
+   "window_29_32": {
+    "bkg": 23.155803822200962,
+    "n": 33
+   }
+  },
+  "dev0": 55.19599225004407
+ },
+ "elapsed_s": 19838.62338590622,
+ "ntoys": 869,
+ "rates": {
+  "slope": {
+   "p_ge2": 0.03222094361334868,
+   "p_ge3": 0.0023014959723820483,
+   "mean_Z": 0.377829719984709
+  },
+  "const": {
+   "p_ge2": 0.1806674338319908,
+   "p_ge3": 0.03682393555811277,
+   "mean_Z": 1.1617246738550906
+  }
+ },
+ "calibrated": {
+  "slope": {
+   "p": 0.012658227848101266,
+   "Z": 2.236539457140851,
+   "lower_bound": false,
+   "k": 11,
+   "n": 869,
+   "Z_asym": 2.2952839457044156
+  },
+  "const": {
+   "p": 0.028768699654775604,
+   "Z": 1.8992059761193947,
+   "lower_bound": false,
+   "k": 25,
+   "n": 869,
+   "Z_asym": 3.1339963632740275
+  }
+ },
+ "gof": {
+  "dev_obs": 55.19599225004407,
+  "k": 603,
+  "p": 0.6939010356731876
+ },
+ "mean_mu_toys": 0.11519908140079252,
+ "mean_b0_toys": 0.027156149732216,
+ "grades": {
+  "L0": "PASS",
+  "L1": "NOT GRADABLE (only 869 toys in the finished prefix, fewer than 1000)",
+  "L2": "NOT GRADABLE (only 869 toys in the finished prefix, fewer than 1000)",
+  "L3": "PASS",
+  "L4": "NOT GRADABLE (only 869 toys in the finished prefix, fewer than 1000)",
+  "L5": "NOT GRADABLE (only 869 toys in the finished prefix, fewer than 1000)"
+ },
+ "finished_any_order": 869,
+ "stopped": "time budget 19800 s reached"
+}

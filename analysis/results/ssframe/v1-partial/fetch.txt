@@ -1,0 +1,5 @@
+fetched aprime_smooth.py (17863 bytes) sha256 eae6510abcd327c385585095117e1fa3ba1cec8fa5e74aa9d605f230f0ed8d28 (matches aprime-slsm-v1)
+fetched aprime_slsm.py (15127 bytes) sha256 66225147496757840e59e3a29f810f13f70aca9573902aefb30b466aa419cb57 (matches aprime-slsm-v1)
+fetched aprime_cross.py (18597 bytes) sha256 3161582977222cca65f826d9b92a58d5979ebd8dee6d359386757c4ea25a83ae (matches dmcratio-v1)
+fetched dmcratio.py (12562 bytes) sha256 43f29aa86475952ef3b482591f4bee99017b789bf2eda2e73008bf22045b2a7c (matches dmcratio-v1)
+fetched sscontrol.py (14499 bytes) sha256 f5001810421ef6875bbe0146a6eb0eb140319d7805522557036da9c8f3d7638a

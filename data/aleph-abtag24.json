@@ -1,0 +1,13 @@
+{
+ "source": "Blind per-bin reading of Heister, arXiv:1610.06536 v9, HTML Figure 24, caption beginning 'The opposite sign di-muon mass spectrum for events where the b-tag was inverted, i.e. P_H,mass,max < 2'. 'Events / 1 GeV', LOGARITHMIC y axis (about 0.29 to 530, decade ticks 1, 10, 10^2), x 0-50 GeV, 1 GeV bins. ALEPH archived data (black dots with error bars) against ALEPH simulation drawn as a stacked filled histogram (green b events, red c events, blue uds events; green top = total simulation). Read by an AI reading agent with no access to MV2's repositories, from exact SVG vector coordinates; report completed 2026-11-21T06:21Z. Values copied exactly as read, no edits. A null value is NM (no data marker drawn in that bin) or OFF (the simulation lies below the bottom of the log axis); see 'marks'. Reader's uncertainty: data exact whole numbers (+-0.003), simulation +-0.01 plus one-decimal rounding (+-0.05); bin 24 simulation 13.65 and bin 39 1.050 were rounded up. Reader's sums: 15-25 data 331 / simulation 317.2; 25-50 data 90 / simulation 76.9 (excluding 7 OFF bins, each < 0.3); NM 10 (data 36, 37, 39, 43-49), OFF 7 (simulation 43-49).",
+ "licence": "CC BY 4.0 (this reading); the figure itself belongs to its author",
+ "edges": [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50],
+ "data": [62, 45, 37, 42, 36, 24, 23, 22, 24, 16, 17, 14, 11, 11, 8, 4, 5, 5, 1, 3, 3, null, null, 2, null, 2, 2, 2, null, null, null, null, null, null, null],
+ "mc": [58.6, 49.4, 42.4, 38.0, 29.2, 27.9, 20.6, 20.2, 17.2, 13.7, 13.0, 8.8, 9.5, 5.7, 8.4, 6.3, 4.6, 2.9, 4.0, 3.4, 2.3, 2.3, 1.9, 0.4, 1.1, 0.6, 0.8, 0.8, null, null, null, null, null, null, null],
+ "marks": {
+  "data": {"NM": [36, 37, 39, 43, 44, 45, 46, 47, 48, 49], "OFF": []},
+  "mc": {"NM": [], "OFF": [43, 44, 45, 46, 47, 48, 49]}
+ },
+ "off_range": [0.0, 0.3],
+ "reader_ALEPHA24_line": "HTML Figure 24 | Events / 1 GeV | log, y about 0.29 to 530 (decade ticks 1, 10, 10^2), x 0-50 GeV | 1 GeV | data = black dots with error bars (ALEPH archived data: mu+mu-); MC = stacked filled histograms green = b events, red = c events, blue = uds events, green top = total MC | 15-25: data 331 / MC 317.2; 25-50: data 90 / MC 76.9 (excl. 7 OFF bins, each <0.3) | NM 10 (data bins 36,37,39,43-49), OFF 7 (MC bins 43-49) | data whole numbers yes | read from exact SVG vector coordinates: data exact (+-0.003), MC +-0.01 plus one-decimal rounding (+-0.05)"
+}

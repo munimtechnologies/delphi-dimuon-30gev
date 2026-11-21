@@ -1,0 +1,10 @@
+test_counts_match_aprime_slsm (test_slsm_chunk.TestChunk.test_counts_match_aprime_slsm) ... ok
+test_gate_fail_propagates (test_slsm_chunk.TestChunk.test_gate_fail_propagates) ... ok
+test_no_toys (test_slsm_chunk.TestChunk.test_no_toys) ... ok
+test_prefix (test_slsm_chunk.TestChunk.test_prefix) ... ok
+test_too_few_toys (test_slsm_chunk.TestChunk.test_too_few_toys) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.016s
+
+OK

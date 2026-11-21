@@ -1,0 +1,21 @@
+python 3.12.16
+emuframe blob d55c900fdb45aa9f8a6099a142079a510c3afdfa
+mv2 ssframe 0.1.0 with mv2 aprime_slsm 0.1.0, mv2 sscontrol 0.1.0, mv2 emuframe 0.1.0; sum n 362, sum v 300.9
+CONTROL dmc closure PASS (OS 0.02804 SS 0.04094) | window 15-38.0 ok True | b_SS 0.0387 sb 0.0187 | b_emu 0.0042 sb 0.0119 | b_ctrl 0.0345 +- 0.0222
+CLOSURE par3 b=0 3.1340 (want 3.1340) | slope free 2.2953 (want 2.2953) | loose constraint 2.2953
+CONSTRAINED Z0=2.1339 mu=0.618 b=0.0177 b(mu=0)=0.0284 pulls -0.28/-0.76 | fixed b_ctrl Z0=1.6917, -1s 2.5933, +1s 0.8716 | bkg 29-32 23.34 vs n 33 | dev0 55.22
+toys done 250 (prefix 250) of 6000, 9455 s
+{
+ "ntoys": 309,
+ "finished_any_order": 309,
+ "stopped": "time budget 13000 s reached",
+ "stats": null,
+ "grades": {
+  "P0": "PASS",
+  "P1": "NOT GRADABLE (only 309 toys in the finished prefix, fewer than 1000)",
+  "P2": "NOT GRADABLE (only 309 toys in the finished prefix, fewer than 1000)",
+  "P3": "NOT GRADABLE (only 309 toys in the finished prefix, fewer than 1000)",
+  "P4": "NOT GRADABLE (only 309 toys in the finished prefix, fewer than 1000)"
+ }
+}
+SSFRAME: P0 PASS P1 NOT P2 NOT P3 NOT P4 NOT | b_ctrl 0.0345+-0.0222 (SS 0.0387, emu 0.0042, W 15-38.0) | closures b0 3.1340 free 2.2953 loose 2.2953 | Z0 con 2.1339 -> cal na (k=None of None) mu 0.618 b 0.0177 b(mu=0) 0.0284 | fixed b_ctrl 1.6917 | p2 na gof p na
