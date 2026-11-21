@@ -1,0 +1,29 @@
+{
+ "job": "sscontrol-v1",
+ "module": "mv2 sscontrol 0.1.0 (stats/sscontrol.py) on aprime_cross 0.1.0 and dmcratio 0.1.0",
+ "pre_registration": "PLAN-amendment-0.28.md sec. 3 (tests W0-W5), written before the job existed",
+ "graded_in": "PLAN-amendment-0.31.md sec. 1",
+ "graded_at": "2026-11-21",
+ "graded_by": "AI agents working in MV2's name; not checked by a physicist",
+ "raw_output": "analysis/results/sscontrol/",
+ "window": "15-38 GeV, 23 bins, every value readable (NM -> 0, no OFF value used)",
+ "grades": {
+  "W0": {"grade": "PASS", "prior": 0.90, "got": "C0 PASS (Z0 const 2.6640, slope-free 1.6214, b_mu0 0.02663, Z_slope 2.256); dmcratio-v1 slopes reproduced exactly (OS 0.02804, SS 0.04094); window 15-38 GeV, all readable and non-negative"},
+  "W1": {"grade": "PASS", "prior": 0.35, "got": "b_SS = 0.0387 [0.0201, 0.0576] per GeV, Z 2.09 (threshold 2.0)"},
+  "W2": {"grade": "FAIL", "prior": 0.45, "got": "joint OS+SS slope with the 30 GeV signal floated b = 0.0237, Z 1.77 (threshold 2.0); without the signal b = 0.0295, Z 2.58 (information)"},
+  "W3": {"grade": "PASS", "prior": 0.90, "got": "b_emu = 0.0042 [-0.0077, 0.0161], Z 0.35"},
+  "W4": {"grade": "PASS", "prior": 0.85, "got": "b_ctrl = b_SS - b_emu = 0.0345 +- 0.0222 against the data's 0.0266 +- 0.0118: pull 0.31"},
+  "W5": {"grade": "PASS", "prior": 0.80, "got": "excess (Fig. 5, 15-50 GeV, model bb) with the slope constrained to 0.0345 +- 0.0222: Z0 = 1.42, mu_hat 0.557, b_hat 0.0191"}
+ },
+ "meaning_applied": "Amendment 0.28 sec. 3, case 'W2 FAIL with W4 PASS': the same-sign control agrees with the data's slope but does not establish the drift on its own; undecided. W5's 1.42 sigma is conditional on a drift the control does not establish.",
+ "information": {
+  "slope_os_W": "0.0238 +- 0.0146, Z 1.64",
+  "slope_os_W_signal_floated": "0.0072, Z 0.37 (slope and 30 GeV peak nearly degenerate in OS alone)",
+  "mc_mumu_over_emu_W": "0.0038 +- 0.0137, Z 0.28",
+  "Z0_fixed_b_ctrl": 0.893,
+  "Z0_fixed_b_ctrl_minus_1s": 2.024,
+  "Z0_fixed_b_ctrl_plus_1s": 0.0,
+  "constrained_with_mc_slope_added": "b_c 0.0383 +- 0.0261, Z0 1.425"
+ },
+ "hand_estimate_disclosed_before": "amendment 0.30 sec. 5: b_ctrl about 0.04 +- 0.03 (got 0.0345 +- 0.0222)"
+}

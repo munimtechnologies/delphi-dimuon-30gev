@@ -1,0 +1,18 @@
+python 3.12.16
+mv2 sscontrol 0.1.0 on mv2 aprime_cross 0.1.0 and mv2 dmcratio 0.1.0
+C0 PASS {"Z0_const": 2.6640384798147467, "Z0_slope": 1.621431986648286, "b_mu0": 0.026633969098712747, "Z_slope": 2.256379371992658} (63 s)
+DMC closure PASS: OS b 0.02804 (want 0.02804) SS b 0.04094 (want 0.04094) (68 s)
+WINDOW 15-38 GeV, 23 bins, all readable: True
+SLOPE W os b=0.0238 sb=0.0146 Zs=1.64 r=1.017->1.295 (76 s)
+SLOPE W ss b=0.0387 sb=0.0187 Zs=2.09 r=0.953->1.297 (76 s)
+SLOPE W emu b=0.0042 sb=0.0119 Zs=0.35 r=1.058->0.958 (76 s)
+SLOPE W mc_ratio b=0.0038 sb=0.0137 Zs=0.28 r=0.594->0.643 (76 s)
+JOINT joint_w_signal_floated b=0.0237 Zs=1.77 (110 s)
+JOINT joint_w_no_signal b=0.0295 Zs=2.58 (110 s)
+CONTROL b_ctrl=0.0345 sc=0.0222 | data b=0.0266 sb=0.0118 | pull 0.314 (150 s)
+FIXED b_ctrl b=0.0345 Z0=0.893 mu=0.319 (150 s)
+FIXED b_ctrl-1s b=0.0123 Z0=2.024 mu=0.651 (151 s)
+FIXED b_ctrl+1s b=0.0567 Z0=0.000 mu=0.000 (151 s)
+CONSTRAINED Z0=1.421 mu=0.557 b=0.0191 b_mu0=0.0284 (184 s)
+CONSTRAINED+MC b_c=0.0383 sc=0.0261 Z0=1.425 mu=0.564 (226 s)
+SSCTRL: W0 PASS W1 PASS W2 FAIL W3 PASS W4 PASS W5 PASS | W 15-38 | SS b=0.0387 sb=0.0187 Zs=2.09 | OS b=0.0238 Zs=1.64 | emu b=0.0042 Zs=0.35 | joint(sig) b=0.0237 Zs=1.77 | joint(nosig) b=0.0295 Zs=2.58 | ctrl 0.0345+-0.0222 | data b 0.0266 pull 0.314 | Z0 con 1.421 mu 0.557 | Z0 fixed 0.893
