@@ -1,0 +1,20 @@
+{
+  "name": "dimu-ntuple-rl-v1",
+  "kind": "compete",
+  "workdir": "E:\\MV2-Pursuit\\work\\20261121T160527Z-science\\dntrl",
+  "image": "python:3.12",
+  "setup": [
+    "(apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq proot > /dev/null 2>&1); command -v proot || echo 'proot not installed by apt (delphi_rootless.sh will try a static release)'"
+  ],
+  "run": [
+    "cd /work && sed -i 's/\\r$//' fetch.sh inner_ntuple.sh && bash fetch.sh > /out/fetch.txt 2>&1; rc=$?; cat /out/fetch.txt; exit $rc",
+    "cd /work && python -m py_compile ocipull.py validate.py test_validate.py > /out/compile.txt 2>&1; rc=$?; for s in delphi_rootless.sh run_ntuple.sh inner_ntuple.sh fetch.sh; do bash -n $s >> /out/compile.txt 2>&1 || rc=1; done; cat /out/compile.txt; exit $rc",
+    "cd /work && bash delphi_rootless.sh /work/inner_ntuple.sh > /out/rootless.txt 2>&1; rc=$?; head -c 5000 /out/rootless.txt; echo; echo '[...]'; tail -c 16000 /out/rootless.txt; grep -E '^(OCIPULL|ROOTLESS|NTUPLE_RL|NTUPLE_RL_RUN):|xrdfs inside|inner rc=' /out/rootless.txt; exit $rc"
+  ],
+  "network": true,
+  "data_urls": [],
+  "data_key": "delphi-al9-rootfs-nt",
+  "cpu": 2,
+  "memory_gb": 2,
+  "timeout_minutes": 360
+}
