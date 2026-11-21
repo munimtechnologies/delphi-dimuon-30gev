@@ -1,0 +1,21 @@
+{
+  "name": "delphi-rootless-probe-v1",
+  "kind": "compete",
+  "workdir": "E:\\MV2-Pursuit\\work\\20261121T112407Z-science\\rootless",
+  "image": "python:3.12",
+  "setup": [
+    "(apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq proot > /dev/null 2>&1); command -v proot || echo 'proot not installed by apt (the script will try a static release)'"
+  ],
+  "run": [
+    "cd /work && python -m py_compile ocipull.py test_ocipull.py > /out/compile.txt 2>&1; rc=$?; bash -n delphi_rootless.sh >> /out/compile.txt 2>&1 || rc=1; cat /out/compile.txt; exit $rc",
+    "cd /work && python -m unittest -v test_ocipull > /out/tests.txt 2>&1; rc=$?; cat /out/tests.txt; exit $rc",
+    "cd /work && curl -fsSL -o /tmp/probe.sh https://raw.githubusercontent.com/munimtechnologies/delphi-dimuon-30gev/main/probe/probe.sh; rc=$?; sha256sum ocipull.py test_ocipull.py delphi_rootless.sh /tmp/probe.sh | tee /out/sha256.txt; exit $rc",
+    "cd /work && bash delphi_rootless.sh /tmp/probe.sh > /out/rootless.txt 2>&1; rc=$?; head -c 6000 /out/rootless.txt; echo; echo '[...]'; tail -c 14000 /out/rootless.txt; grep -E '^(OCIPULL|ROOTLESS):|xrdcp exit|dump.sh exit|xrdfs inside' /out/rootless.txt; exit $rc"
+  ],
+  "network": true,
+  "data_urls": [],
+  "data_key": "delphi-al9-rootfs",
+  "cpu": 2,
+  "memory_gb": 2,
+  "timeout_minutes": 240
+}
