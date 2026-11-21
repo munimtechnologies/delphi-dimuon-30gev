@@ -1,0 +1,12 @@
+python 3.12.15
+mv2 abtag 0.1.0 on mv2 aprime_cross 0.1.0 and mv2 dmcratio 0.1.0
+C0 PASS {"Z0_const": 2.6640384798147467, "Z0_slope": 1.621431986648286, "b_mu0": 0.026633969098712747, "Z_slope": 2.256379371992658} (26 s)
+SS closure PASS: b_SS 0.03873 (want 0.03873) sb 0.0187 window 15-38.0 (27 s)
+WINDOW A 15-43 GeV, 28 bins, data 421 events, simulation 394.0, whole True, nonneg True
+HALVES data/sim 15-25 331/317.2 = 1.044 | 25-43 90/76.8 = 1.172
+SLOPE A b=0.0095 sb=0.0130 Zs=0.73 [-0.0035, 0.0225] (28 s)
+PULL A-SS -1.285 (b_SS 0.0387 +- 0.0187)
+EXCESS excess_slope_free Z0=0.000 mu=0.000 b=0.0095 (48 s)
+EXCESS excess_const Z0=0.000 mu=0.000 b=0.0000 (48 s)
+INFO weight 2.2: A b=0.0094 Zs=0.86 | SS b=0.0393 Zs=2.49 | OS b=0.0237 Zs=1.94 (51 s)
+ABTAG: A0 PASS A1 FAIL A2 PASS A3 FAIL A4 PASS | W 15-43 n 421 | A b=0.0095 sb=0.0130 Zs=0.73 | r 1.044->1.172 | pull A-SS -1.285 | Z0 free 0.000 mu 0.000 | Z0 const 0.000 | info w2.2 A Zs=0.86

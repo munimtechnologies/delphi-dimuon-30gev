@@ -1,0 +1,8 @@
+fetched abtag.py (13100 bytes) sha256 fbdddccb3318b3aa947a6a66468282f5defd3affd41d412b0dc44e351f5a7d90
+fetched test_abtag.py (4257 bytes) sha256 678ca57b593b9d531351f5dcb63df2f1bb418feacc02e3d93a9259bc65fffa0f
+fetched aprime_cross.py (18597 bytes) sha256 3161582977222cca65f826d9b92a58d5979ebd8dee6d359386757c4ea25a83ae (matches sscontrol-v1)
+fetched test_aprime_cross.py (6251 bytes) sha256 6611916124829b485c5a09c913bd1a3aab51392a5c4bb1cd22943aef9e15498b (matches sscontrol-v1)
+fetched emuframe.py (12983 bytes) sha256 5cdc85aef2c314be8d7c2faf87e521925d8fb72068fab5dba0a3151e36341f10
+fetched aprime_ext.py (13550 bytes) sha256 2f574c9dd386198bf203d05a922180374b7230ce22232d9961dc9b12936ca5e5
+fetched dmcratio.py (12562 bytes) sha256 43f29aa86475952ef3b482591f4bee99017b789bf2eda2e73008bf22045b2a7c (matches sscontrol-v1)
+fetched test_dmcratio.py (4091 bytes) sha256 e25f59d19fc1a8be0a88bbfcc153d33a3788307307a34dc3af814f206d4efcbf (matches sscontrol-v1)

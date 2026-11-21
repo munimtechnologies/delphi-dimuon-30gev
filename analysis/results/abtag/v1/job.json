@@ -1,0 +1,19 @@
+{
+  "name": "abtag-v1",
+  "kind": "compete",
+  "workdir": "E:\\MV2-Pursuit\\work\\20261121T090657Z-science\\abtag",
+  "image": "python:3.12",
+  "setup": [],
+  "run": [
+    "cd /work && python -m py_compile fetch_mods.py > /out/compile.txt 2>&1; rc=$?; cat /out/compile.txt; exit $rc",
+    "cd /work && python fetch_mods.py > /out/fetch.txt 2>&1; rc=$?; cat /out/fetch.txt; python -m py_compile abtag.py test_abtag.py >> /out/compile.txt 2>&1 || rc=1; sha256sum abtag.py test_abtag.py dmcratio.py aprime_cross.py aleph-abtag24.json aleph-fig5.json aleph-dmc21.json aleph-emu3.json | tee /out/sha256.txt; exit $rc",
+    "cd /work && python -m unittest -v test_aprime_cross test_dmcratio test_abtag > /out/tests.txt 2>&1; rc=$?; cat /out/tests.txt; exit $rc",
+    "cd /work && python abtag.py --abtag aleph-abtag24.json --fig5 aleph-fig5.json --dmc aleph-dmc21.json --emu aleph-emu3.json --out /out > /out/run.txt 2>&1; rc=$?; cat /out/run.txt; exit $rc"
+  ],
+  "network": true,
+  "data_urls": [],
+  "data_key": "none",
+  "cpu": 1,
+  "memory_gb": 1,
+  "timeout_minutes": 120
+}
