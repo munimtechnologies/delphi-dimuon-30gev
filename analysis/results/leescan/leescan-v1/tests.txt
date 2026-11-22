@@ -1,0 +1,14 @@
+test_scan_finds_injected_bump (test_leescan.Fits.test_scan_finds_injected_bump) ... ok
+test_scanner_equals_discovery (test_leescan.Fits.test_scanner_equals_discovery) ... ok
+test_direct (test_leescan.Pure.test_direct) ... ok
+test_grade_gate (test_leescan.Pure.test_grade_gate) ... ok
+test_grid (test_leescan.Pure.test_grid) ... ok
+test_gv (test_leescan.Pure.test_gv) ... ok
+test_p_z_roundtrip (test_leescan.Pure.test_p_z_roundtrip) ... ok
+test_rows_and_summary (test_leescan.Pure.test_rows_and_summary) ... ok
+test_upcrossings (test_leescan.Pure.test_upcrossings) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 2.905s
+
+OK

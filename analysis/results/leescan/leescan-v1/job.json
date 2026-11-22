@@ -1,0 +1,49 @@
+{
+ "source": "E:\\MV2-Pursuit\\work\\20261121T144733Z-science\\compete\\leescan\\job.json",
+ "normalized": {
+  "id": "2da1bbbafdf9",
+  "name": "leescan-v1",
+  "job_path": "E:\\MV2-Pursuit\\work\\20261121T144733Z-science\\compete\\leescan\\job.json",
+  "run": "20261121T144733Z-science",
+  "field": "science",
+  "kind": "compete",
+  "workdir": "E:\\MV2-Pursuit\\work\\20261121T144733Z-science\\leescan",
+  "image": "python:3.12",
+  "run_network": true,
+  "network": true,
+  "setup": [
+   {
+    "name": "setup-01-pip",
+    "cmd": "pip install -q numpy scipy",
+    "timeout_seconds": 0
+   }
+  ],
+  "run_steps": [
+   {
+    "name": "run-01-cd",
+    "cmd": "cd /work && python -m py_compile leescan.py test_leescan.py > /out/compile.txt 2>&1; rc=$?; cat /out/compile.txt; exit $rc",
+    "timeout_seconds": 0
+   },
+   {
+    "name": "run-02-cd",
+    "cmd": "cd /work && python leescan.py --fetch-only > /out/fetch.txt 2>&1; rc=$?; cat /out/fetch.txt; sha256sum leescan.py test_leescan.py aprime_smooth.py emuframe.py aleph-fig5.json | tee /out/sha256.txt; exit $rc",
+    "timeout_seconds": 0
+   },
+   {
+    "name": "run-03-cd",
+    "cmd": "cd /work && python -m unittest -v test_leescan > /out/tests.txt 2>&1; rc=$?; cat /out/tests.txt; exit $rc",
+    "timeout_seconds": 0
+   },
+   {
+    "name": "run-04-cd",
+    "cmd": "cd /work && python leescan.py --out /out --ntoys 2000 --workers 2 --budget-s 14000 > /out/run.txt 2>&1; rc=$?; grep -E '^(CLOSURE|OBS|budget|LEESCAN)' /out/run.txt; tail -n 60 /out/run.txt; exit $rc",
+    "timeout_seconds": 0
+   }
+  ],
+  "data_urls": [],
+  "data_key": "none",
+  "cpu": 2.0,
+  "memory_gb": 1,
+  "timeout_minutes": 300.0
+ }
+}
