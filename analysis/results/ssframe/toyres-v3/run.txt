@@ -1,0 +1,55 @@
+python 3.12.16, mv2 toyresume 0.1.0
+emuframe blob d55c900fdb45aa9f8a6099a142079a510c3afdfa
+PRIOR ssframe: 934 toys, idx 0..933
+CONTROL dmc closure PASS (OS 0.02804 SS 0.04094) | window 15-38.0 ok True | b_SS 0.0387 sb 0.0187 | b_emu 0.0042 sb 0.0119 | b_ctrl 0.0345 +- 0.0222
+CLOSURE par3 b=0 3.1340 (want 3.1340) | slope free 2.2953 (want 2.2953) | loose constraint 2.2953
+CONSTRAINED Z0=2.1339 mu=0.618 b=0.0177 b(mu=0)=0.0284 pulls -0.28/-0.76 | fixed b_ctrl Z0=1.6917, -1s 2.5933, +1s 0.8716 | bkg 29-32 23.34 vs n 33 | dev0 55.22
+RECHECK PASS: 8 saved toys re-run, 0 mismatches (275 s)
+toys merged 1034 (new 100), 2847 s
+toys merged 1134 (new 200), 5070 s
+toys merged 1234 (new 300), 7290 s
+toys merged 1334 (new 400), 9662 s
+toys merged 1434 (new 500), 12472 s
+toys merged 1534 (new 600), 15238 s
+{
+ "prior_toys": 934,
+ "merged_toys": 1563,
+ "stopped": "time budget 16000 s reached",
+ "recheck_result": {
+  "n": 8,
+  "mismatches": []
+ },
+ "near_ties": {
+  "Z0": 0
+ },
+ "stats": {
+  "calibrated": {
+   "p": 0.01599488163787588,
+   "Z": 2.144538509387635,
+   "lower_bound": false,
+   "k": 25,
+   "n": 1563,
+   "Z_asym": 2.133875152356371
+  },
+  "p_ge2": 0.020473448496481125,
+  "p_ge3": 0.0,
+  "mean_Z": 0.37987263843884067,
+  "gof": {
+   "dev_obs": 55.21769407098982,
+   "k": 1102,
+   "p": 0.7050543825975688
+  },
+  "mean_mu_toys": 0.11305276168504379,
+  "mean_b0_toys": 0.028815517761202815,
+  "ntoys": 1563
+ },
+ "grades": {
+  "P0": "PASS",
+  "P1": "PASS",
+  "P2": "FAIL",
+  "P3": "PASS",
+  "P4": "PASS"
+ }
+}
+SSFRAME: P0 PASS P1 PASS P2 FAIL P3 PASS P4 PASS | b_ctrl 0.0345+-0.0222 (SS 0.0387, emu 0.0042, W 15-38.0) | closures b0 3.1340 free 2.2953 loose 2.2953 | Z0 con 2.1339 -> cal 2.145 (k=25 of 1563) mu 0.618 b 0.0177 b(mu=0) 0.0284 | fixed b_ctrl 1.6917 | p2 0.0205 gof p 0.705
+TOYRESUME: ssframe prior 934 merged 1563 | recheck PASS | time budget 16000 s reached | P0 PASS P1 PASS P2 FAIL P3 PASS P4 PASS

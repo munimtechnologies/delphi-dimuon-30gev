@@ -1,0 +1,135 @@
+fetched stats/leescan.py @dabf4b2fa8f7 (20074 bytes) sha256 fec272cc336aac66880413592d98ab0bb807189d093d626aa618855f0e8b045f (matches)
+fetched stats/aprime_smooth.py (17863 bytes) sha256 eae6510abcd327c385585095117e1fa3ba1cec8fa5e74aa9d605f230f0ed8d28 (matches)
+fetched data/aleph-fig5.json (1679 bytes) sha256 f535d924111e215b71f6a308e6c228cead13680512498517680863b05b7ee626 (matches)
+emuframe.py git blob d55c900fdb45aa9f8a6099a142079a510c3afdfa (matches)
+mv2 leefast 0.1.0 with mv2 leescan 0.1.0
+CLOSURE par3 Z0=3.1340 (want 3.134) fast scanner=3.133996 (discovery 3.133996)
+shapes ready in 38 s
+OBSCHECK 378 shapes in 1.4 s (1135 Newton runs, 0 fallbacks, 0 at maxit); max |Z_fast - Z_v1| grid 1.00e-06, at 30.40 1.47e-13
+OBSDIFF gamma 3.0 mass 20.50 fast 0.000000 v1 0.000001 diff 1.00e-06
+OBSDIFF gamma 3.0 mass 20.00 fast 0.000000 v1 0.000001 diff 1.00e-06
+OBSDIFF gamma 3.0 mass 19.50 fast 0.000000 v1 0.000001 diff 1.00e-06
+OBSDIFF gamma 1.0 mass 36.25 fast 0.000000 v1 0.000001 diff 1.00e-06
+OBSDIFF gamma 1.0 mass 26.75 fast 0.000000 v1 0.000001 diff 1.00e-06
+OBS g1.78 scan max Z=3.133 at 30.50 GeV; upcrossings {'0.5': 4, '1.0': 1, '1.5': 1, '2.0': 1} (v1 {0.5: 4, 1.0: 1, 1.5: 1, 2.0: 1})
+OBS g1.0 scan max Z=3.120 at 30.50 GeV; upcrossings {'0.5': 4, '1.0': 2, '1.5': 1, '2.0': 1} (v1 {0.5: 4, 1.0: 2, 1.5: 1, 2.0: 1})
+OBS g3.0 scan max Z=3.097 at 30.50 GeV; upcrossings {'0.5': 2, '1.0': 2, '1.5': 1, '2.0': 1} (v1 {0.5: 2, 1.0: 2, 1.5: 1, 2.0: 1})
+OBS float scan max Z=3.133 at 30.50 GeV; upcrossings {'0.5': 3, '1.0': 3, '1.5': 1, '2.0': 1} (v1 {0.5: 3, 1.0: 3, 1.5: 1, 2.0: 1})
+OBS Z at 30.40: g1.0=3.129 g1.78=3.134 (exact emuframe shape 3.134) g3.0=3.095
+TRUTH r=0.6399241887 sum_T=565.692005 (v1 0.6399241887 565.692005) ok=True
+TOYS prior 0, to run 2000
+toys done 10 of 2000, 8 s, mean 1.30 s per toy per worker, fallbacks 0, maxit 0
+toys done 50 of 2000, 32 s, mean 1.24 s per toy per worker, fallbacks 0, maxit 0
+toys done 100 of 2000, 67 s, mean 1.33 s per toy per worker, fallbacks 0, maxit 0
+toys done 200 of 2000, 128 s, mean 1.28 s per toy per worker, fallbacks 0, maxit 0
+toys done 300 of 2000, 195 s, mean 1.30 s per toy per worker, fallbacks 0, maxit 0
+toys done 400 of 2000, 262 s, mean 1.30 s per toy per worker, fallbacks 0, maxit 0
+toys done 500 of 2000, 329 s, mean 1.31 s per toy per worker, fallbacks 0, maxit 0
+toys done 600 of 2000, 393 s, mean 1.31 s per toy per worker, fallbacks 0, maxit 0
+toys done 700 of 2000, 464 s, mean 1.32 s per toy per worker, fallbacks 0, maxit 0
+toys done 800 of 2000, 548 s, mean 1.37 s per toy per worker, fallbacks 0, maxit 0
+toys done 900 of 2000, 636 s, mean 1.41 s per toy per worker, fallbacks 0, maxit 0
+toys done 1000 of 2000, 705 s, mean 1.41 s per toy per worker, fallbacks 0, maxit 0
+toys done 1100 of 2000, 776 s, mean 1.41 s per toy per worker, fallbacks 0, maxit 0
+toys done 1200 of 2000, 846 s, mean 1.41 s per toy per worker, fallbacks 0, maxit 0
+toys done 1300 of 2000, 923 s, mean 1.42 s per toy per worker, fallbacks 0, maxit 0
+toys done 1400 of 2000, 999 s, mean 1.43 s per toy per worker, fallbacks 0, maxit 0
+toys done 1500 of 2000, 1080 s, mean 1.44 s per toy per worker, fallbacks 0, maxit 0
+toys done 1600 of 2000, 1162 s, mean 1.45 s per toy per worker, fallbacks 0, maxit 0
+toys done 1700 of 2000, 1235 s, mean 1.45 s per toy per worker, fallbacks 0, maxit 0
+toys done 1800 of 2000, 1312 s, mean 1.46 s per toy per worker, fallbacks 0, maxit 0
+toys done 1900 of 2000, 1384 s, mean 1.46 s per toy per worker, fallbacks 0, maxit 0
+toys done 2000 of 2000, 1468 s, mean 1.47 s per toy per worker, fallbacks 0, maxit 0
+TOYCHECK 36 of 36 v1 toy maxima compared; max |dZ| 4.93e-06; same argmax mass 36 of 36
+TOYDIFF idx 3 g1.0 fast 2.38826 v1 2.38826 diff 4.93e-06
+TOYDIFF idx 3 float fast 2.38826 v1 2.38826 diff 4.93e-06
+TOYDIFF idx 0 g1.0 fast 1.17240 v1 1.17240 diff 4.63e-06
+TOYDIFF idx 0 float fast 1.17240 v1 1.17240 diff 4.63e-06
+TOYDIFF idx 1 g3.0 fast 2.67689 v1 2.67689 diff 4.49e-06
+{
+ "gate": {
+  "Z_par3_closure": 3.1339963632770744,
+  "Z_scanner_default_shape": 3.1339963632769297,
+  "closure_ok": true,
+  "scanner_ok": true,
+  "v1_grid_points": 375,
+  "v1_grid_maxdiff": 1e-06,
+  "v1_at30_maxdiff": 1.4699352846037073e-13,
+  "v1_grid_ok": true,
+  "obs_scan_s": 1.436095952987671,
+  "obs_fallbacks": 0,
+  "obs_maxit": 0,
+  "truth_ok": true,
+  "v1_toy_values": 36,
+  "v1_toy_maxdiff": 4.930966415628291e-06,
+  "v1_toys_ok": true,
+  "toy_fallbacks": 0,
+  "toy_maxit": 0,
+  "mean_s_per_toy_per_worker": 1.466248707652092,
+  "v1_toy_mmax_same": 36,
+  "ntoys": 2000,
+  "ok": true,
+  "why": ""
+ },
+ "grades": {
+  "L0": "PASS",
+  "L1": "PASS",
+  "L2": "PASS",
+  "L3": "PASS",
+  "L4": "PASS",
+  "L5": "PASS"
+ },
+ "observed_max": {
+  "g1.78": {
+   "zmax": 3.13250925369671,
+   "mmax": 30.5,
+   "upcrossings": {
+    "0.5": 4,
+    "1.0": 1,
+    "1.5": 1,
+    "2.0": 1
+   }
+  },
+  "g1.0": {
+   "zmax": 3.1196167863295954,
+   "mmax": 30.5,
+   "upcrossings": {
+    "0.5": 4,
+    "1.0": 2,
+    "1.5": 1,
+    "2.0": 1
+   }
+  },
+  "g3.0": {
+   "zmax": 3.0965945626497238,
+   "mmax": 30.5,
+   "upcrossings": {
+    "0.5": 2,
+    "1.0": 2,
+    "1.5": 1,
+    "2.0": 1
+   }
+  },
+  "float": {
+   "zmax": 3.13250925369671,
+   "mmax": 30.5,
+   "upcrossings": {
+    "0.5": 3,
+    "1.0": 3,
+    "1.5": 1,
+    "2.0": 1
+   }
+  }
+ },
+ "Z_at_30.40": {
+  "1.0": 3.128785421284753,
+  "1.78": 3.134074434890173,
+  "3.0": 3.0952555995631204
+ }
+}
+SUMMARY g1.78 {"E_N": {"0.5": {"mean": 2.3805, "se": 0.020906420406351336}, "1.0": {"mean": 1.6035, "se": 0.020636298200057607}, "1.5": {"mean": 0.8295, "se": 0.016966402223282377}, "2.0": {"mean": 0.3445, "se": 0.012287610332519579}}, "direct": {"1.5": {"k": 1341, "n": 2000, "p": 0.6705, "p_se": 0.010510227162150207, "Z": -0.4412942338305522, "lower_bound": false, "gv_p": 0.925098901899059}, "2.0": {"k": 657, "n": 2000, "p": 0.3285, "p_se": 0.010502089077893026, "Z": 0.44405890046311447, "lower_bound": false, "gv_p": 0.3805393437461864}, "2.5": {"k": 212, "n": 2000, "p": 0.106, "p_se": 0.0068834584330843464, "Z": 1.2480848111275473, "lower_bound": false, "gv_p": 0.12236681573019835}, "3.0": {"k": 57, "n": 2000, "p": 0.0285, "p_se": 0.0037207358143249033, "Z": 1.9033108187089973, "lower_bound": false, "gv_p": 0.030719024989715352}}, "observed": {"Z_local": 3.1339963632770744, "p_local": 0.0008622149658824096, "direct": {"k": 36, "n": 2000, "p": 0.018, "p_se": 0.0029728773940409987, "Z": 2.0969274291643423, "lower_bound": false}, "gv_p": 0.020334212636468094, "gv_Z": 2.0468946931409056}, "conversions": [{"what": "Heister Z_asym, TKDE frame, as published", "Z_local": 5.35, "gv_p": 1.6543234949766534e-06, "gv_Z": 4.650666064384703, "direct": {"k": 0, "n": 2000, "p": 0.0, "Z": 2.9677379253417833, "lower_bound": true}}, {"what": "par3 toy-calibrated (aprime-smooth-v1)", "Z_local": 3.35, "gv_p": 0.01007082575460482, "gv_Z": 2.323698638199282, "direct": {"k": 18, "n": 2000, "p": 0.009, "p_se": 0.002111752826445368, "Z": 2.365618126864293, "lower_bound": false}}, {"what": "bb asymptotic (aprime-aleph-v1)", "Z_local": 2.664, "gv_p": 0.07991886383663661, "gv_Z": 1.4056175302604395, "direct": {"k": 143, "n": 2000, "p": 0.0715, "p_se": 0.005761412587204634, "Z": 1.4647102032030621, "lower_bound": false}}, {"what": "par3 with fitted rising ratio (aprime-slsm-v2)", "Z_local": 2.295, "gv_p": 0.2007540104228763, "gv_Z": 0.838931017492214, "direct": {"k": 344, "n": 2000, "p": 0.172, "p_se": 0.0084384832760396, "Z": 0.9462913579615762, "lower_bound": false}}, {"what": "par3 with same-sign constrained ratio (ssframe-v1)", "Z_local": 2.134, "gv_p": 0.2876510784177934, "gv_Z": 0.560259926633156, "direct": {"k": 503, "n": 2000, "p": 0.2515, "p_se": 0.009701745976884779, "Z": 0.6697769334559662, "lower_bound": false}}]}
+SUMMARY g1.0 {"E_N": {"0.5": {"mean": 2.8855, "se": 0.022670506190322764}, "1.0": {"mean": 1.9345, "se": 0.02146707461780303}, "1.5": {"mean": 0.9915, "se": 0.017800907593591337}, "2.0": {"mean": 0.414, "se": 0.012821239881386202}}, "direct": {"1.5": {"k": 1488, "n": 2000, "p": 0.744, "p_se": 0.00975868843646522, "Z": -0.6557266787982536, "lower_bound": false, "gv_p": 1.0}, "2.0": {"k": 784, "n": 2000, "p": 0.392, "p_se": 0.010916409666186039, "Z": 0.274110116035147, "lower_bound": false, "gv_p": 0.4543954267553167}, "2.5": {"k": 237, "n": 2000, "p": 0.1185, "p_se": 0.007226954752867904, "Z": 1.1825185740471165, "lower_bound": false, "gv_p": 0.14634437530853558}, "3.0": {"k": 58, "n": 2000, "p": 0.029, "p_se": 0.003752265982043384, "Z": 1.8956979239918383, "lower_bound": false, "gv_p": 0.03678150146188637}}, "observed": {"Z_local": 3.128785421284753, "p_local": 0.0008776522077401995, "direct": {"k": 44, "n": 2000, "p": 0.022, "p_se": 0.003279939023823461, "Z": 2.0140908120181393, "lower_bound": false}, "gv_p": 0.024755593348432102, "gv_Z": 1.964163046776025}, "conversions": [{"what": "Heister Z_asym, TKDE frame, as published", "Z_local": 5.35, "gv_p": 1.9867367481485356e-06, "gv_Z": 4.612765058706183, "direct": {"k": 0, "n": 2000, "p": 0.0, "Z": 2.9677379253417833, "lower_bound": true}}, {"what": "par3 toy-calibrated (aprime-smooth-v1)", "Z_local": 3.35, "gv_p": 0.012066273333249788, "gv_Z": 2.255012460521166, "direct": {"k": 19, "n": 2000, "p": 0.0095, "p_se": 0.002169072382379159, "Z": 2.3455309708066743, "lower_bound": false}}, {"what": "bb asymptotic (aprime-aleph-v1)", "Z_local": 2.664, "gv_p": 0.09561901554682757, "gv_Z": 1.3069254517698554, "direct": {"k": 154, "n": 2000, "p": 0.077, "p_se": 0.0059611659933271445, "Z": 1.4255440370804515, "lower_bound": false}}, {"what": "par3 with fitted rising ratio (aprime-slsm-v2)", "Z_local": 2.295, "gv_p": 0.2399512323616814, "gv_Z": 0.7064594446217392, "direct": {"k": 412, "n": 2000, "p": 0.206, "p_se": 0.009043340090917736, "Z": 0.8203791459684608, "lower_bound": false}}, {"what": "par3 with same-sign constrained ratio (ssframe-v1)", "Z_local": 2.134, "gv_p": 0.34363924600796963, "gv_Z": 0.40255109627786523, "direct": {"k": 601, "n": 2000, "p": 0.3005, "p_se": 0.010251823008616564, "Z": 0.5229630023392788, "lower_bound": false}}]}
+SUMMARY g3.0 {"E_N": {"0.5": {"mean": 1.85, "se": 0.019658159161294972}, "1.0": {"mean": 1.241, "se": 0.019433175864023898}, "1.5": {"mean": 0.662, "se": 0.0157956560919668}, "2.0": {"mean": 0.2725, "se": 0.011277653467537783}}, "direct": {"1.5": {"k": 1150, "n": 2000, "p": 0.575, "p_se": 0.011053845484717072, "Z": -0.18911842627279257, "lower_bound": false, "gv_p": 0.7310666340609251}, "2.0": {"k": 531, "n": 2000, "p": 0.2655, "p_se": 0.009874455681200862, "Z": 0.6264802304337753, "lower_bound": false, "gv_p": 0.2996546606923806}, "2.5": {"k": 181, "n": 2000, "p": 0.0905, "p_se": 0.006415206543830058, "Z": 1.337682371320883, "lower_bound": false, "gv_p": 0.09610740380528221}, "3.0": {"k": 48, "n": 2000, "p": 0.024, "p_se": 0.00342227994179319, "Z": 1.9773684281819466, "lower_bound": false, "gv_p": 0.024079605892549216}}, "observed": {"Z_local": 3.0952555995631204, "p_local": 0.0009832167906117819, "direct": {"k": 36, "n": 2000, "p": 0.018, "p_se": 0.0029728773940409987, "Z": 2.0969274291643423, "lower_bound": false}, "gv_p": 0.01798586607021659, "gv_Z": 2.097246816311144}, "conversions": [{"what": "Heister Z_asym, TKDE frame, as published", "Z_local": 5.35, "gv_p": 1.2902757479228553e-06, "gv_Z": 4.70165983272701, "direct": {"k": 0, "n": 2000, "p": 0.0, "Z": 2.9677379253417833, "lower_bound": true}}, {"what": "par3 toy-calibrated (aprime-smooth-v1)", "Z_local": 3.35, "gv_p": 0.007885479086149231, "gv_Z": 2.4141733235192726, "direct": {"k": 14, "n": 2000, "p": 0.007, "p_se": 0.0018642692938521516, "Z": 2.457263390205438, "lower_bound": false}}, {"what": "bb asymptotic (aprime-aleph-v1)", "Z_local": 2.664, "gv_p": 0.0627245889274396, "gv_Z": 1.5322969320300723, "direct": {"k": 119, "n": 2000, "p": 0.0595, "p_se": 0.005289600646551685, "Z": 1.558984706172256, "lower_bound": false}}, {"what": "par3 with fitted rising ratio (aprime-slsm-v2)", "Z_local": 2.295, "gv_p": 0.15782653926632997, "gv_Z": 1.003430740057326, "direct": {"k": 294, "n": 2000, "p": 0.147, "p_se": 0.007918049002121673, "Z": 1.0493870846841045, "lower_bound": false}}, {"what": "par3 with same-sign constrained ratio (ssframe-v1)", "Z_local": 2.134, "gv_p": 0.22633473173670926, "gv_Z": 0.7509720723368032, "direct": {"k": 396, "n": 2000, "p": 0.198, "p_se": 0.00891055553823666, "Z": 0.848786685915967, "lower_bound": false}}]}
+SUMMARY float {"E_N": {"0.5": {"mean": 2.4935, "se": 0.020265345225496514}, "1.0": {"mean": 1.799, "se": 0.019773593439199395}, "1.5": {"mean": 0.9885, "se": 0.01753104514202978}, "2.0": {"mean": 0.4335, "se": 0.013110103447578248}}, "direct": {"1.5": {"k": 1519, "n": 2000, "p": 0.7595, "p_se": 0.009556666521334729, "Z": -0.7046951021736432, "lower_bound": false, "gv_p": 1.0}, "2.0": {"k": 823, "n": 2000, "p": 0.4115, "p_se": 0.01100381183953997, "Z": 0.22368810792185378, "lower_bound": false, "gv_p": 0.4241612900552044}, "2.5": {"k": 271, "n": 2000, "p": 0.1355, "p_se": 0.007653095778833557, "Z": 1.100762584170507, "lower_bound": false, "gv_p": 0.1365287882303945}, "3.0": {"k": 75, "n": 2000, "p": 0.0375, "p_se": 0.004248161366991607, "Z": 1.7804643416920256, "lower_bound": false, "gv_p": 0.03429973239246288}}, "observed": {"Z_local": 3.1339963632770744, "p_local": 0.0008622149658824096, "direct": {"k": 55, "n": 2000, "p": 0.0275, "p_se": 0.0036567574434189644, "Z": 1.9188762262165762, "lower_bound": false}, "gv_p": 0.022708254136062422, "gv_Z": 2.0007762471200836}, "conversions": [{"what": "Heister Z_asym, TKDE frame, as published", "Z_local": 5.35, "gv_p": 1.8506582109739432e-06, "gv_Z": 4.627485777127287, "direct": {"k": 0, "n": 2000, "p": 0.0, "Z": 2.9677379253417833, "lower_bound": true}}, {"what": "par3 toy-calibrated (aprime-smooth-v1)", "Z_local": 3.35, "gv_p": 0.01124940581993742, "gv_Z": 2.281839604057687, "direct": {"k": 24, "n": 2000, "p": 0.012, "p_se": 0.002434748446965312, "Z": 2.257129244486226, "lower_bound": false}}, {"what": "bb asymptotic (aprime-aleph-v1)", "Z_local": 2.664, "gv_p": 0.08919191416697599, "gv_Z": 1.3457479140100488, "direct": {"k": 182, "n": 2000, "p": 0.091, "p_se": 0.006431135203057078, "Z": 1.334622286700193, "lower_bound": false}}, {"what": "par3 with fitted rising ratio (aprime-slsm-v2)", "Z_local": 2.295, "gv_p": 0.22390523969488957, "gv_Z": 0.7590703420152696, "direct": {"k": 447, "n": 2000, "p": 0.2235, "p_se": 0.009315249594079592, "Z": 0.7604259779261413, "lower_bound": false}}, {"what": "par3 with same-sign constrained ratio (ssframe-v1)", "Z_local": 2.134, "gv_p": 0.32071961848993674, "gv_Z": 0.4656874497574408, "direct": {"k": 639, "n": 2000, "p": 0.3195, "p_se": 0.010426402783318895, "Z": 0.46909742439517144, "lower_bound": false}}]}
+LEEFAST: toys 2000 | closure 3.1340 fast 3.1340 | v1 grid maxdiff 1.00e-06 at30 1.47e-13 ok True | v1 toys 36 maxdiff 4.93e-06 ok True | truth True | fallbacks obs 0 toys 0 | maxit obs 0 toys 0 | s/toy/worker 1.47 | gate PASS
+LEESCAN: toys 2000 | closure 3.1340 scanner 3.1340 | g1.78: obs max 3.133@30.50; E[N(1)] 1.603+-0.021; Zloc 3.134 -> direct p 0.0180 Z 2.097; GV Z 2.047 | g1.0: obs max 3.120@30.50; E[N(1)] 1.935+-0.021; Zloc 3.129 -> direct p 0.0220 Z 2.014; GV Z 1.964 | g3.0: obs max 3.097@30.50; E[N(1)] 1.241+-0.019; Zloc 3.095 -> direct p 0.0180 Z 2.097; GV Z 2.097 | float: obs max 3.133@30.50; E[N(1)] 1.799+-0.020; Zloc 3.134 -> direct p 0.0275 Z 1.919; GV Z 2.001 | GV(primary) 5.350->4.651; 3.350->2.324; 2.664->1.406; 2.295->0.839; 2.134->0.560 | P(max>=2) direct 0.3285 GV 0.3805 | L0 PASS L1 PASS L2 PASS L3 PASS L4 PASS L5 PASS

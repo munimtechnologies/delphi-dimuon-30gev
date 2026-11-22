@@ -1,0 +1,18 @@
+test_fast_equals_discovery (test_leefast.Fits.test_fast_equals_discovery) ... ok
+test_fast_equals_lbfgs_scanner (test_leefast.Fits.test_fast_equals_lbfgs_scanner) ... ok
+test_hessian_equals_finite_differences (test_leefast.Fits.test_hessian_equals_finite_differences) ... ok
+test_newton_respects_bounds (test_leefast.Fits.test_newton_respects_bounds) ... ok
+test_value_and_gradient_equal_parfit (test_leefast.Fits.test_value_and_gradient_equal_parfit) ... ok
+test_grid_diffs (test_leefast.Helpers.test_grid_diffs) ... ok
+test_read_rows (test_leefast.Helpers.test_read_rows) ... ok
+test_tolerances (test_leefast.Helpers.test_tolerances) ... ok
+test_toy_diffs (test_leefast.Helpers.test_toy_diffs) ... ok
+test_lengths (test_leefast.Reference.test_lengths) ... ok
+test_observed_maxima_as_v1_printed (test_leefast.Reference.test_observed_maxima_as_v1_printed) ... ok
+test_toy_rows_consistent (test_leefast.Reference.test_toy_rows_consistent) ... ok
+test_upcrossings_as_v1 (test_leefast.Reference.test_upcrossings_as_v1) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 1.059s
+
+OK

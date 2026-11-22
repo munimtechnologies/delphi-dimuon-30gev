@@ -1,0 +1,37 @@
+{
+  "what": "ALEPH 30 GeV opposite-sign dimuon excess (Heister, arXiv:1610.06536 v9): local and global significance by background frame, as graded in PLAN amendment 0.41. Every number is copied from the two job outputs named in 'sources'; nothing here is recomputed.",
+  "made_by": "MV2 of Munim, Inc. (mv2@munimtech.com), with AI agents; not yet checked by a physicist. CC BY 4.0.",
+  "sources": {
+    "leescan": "analysis/results/leescan/leescan-v2/leescan.json",
+    "ssframe": "analysis/results/ssframe/toyres-v3/toyresume.json"
+  },
+  "scan": {
+    "masses_GeV": "17.0 to 48.0 in 0.25 GeV steps (125 points)",
+    "widths_GeV": [1.0, 1.78, 3.0],
+    "primary_width_GeV": 1.78,
+    "toys": 2000,
+    "toy_truth": "constant-ratio par3 background-only fit to the figure-read spectrum",
+    "E_N1_primary": [1.6035, 0.0206],
+    "observed_max_primary": {"Z": 3.1325, "mass_GeV": 30.5}
+  },
+  "global_from_observed_Z_3134": {
+    "width_1.78": {"Z_local": 3.134, "direct_p": 0.018, "direct_k_of_2000": 36, "direct_Z": 2.097, "GV_Z": 2.047},
+    "width_1.0": {"Z_local": 3.129, "direct_p": 0.022, "direct_k_of_2000": 44, "direct_Z": 2.014, "GV_Z": 1.964},
+    "width_3.0": {"Z_local": 3.095, "direct_p": 0.018, "direct_k_of_2000": 36, "direct_Z": 2.097, "GV_Z": 2.097},
+    "width_floated_over_3": {"Z_local": 3.134, "direct_p": 0.0275, "direct_k_of_2000": 55, "direct_Z": 1.919, "GV_Z": 2.001}
+  },
+  "ladder_primary_width": [
+    {"frame": "Heister kernel-density background, asymptotic (as published)", "Z_local": 5.35, "GV_Z_global": 4.651, "direct": "0 of 2000 toys reach it (direct Z > 2.97, lower bound only)"},
+    {"frame": "smooth par3 background, constant muon ratio, toy-calibrated", "Z_local": 3.35, "GV_Z_global": 2.324, "direct_Z_global": 2.366},
+    {"frame": "smooth par3 background, constant muon ratio, asymptotic (observed)", "Z_local": 3.134, "GV_Z_global": 2.047, "direct_Z_global": 2.097},
+    {"frame": "b-bbar Monte Carlo shape, asymptotic", "Z_local": 2.664, "GV_Z_global": 1.406, "direct_Z_global": 1.465},
+    {"frame": "par3 with the fitted rising muon ratio", "Z_local": 2.295, "GV_Z_global": 0.839, "direct_Z_global": 0.946},
+    {"frame": "par3 with the same-sign-constrained ratio", "Z_local": 2.134, "GV_Z_global": 0.560, "direct_Z_global": 0.670}
+  ],
+  "gv_check_L2": {"P_maxZ_ge_2_direct": 0.3285, "P_maxZ_ge_2_GV": 0.3805, "abs_diff": 0.052, "tolerance_as_coded": 0.0571, "result": "PASS (narrow; with 15 % of the direct value instead, 0.0493, it would fail)"},
+  "ssframe_v3": {"toys": 1563, "Z_asym": 2.1339, "calibrated_k": 25, "calibrated_p": 0.0160, "calibrated_Z": 2.145, "P_Z_ge_2": 0.0205, "gof_p": 0.705, "b_ctrl_per_GeV": [0.0345, 0.0222], "Z_at_fixed_b_ctrl": 1.692},
+  "grades": {
+    "leescan-v2": {"gateV": "PASS", "L0": "PASS", "L1": "PASS", "L2": "PASS", "L3": "PASS", "L4": "PASS", "L5": "PASS"},
+    "toyres-ssframe-v3": {"P0": "PASS", "P1": "PASS", "P2": "FAIL", "P3": "PASS", "P4": "PASS"}
+  }
+}
