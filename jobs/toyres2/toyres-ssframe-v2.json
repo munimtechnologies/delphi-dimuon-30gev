@@ -1,0 +1,19 @@
+{
+  "name": "toyres-ssframe-v2",
+  "kind": "compete",
+  "workdir": "E:\\MV2-Pursuit\\work\\20261122T073340Z-science\\toyres2",
+  "image": "python:3.12",
+  "setup": ["pip install -q numpy scipy"],
+  "run": [
+    "cd /work && python -m py_compile fetch_mods2.py > /out/compile.txt 2>&1; rc=$?; cat /out/compile.txt; exit $rc",
+    "cd /work && python fetch_mods2.py > /out/fetch.txt 2>&1; rc=$?; cat /out/fetch.txt; sha256sum toyresume.py test_toyresume.py fetch_mods2.py aprime_slsm.py aprime_smooth.py ssframe.py sscontrol.py dmcratio.py aprime_cross.py aleph-fig5.json aleph-dmc21.json aleph-emu3.json prior-ssframe.csv | tee /out/sha256.txt; exit $rc",
+    "cd /work && python -m py_compile toyresume.py test_toyresume.py >> /out/compile.txt 2>&1 && python -m unittest -v test_toyresume > /out/tests.txt 2>&1; rc=$?; cat /out/tests.txt; exit $rc",
+    "cd /work && python toyresume.py --kind ssframe --prior prior-ssframe.csv --fig5 aleph-fig5.json --dmc aleph-dmc21.json --emu aleph-emu3.json --emuframe /work/emuframe.py --out /out --ntoys 6000 --workers 4 --budget-s 16000 > /out/run.txt 2>&1; rc=$?; tail -n 90 /out/run.txt; exit $rc"
+  ],
+  "network": true,
+  "data_urls": [],
+  "data_key": "none",
+  "cpu": 4,
+  "memory_gb": 1,
+  "timeout_minutes": 360
+}
