@@ -1,0 +1,49 @@
+{
+ "source": "E:\\MV2-Pursuit\\work\\20261122T073340Z-science\\compete\\toyres-ssframe\\job.json",
+ "normalized": {
+  "id": "854da8caa6ce",
+  "name": "toyres-ssframe-v2",
+  "job_path": "E:\\MV2-Pursuit\\work\\20261122T073340Z-science\\compete\\toyres-ssframe\\job.json",
+  "run": "20261122T073340Z-science",
+  "field": "science",
+  "kind": "compete",
+  "workdir": "E:\\MV2-Pursuit\\work\\20261122T073340Z-science\\toyres2",
+  "image": "python:3.12",
+  "run_network": true,
+  "network": true,
+  "setup": [
+   {
+    "name": "setup-01-pip",
+    "cmd": "pip install -q numpy scipy",
+    "timeout_seconds": 0
+   }
+  ],
+  "run_steps": [
+   {
+    "name": "run-01-cd",
+    "cmd": "cd /work && python -m py_compile fetch_mods2.py > /out/compile.txt 2>&1; rc=$?; cat /out/compile.txt; exit $rc",
+    "timeout_seconds": 0
+   },
+   {
+    "name": "run-02-cd",
+    "cmd": "cd /work && python fetch_mods2.py > /out/fetch.txt 2>&1; rc=$?; cat /out/fetch.txt; sha256sum toyresume.py test_toyresume.py fetch_mods2.py aprime_slsm.py aprime_smooth.py ssframe.py sscontrol.py dmcratio.py aprime_cross.py aleph-fig5.json aleph-dmc21.json aleph-emu3.json prior-ssframe.csv | tee /out/sha256.txt; exit $rc",
+    "timeout_seconds": 0
+   },
+   {
+    "name": "run-03-cd",
+    "cmd": "cd /work && python -m py_compile toyresume.py test_toyresume.py >> /out/compile.txt 2>&1 && python -m unittest -v test_toyresume > /out/tests.txt 2>&1; rc=$?; cat /out/tests.txt; exit $rc",
+    "timeout_seconds": 0
+   },
+   {
+    "name": "run-04-cd",
+    "cmd": "cd /work && python toyresume.py --kind ssframe --prior prior-ssframe.csv --fig5 aleph-fig5.json --dmc aleph-dmc21.json --emu aleph-emu3.json --emuframe /work/emuframe.py --out /out --ntoys 6000 --workers 4 --budget-s 16000 > /out/run.txt 2>&1; rc=$?; tail -n 90 /out/run.txt; exit $rc",
+    "timeout_seconds": 0
+   }
+  ],
+  "data_urls": [],
+  "data_key": "none",
+  "cpu": 4.0,
+  "memory_gb": 1,
+  "timeout_minutes": 360.0
+ }
+}

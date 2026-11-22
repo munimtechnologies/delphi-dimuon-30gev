@@ -1,0 +1,7 @@
+python 3.12.15, mv2 toyresume 0.1.0
+emuframe blob d55c900fdb45aa9f8a6099a142079a510c3afdfa
+PRIOR ssframe: 934 toys, idx 0..933
+CONTROL dmc closure PASS (OS 0.02804 SS 0.04094) | window 15-38.0 ok True | b_SS 0.0387 sb 0.0187 | b_emu 0.0042 sb 0.0119 | b_ctrl 0.0345 +- 0.0222
+CLOSURE par3 b=0 3.1340 (want 3.1340) | slope free 2.2953 (want 2.2953) | loose constraint 2.2953
+CONSTRAINED Z0=2.1339 mu=0.618 b=0.0177 b(mu=0)=0.0284 pulls -0.28/-0.76 | fixed b_ctrl Z0=1.6917, -1s 2.5933, +1s 0.8716 | bkg 29-32 23.34 vs n 33 | dev0 55.22
+RECHECK PASS: 8 saved toys re-run, 0 mismatches (90 s)
