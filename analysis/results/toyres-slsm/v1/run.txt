@@ -1,0 +1,70 @@
+python 3.12.16, mv2 toyresume 0.1.0
+emuframe blob d55c900fdb45aa9f8a6099a142079a510c3afdfa
+PRIOR slsm: 869 toys, idx 0..868
+OBS slsm: closure parfit 3.1340 b0 3.1340 | const Z0 3.1340 | slope Z0 2.2953 mu 0.690 b 0.0107 | dev0 55.1960 | sum_T 565.6920 sum_lam_n 362.0000
+RECHECK PASS: 8 saved toys re-run, 0 mismatches (169 s)
+toys merged 969 (new 100), 2407 s
+toys merged 1069 (new 200), 4688 s
+toys merged 1169 (new 300), 6818 s
+toys merged 1269 (new 400), 8941 s
+toys merged 1369 (new 500), 11275 s
+toys merged 1469 (new 600), 13418 s
+toys merged 1569 (new 700), 15669 s
+{
+ "prior_toys": 869,
+ "merged_toys": 1584,
+ "stopped": "time budget 16000 s reached",
+ "recheck_result": {
+  "n": 8,
+  "mismatches": []
+ },
+ "near_ties": {
+  "slope": 0,
+  "const": 0
+ },
+ "rates": {
+  "slope": {
+   "p_ge2": 0.02335858585858586,
+   "p_ge3": 0.0012626262626262627,
+   "mean_Z": 0.3634735125259591
+  },
+  "const": {
+   "p_ge2": 0.1717171717171717,
+   "p_ge3": 0.03345959595959596,
+   "mean_Z": 1.1374378301404915
+  }
+ },
+ "calibrated": {
+  "slope": {
+   "p": 0.00946969696969697,
+   "Z": 2.3467217229055333,
+   "lower_bound": false,
+   "k": 15,
+   "n": 1584,
+   "Z_asym": 2.2952839457044156
+  },
+  "const": {
+   "p": 0.026515151515151516,
+   "Z": 1.9346740800992503,
+   "lower_bound": false,
+   "k": 42,
+   "n": 1584,
+   "Z_asym": 3.1339963632740275
+  }
+ },
+ "gof": {
+  "dev_obs": 55.19599225004407,
+  "k": 1107,
+  "p": 0.6988636363636364
+ },
+ "grades": {
+  "L0": "PASS",
+  "L1": "PASS",
+  "L2": "FAIL",
+  "L3": "PASS",
+  "L4": "PASS",
+  "L5": "PASS"
+ }
+}
+APSLSM: closure parfit=3.1340 b0=3.1340 | const Z0 3.134 -> cal(slope truth) 1.93 | slope Z0 2.295 -> cal 2.35 (k=15) mu=0.690 b=0.0107 | b(mu=0)=0.0266 [0.0149,0.0384] Zs=2.26 | sig-floated b=0.0107 Zs=0.73 | rates slope p2=0.0234 p3=0.0013 | gof p=0.699 | L0 PASS L1 PASS L2 FAIL L3 PASS L4 PASS L5 PASS
+TOYRESUME: slsm prior 869 merged 1584 | recheck PASS | time budget 16000 s reached | L0 PASS L1 PASS L2 FAIL L3 PASS L4 PASS L5 PASS

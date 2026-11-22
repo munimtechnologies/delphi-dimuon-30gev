@@ -1,0 +1,11 @@
+test_match_within_rounding (test_toyresume.TestCompare.test_match_within_rounding) ... ok
+test_mismatch (test_toyresume.TestCompare.test_mismatch) ... ok
+test_near_ties (test_toyresume.TestCompare.test_near_ties) ... ok
+test_contiguous (test_toyresume.TestCsv.test_contiguous) ... ok
+test_parse_and_format_roundtrip (test_toyresume.TestCsv.test_parse_and_format_roundtrip) ... ok
+test_wrong_header (test_toyresume.TestCsv.test_wrong_header) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.001s
+
+OK

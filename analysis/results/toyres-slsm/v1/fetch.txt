@@ -1,0 +1,11 @@
+fetched stats/aprime_smooth.py (17863 bytes) sha256 eae6510abcd327c385585095117e1fa3ba1cec8fa5e74aa9d605f230f0ed8d28 (matches)
+fetched stats/aprime_slsm.py (15127 bytes) sha256 66225147496757840e59e3a29f810f13f70aca9573902aefb30b466aa419cb57 (matches)
+fetched stats/slsm_chunk.py (8337 bytes) sha256 3b27243a9d8a40af5760d4171fda8b87243b8fa030ca938b67e4ba0aaa9c2009 (matches)
+fetched stats/ssframe.py (19968 bytes) sha256 f1bb30e0de34300e95cb246a3494ac2083b543cd8a21623eb6a8b004a7d22125 (matches)
+fetched stats/sscontrol.py (14499 bytes) sha256 f5001810421ef6875bbe0146a6eb0eb140319d7805522557036da9c8f3d7638a (matches)
+fetched stats/dmcratio.py (12562 bytes) sha256 43f29aa86475952ef3b482591f4bee99017b789bf2eda2e73008bf22045b2a7c (matches)
+fetched stats/aprime_cross.py (18597 bytes) sha256 3161582977222cca65f826d9b92a58d5979ebd8dee6d359386757c4ea25a83ae (matches)
+fetched data/aleph-fig5.json (1679 bytes) sha256 f535d924111e215b71f6a308e6c228cead13680512498517680863b05b7ee626 (matches)
+fetched data/aleph-dmc21.json (3075 bytes) sha256 c0b79dafbc25bc0f0e204f657a95d2c47bc05afd4f6758df312cfaa8d12cc1ba (matches)
+fetched data/aleph-emu3.json (2022 bytes) sha256 f6fe3249c303e07b475487c33e9a8e20e5f1778d7b0abba8bfa7f77810a7c984 (matches)
+fetched analysis/results/aprime-slsm/v2-partial/toys.csv -> prior-slsm.csv (869 rows, 39034 bytes) sha256 6ed3681dea2779572cb8ca628557a3f1a433aa947f4bf3df8f93bd076a431cf7

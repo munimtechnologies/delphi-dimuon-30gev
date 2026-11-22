@@ -1,0 +1,49 @@
+{
+ "source": "E:\\MV2-Pursuit\\work\\20261121T090657Z-science\\compete\\toyres-slsm\\job.json",
+ "normalized": {
+  "id": "d8d2df110eab",
+  "name": "toyres-slsm-v1",
+  "job_path": "E:\\MV2-Pursuit\\work\\20261121T090657Z-science\\compete\\toyres-slsm\\job.json",
+  "run": "20261121T090657Z-science",
+  "field": "science",
+  "kind": "compete",
+  "workdir": "E:\\MV2-Pursuit\\work\\20261121T090657Z-science\\toyres",
+  "image": "python:3.12",
+  "run_network": true,
+  "network": true,
+  "setup": [
+   {
+    "name": "setup-01-pip",
+    "cmd": "pip install -q numpy scipy",
+    "timeout_seconds": 0
+   }
+  ],
+  "run_steps": [
+   {
+    "name": "run-01-cd",
+    "cmd": "cd /work && python -m py_compile toyresume.py test_toyresume.py fetch_mods.py > /out/compile.txt 2>&1; rc=$?; cat /out/compile.txt; exit $rc",
+    "timeout_seconds": 0
+   },
+   {
+    "name": "run-02-cd",
+    "cmd": "cd /work && python fetch_mods.py slsm > /out/fetch.txt 2>&1; rc=$?; cat /out/fetch.txt; sha256sum toyresume.py test_toyresume.py fetch_mods.py aprime_slsm.py aprime_smooth.py slsm_chunk.py aleph-fig5.json prior-slsm.csv | tee /out/sha256.txt; exit $rc",
+    "timeout_seconds": 0
+   },
+   {
+    "name": "run-03-cd",
+    "cmd": "cd /work && python -m unittest -v test_toyresume > /out/tests.txt 2>&1; rc=$?; cat /out/tests.txt; exit $rc",
+    "timeout_seconds": 0
+   },
+   {
+    "name": "run-04-cd",
+    "cmd": "cd /work && python toyresume.py --kind slsm --prior prior-slsm.csv --fig5 aleph-fig5.json --emuframe /work/emuframe.py --out /out --ntoys 10000 --workers 4 --budget-s 16000 > /out/run.txt 2>&1; rc=$?; tail -n 90 /out/run.txt; exit $rc",
+    "timeout_seconds": 0
+   }
+  ],
+  "data_urls": [],
+  "data_key": "none",
+  "cpu": 4.0,
+  "memory_gb": 1,
+  "timeout_minutes": 360.0
+ }
+}
