@@ -1,0 +1,9 @@
+NAME="AlmaLinux"
+VERSION="9.8 (Olive Jaguar)"
+uid=0(root) gid=0(root) groups=0(root)
+INSIDE_OK
+STATX_OK
+total 92
+drwxr-xr-x  2 root root 4096 Nov 23 11:25 .
+drwxr-xr-x 77 root root 4096 Nov 23 11:26 ..
+-rw-r--r--  1 root root  196 Jan 31  2022 colorgrep.csh

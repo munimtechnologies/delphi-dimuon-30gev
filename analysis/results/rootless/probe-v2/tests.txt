@@ -1,0 +1,12 @@
+test_resolve_stays_inside (test_ocipull.TestLayers.test_resolve_stays_inside) ... ok
+test_symlink_loop (test_ocipull.TestLayers.test_symlink_loop) ... ok
+test_two_layers_with_whiteouts (test_ocipull.TestLayers.test_two_layers_with_whiteouts) ... ok
+test_write_env (test_ocipull.TestLayers.test_write_env) ... ok
+test_pick_platform (test_ocipull.TestParse.test_pick_platform) ... ok
+test_ref (test_ocipull.TestParse.test_ref) ... ok
+test_www_authenticate (test_ocipull.TestParse.test_www_authenticate) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.016s
+
+OK

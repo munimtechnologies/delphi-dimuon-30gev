@@ -1,0 +1,277 @@
+--- /etc/profile.d/delphi.sh
+export DELPHI_INSTALL_DIR=/delphi; export CERNLIB_XROOTD=ON; . /delphi/setup.sh
+
+--- /home/delphi/.bash_profile
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+--- /home/delphi/.bashrc
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
+then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+if [ -d ~/.bashrc.d ]; then
+	for rc in ~/.bashrc.d/*; do
+		if [ -f "$rc" ]; then
+			. "$rc"
+		fi
+	done
+fi
+
+unset rc
+export PS1='[\u \W]$ '
+
+--- /home/delphi/.profile
+head: cannot open '/home/delphi/.profile' for reading: No such file or directory
+
+--- ls -la /home/delphi
+total 28
+drwx------  4 delphi delphi 4096 Nov 23 11:26 .
+drwxr-xr-x  3 delphi delphi 4096 Nov 23 11:25 ..
+-rw-r--r--  1 delphi delphi   18 Apr 30  2024 .bash_logout
+-rw-r--r--  1 delphi delphi  141 Apr 30  2024 .bash_profile
+-rw-r--r--  1 delphi delphi  515 Oct 17 11:35 .bashrc
+drwxr-xr-x 10 delphi delphi 4096 Nov 23 11:26 examples
+drwxr-xr-x  5 delphi delphi 4096 Nov 23 11:26 graexe
+--- ls -la /delphi
+total 72
+drwxr-xr-x 10 delphi delphi  4096 Nov 23 11:26 .
+drwxr-xr-x 20 delphi delphi  4096 Nov 23 11:26 ..
+drwxr-xr-x  2 delphi delphi 20480 Nov 23 11:23 RunInfo
+lrwxrwxrwx  1 delphi delphi    22 Nov 23 11:26 almalinux-x86_64-9 -> almalinux-x86_64-9_xrd
+drwxr-xr-x 12 delphi delphi  4096 Nov 23 11:23 docs
+drwxr-xr-x  2 delphi delphi  4096 Nov 23 11:23 env
+drwxr-xr-x  9 delphi delphi  4096 Nov 23 11:23 examples
+drwxr-xr-x 39 delphi delphi  4096 Nov 23 11:23 pdl
+drwxr-xr-x  3 delphi delphi  4096 Nov 23 11:23 perl
+drwxr-xr-x  3 delphi delphi  4096 Nov 23 11:23 releases
+drwxr-xr-x  2 delphi delphi  4096 Nov 23 11:25 scripts
+-rwxr-xr-x  1 delphi delphi  1663 Oct 17 11:31 setup.csh
+-rwxr-xr-x  1 delphi delphi  1658 Oct 17 11:31 setup.sh
+-rwxr-xr-x  1 delphi delphi   817 Oct 17 11:31 unset.csh
+-rwxr-xr-x  1 delphi delphi   838 Oct 17 11:31 unset.sh
+--- setup scripts and tools under /delphi
+/delphi/setup.sh
+/delphi/releases/almalinux-9-x86_64_xrd/latest/profiles/delphi.sh
+/delphi/releases/almalinux-9-x86_64_xrd/latest/scripts/dellib
+/delphi/docs/cernlib
+--- trace of sourcing /etc/profile.d/delphi.sh
++ . /etc/profile.d/delphi.sh
+++ export DELPHI_INSTALL_DIR=/delphi
+++ DELPHI_INSTALL_DIR=/delphi
+++ export CERNLIB_XROOTD=ON
+++ CERNLIB_XROOTD=ON
+++ . /delphi/setup.sh
++++ test /delphi = ''
++++ export DELPHI_INSTALL_DIR
++++ . /delphi/unset.sh
+++++ unset ADDCOMP
+++++ unset ADDLIB
+++++ unset CC
+++++ unset CCOMP
+++++ unset CERN
+++++ unset CERN_PAM
+++++ unset CERN_LIB
+++++ unset CERN_ROOT
+++++ unset CFLAGS
+++++ unset DELPHI_DDB_BIN
+++++ unset DELPHI_DDB_DIR
+++++ unset DELPHI
+++++ unset DELPHI_BATCAVE
+++++ unset DELPHI_BLKD
+++++ unset DELPHI_DAT
+++++ unset DELPHI_DATA_ROOT
+++++ unset DELPHI_DDB
+++++ unset DELPHI_LIB
+++++ unset DELPHI_PAM
+++++ unset DELPHI_ZIP
+++++ unset DELSIM_ROOT
+++++ unset DELPHI_BIN
+++++ unset DELPHI_CRA
+++++ unset DELPHI_PATH
+++++ unset DES_HOME
+++++ unset F77
+++++ unset FCOMP
+++++ unset FFLAGS
+++++ unset GRA_PLACE
+++++ unset GROUP_DIR
+++++ unset LDFLAGS
+++++ unset OPGS_HOME
+++++ unset OPGS_HOME
+++++ unset OPGS_RUN_TIME
+++++ unset OS_ID
+++++ unset OS_RELEASE
+++++ unset OS_TAG
+++++ unset PRO
+++++ unset XDB
+++++ unset XLF77
++++++ echo /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++++++ sed -r 's#/cvmfs/delphi.cern.ch/[a-zA-Z0-9\/\@_\.\-]*:##g'
+++++ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+++++ export PATH
++++ '[' -e /delphi/env/osarch ']'
+++++ /delphi/env/osarch
++++ OS_ARCH=x86_64
+++++ /delphi/env/ostag
++++ OS_TAG=almalinux-9-x86_64
++++ export OS_ARCH
++++ export OS_TAG
++++ '[' '' = '' ']'
++++ DELPHI_RELEASE=latest
++++ export DELPHI_RELEASE
++++ '[' ON = ON ']'
++++ export DELPHI_XRD=_xrd
++++ DELPHI_XRD=_xrd
++++ '[' -d /delphi/releases/almalinux-9-x86_64_xrd/latest ']'
++++ export GROUP_DIR=/delphi/releases/almalinux-9-x86_64_xrd/latest
++++ GROUP_DIR=/delphi/releases/almalinux-9-x86_64_xrd/latest
++++ '[' -e /delphi/releases/almalinux-9-x86_64_xrd/latest/profiles/delphi.sh ']'
++++ . /delphi/releases/almalinux-9-x86_64_xrd/latest/profiles/delphi.sh
+++++ unset -f dellevel
+++++ '[' /delphi = '' ']'
+++++ export DELPHI_INSTALL_DIR
+++++ '[' -e /delphi/env/mount_eos.sh ']'
+++++ /delphi/env/mount_eos.sh
+++++ '[' -e /delphi/env/osarch ']'
++++++ /delphi/env/osarch
+++++ OS_ARCH=x86_64
++++++ /delphi/env/ostag
+++++ OS_TAG=almalinux-9-x86_64
+++++ export OS_ARCH
+++++ export OS_TAG
+++++ '[' latest = '' ']'
+++++ export DELPHI_RELEASE
+++++ XROOTD_VMP=eospublic.cern.ch:/eos=/eos
+++++ CERNLIB_XROOTD=ON
+++++ export XROOTD_VMP CERNLIB_XROOTD
+++++ '[' ON = ON ']'
+++++ DELPHI_XRD=_xrd
+++++ export DELPHI_XRD
+++++ '[' -d /delphi/releases/almalinux-9-x86_64_xrd/latest ']'
+++++ export GROUP_DIR=/delphi/releases/almalinux-9-x86_64_xrd/latest
+++++ GROUP_DIR=/delphi/releases/almalinux-9-x86_64_xrd/latest
+++++ '[' '' = '' ']'
+++++ export CERN=/delphi/releases/almalinux-9-x86_64_xrd/latest/cern
+++++ CERN=/delphi/releases/almalinux-9-x86_64_xrd/latest/cern
+++++ PRO=270826
+++++ XLF77=gfortran
+++++ F77=gfortran
+++++ FCOMP=gfortran
+++++ CCOMP=gcc
+++++ CXX=g++
+++++ FC=gfortran
+++++ CC=gcc
+++++ tmpname=/tmp/null278
++++++ gcc -dumpversion
++++++ cut -f1 -d.
+++++ gccversion=11
+++++ FOPT=' -g -O0 -fPIC -finit-local-zero -fno-second-underscore -fno-backslash -fno-automatic -fno-f2c -std=legacy -fno-align-commons -Wtabs -Wno-conversion -Wline-truncation -Warray-bounds -Wno-align-commons -Wno-argument-mismatch'
+++++ COPT=' -g -fPIC -O0 '
+++++ LOPT=' -g '
+++++ '[' 11 -ge 5 ']'
+++++ FOPT=' -g -O0 -fPIC -finit-local-zero -fno-second-underscore -fno-backslash -fno-automatic -fno-f2c -std=legacy -fno-align-commons -Wtabs -Wno-conversion -Wline-truncation -Warray-bounds -Wno-align-commons -Wno-argument-mismatch -no-pie -fcommon -fno-aggressive-loop-optimizations -fstack-protector '
+++++ COPT=' -g -fPIC -O0  -no-pie'
+++++ LOPT=' -g  -no-pie'
+++++ '[' x86_64 = x86_64 ']'
+++++ FOPT=' -g -O0 -fPIC -finit-local-zero -fno-second-underscore -fno-backslash -fno-automatic -fno-f2c -std=legacy -fno-align-commons -Wtabs -Wno-conversion -Wline-truncation -Warray-bounds -Wno-align-commons -Wno-argument-mismatch -no-pie -fcommon -fno-aggressive-loop-optimizations -fstack-protector  -mfpmath=387'
+++++ COPT=' -g -fPIC -O0  -no-pie -mfpmath=387'
+++++ '[' 11 -ge 10 ']'
+++++ FOPT=' -g -O0 -fPIC -finit-local-zero -fno-second-underscore -fno-backslash -fno-automatic -fno-f2c -std=legacy -fno-align-commons -Wtabs -Wno-conversion -Wline-truncation -Warray-bounds -Wno-align-commons -Wno-argument-mismatch -no-pie -fcommon -fno-aggressive-loop-optimizations -fstack-protector  -mfpmath=387 -fallow-invalid-boz -fallow-argument-mismatch '
+++++ '[' 11 -lt 10 ']'
++++++ uname -s
+++++ osname=Linux
+++++ '[' Linux = Darwin ']'
+++++ export PRO XLF77 F77 FCOMP CCOMP CXX FC CC FOPT COPT LOPT
+++++ cat
+++++ CFLAGS=' -g -fPIC -O0  -no-pie -mfpmath=387'
+++++ CXXFLAGS=' -g -fPIC -O0  -no-pie -mfpmath=387 -ansi -fpermissive -Df2cFortran -DLinux -fPIC -ftemplate-depth-25 -Wall'
+++++ LDFLAGS=' -g  -no-pie'
+++++ FFLAGS=' -g -O0 -fPIC -finit-local-zero -fno-second-underscore -fno-backslash -fno-automatic -fno-f2c -std=legacy -fno-align-commons -Wtabs -Wno-conversion -Wline-truncation -Warray-bounds -Wno-align-commons -Wno-argument-mismatch -no-pie -fcommon -fno-aggressive-loop-optimizations -fstack-protector  -mfpmath=387 -fallow-invalid-boz -fallow-argument-mismatch '
+++++ FF77FLAGS=' -g -O0 -fPIC -finit-local-zero -fno-second-underscore -fno-backslash -fno-automatic -fno-f2c -std=legacy -fno-align-commons -Wtabs -Wno-conversion -Wline-truncation -Warray-bounds -Wno-align-commons -Wno-argument-mismatch -no-pie -fcommon -fno-aggressive-loop-optimizations -fstack-protector  -mfpmath=387 -fallow-invalid-boz -fallow-argument-mismatch '
+++++ ADDCOMP=' -g -O0 -fPIC -finit-local-zero -fno-second-underscore -fno-backslash -fno-automatic -fno-f2c -std=legacy -fno-align-commons -Wtabs -Wno-conversion -Wline-truncation -Warray-bounds -Wno-align-commons -Wno-argument-mismatch -no-pie -fcommon -fno-aggressive-loop-optimizations -fstack-protector  -mfpmath=387 -fallow-invalid-boz -fallow-argument-mismatch '
+++++ XDB=gdb
+++++ FTN=fort.
++++++ uname -s
+++++ PLINAM=Linux
+++++ export CFLAGS CXXFLAGS LDFLAGS FFLAGS FF77FLAGS ADDCOMP XDB FTN PLINAM
+++++ CERN_LEVEL=pro
+++++ CERN_ROOT=/delphi/releases/almalinux-9-x86_64_xrd/latest/cern/pro
+++++ CERN_LIB=/delphi/releases/almalinux-9-x86_64_xrd/latest/cern/pro/lib
+++++ CERN_PAM=/delphi/releases/almalinux-9-x86_64_xrd/latest/cern/pro/src/car
+++++ export CERN_LEVEL CERN_ROOT CERN_LIB CERN_PAM
+++++ DELPHI=/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826
+++++ DELPHI_PAM=/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car
+++++ DELPHI_LIB=/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/lib
+++++ DELPHI_BLKD=/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/blkd
+++++ DELPHI_DAT=/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/dat
+++++ DELPHI_BIN=/delphi/releases/almalinux-9-x86_64_xrd/latest/bin
+++++ DELPHI_CRA=/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car
+++++ DELPHI_PATH=/delphi/releases/almalinux-9-x86_64_xrd/latest/bin
+++++ DELPHI_DDB=/eos/opendata/delphi/condition-data
+++++ '[' -e /eos/experiment/delphi/castor2015/ddb ']'
+++++ export DELPHI DELPHI_PAM DELPHI_LIB DELPHI_BLKD DELPHI_DAT DELPHI_BIN DELPHI_CRA DELPHI_PATH DELPHI_DDB
+++++ GROUPPATH=/delphi/releases/almalinux-9-x86_64_xrd/latest/bin
+++++ export GROUPPATH
+++++ ADDLIB=/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/blkd/delblkd.o
+++++ DELPHI_DDB_DIR=/delphi/releases/almalinux-9-x86_64_xrd/latest/ddb
+++++ DELPHI_DDB_BIN=/delphi/releases/almalinux-9-x86_64_xrd/latest/ddb/bin
+++++ export ADDLIB DELPHI_DDB_DIR DELPHI_DDB_BIN
+++++ DELSIM_ROOT=/delphi/releases/almalinux-9-x86_64_xrd/latest/simana
+++++ DELPHI_ZIP=on
+++++ export DELSIM_ROOT DELPHI_ZIP
+++++ PATH=/delphi/releases/almalinux-9-x86_64_xrd/latest/scripts:/delphi/scripts:/delphi/releases/almalinux-9-x86_64_xrd/latest/bin:/delphi/releases/almalinux-9-x86_64_xrd/latest/cern/pro/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:.
+++++ export PATH
+++++ OPENPHIGS=/delphi/releases/almalinux-9-x86_64_xrd/latest/openphigs
+++++ export OPENPHIGS
+++++ '[' '' = '' ']'
+++++ OPGS_RUN_TIME=/delphi/releases/almalinux-9-x86_64_xrd/latest/delgra/run_time
+++++ GRA_PLACE=/delphi/releases/almalinux-9-x86_64_xrd/latest/delgra
+++++ export OPGS_RUN_TIME GRA_PLACE
+++++ '[' -e /delphi/pdl ']'
+++++ DELPHI_BATCAVE=/delphi/pdl
+++++ export DELPHI_BATCAVE
+++++ DELPHI_DATA_ROOT=/eos/opendata/delphi
+++++ '[' -e /eos/experiment/delphi/castor2015 ']'
+++++ export DELPHI_DATA_ROOT
+++++ '[' -d /delphi/releases/almalinux-9-x86_64_xrd/latest/evserv ']'
+++++ DES_HOME=/delphi/releases/almalinux-9-x86_64_xrd/latest/evserv
+++++ export DES_HOME
+++++ '[' delphi = '' ']'
+++++ export USER
++++++ echo delphi
++++++ cut -b1
+++++ x=d
+++++ AFS_HOME=/afs/cern.ch/user/d/delphi
+++++ '[' -e /afs/cern.ch/user/d/delphi ']'
+++++ '[' '' = '' ']'
+++++ SCRATCH=/tmp/delphi
+++++ mkdir -p /tmp/delphi
+++++ '[' '' = '' ']'
+++++ SCRATCH_WEEK=/tmp/delphi
+++++ unset x
+++++ export SCRATCH SCRATCH_WEEK
++++++ uname -s
+++++ OS=Linux
+++++ export OS
+++++ '[' -e /home/delphi/.delphi.sh ']'
++++ '[' -e /cvmfs/delphi.cern.ch/motd ']'

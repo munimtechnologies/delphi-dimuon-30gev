@@ -1,0 +1,211 @@
+{
+ "ocipull": "0.1.0",
+ "image": "gitlab-registry.cern.ch/delphi/deployment/delphi/al9_64_xrd:latest",
+ "manifest_digest": "sha256:fafdb8b45892b350aa1756b697527180b7bc1465df53c3e1a707cb90dcf2c3bc",
+ "layers": [
+  {
+   "digest": "sha256:08ac79bc1a0521119ab70d84194abbb4071f321c0ff32d101939c63b4c8609c1",
+   "bytes": 74277852,
+   "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+   "fetch": "downloaded",
+   "fetch_s": 5.8,
+   "apply_s": 3.2
+  },
+  {
+   "digest": "sha256:898d64d5ea2091cf06b8219625ba2ce72d51b3871923446ecc88b039e0a7707b",
+   "bytes": 2926197,
+   "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+   "fetch": "downloaded",
+   "fetch_s": 1.7,
+   "apply_s": 0.1
+  },
+  {
+   "digest": "sha256:7b50f29ec635a63b35a102fb0e1ccf12b59fc06f715986a4ae297565b6689a69",
+   "bytes": 164260947,
+   "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+   "fetch": "downloaded",
+   "fetch_s": 9.3,
+   "apply_s": 3.6
+  },
+  {
+   "digest": "sha256:935a8f4d435891124e8e510beb1d4f941592930400d1e56e79f849fc05d3c3a3",
+   "bytes": 76514945,
+   "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+   "fetch": "downloaded",
+   "fetch_s": 6.4,
+   "apply_s": 0.2
+  },
+  {
+   "digest": "sha256:7924d59a2333b04e9ee08728962a9f0706789a99299c85affbba3d4017b9d39e",
+   "bytes": 585587025,
+   "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+   "fetch": "downloaded",
+   "fetch_s": 55.5,
+   "apply_s": 59.7
+  },
+  {
+   "digest": "sha256:046fa888193692551daf4bc2aaa67dd795a6a6178b207ebbc65d777e16f42e79",
+   "bytes": 51606,
+   "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+   "fetch": "downloaded",
+   "fetch_s": 2.2,
+   "apply_s": 0.1
+  },
+  {
+   "digest": "sha256:e55b643474919e7611a332fc577e0b6a9fefbda13dd791b53acce27851b7fa2a",
+   "bytes": 339,
+   "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+   "fetch": "downloaded",
+   "fetch_s": 0.9,
+   "apply_s": 0.0
+  },
+  {
+   "digest": "sha256:7248d6cc269de0d23b97873965798268568476910de7a15ac6ac62361b898196",
+   "bytes": 531,
+   "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+   "fetch": "downloaded",
+   "fetch_s": 28.7,
+   "apply_s": 0.0
+  },
+  {
+   "digest": "sha256:5a9b5322ecf93e7f8e20b67f434fad3aca9d5a9e247774d10fdba8b665d468d4",
+   "bytes": 248,
+   "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+   "fetch": "downloaded",
+   "fetch_s": 0.9,
+   "apply_s": 0.0
+  },
+  {
+   "digest": "sha256:7efa62561d7087d7e0f1eedbe3ea1db79be09c23f968ade6b2cc290f71a109b7",
+   "bytes": 58043,
+   "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+   "fetch": "downloaded",
+   "fetch_s": 1.2,
+   "apply_s": 0.1
+  },
+  {
+   "digest": "sha256:8f3d4a63e55146025a955e077b43dd082ff2bee3ab2fba0a8692f71222ccea5b",
+   "bytes": 417436031,
+   "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+   "fetch": "downloaded",
+   "fetch_s": 45.9,
+   "apply_s": 40.6
+  },
+  {
+   "digest": "sha256:bf388af6bad29882651ea3bf5ad4dfb180f27c44e9af427f8a4c3a49e9cea7b4",
+   "bytes": 152945,
+   "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+   "fetch": "downloaded",
+   "fetch_s": 21.3,
+   "apply_s": 0.0
+  },
+  {
+   "digest": "sha256:7ab697c823a1574b97d3376390b6a60be5e4644d38209d65d498d404c1ef5fbd",
+   "bytes": 2358427167,
+   "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+   "fetch": "downloaded",
+   "fetch_s": 149.0,
+   "apply_s": 85.2
+  },
+  {
+   "digest": "sha256:bcb14b37745c5f5946b89b5c97ff8ce75139a2b007ad19c772c93da273a5cd22",
+   "bytes": 486,
+   "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+   "fetch": "downloaded",
+   "fetch_s": 1.6,
+   "apply_s": 0.0
+  },
+  {
+   "digest": "sha256:dc5f9c45d99e9f76fab837a70916e6e40417bd5cbd5a4f3b0a9ef4d6279b20ac",
+   "bytes": 492,
+   "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+   "fetch": "downloaded",
+   "fetch_s": 0.8,
+   "apply_s": 0.0
+  },
+  {
+   "digest": "sha256:edb893ffff29445d7c9e860784586ce3267cb592b72feb269bb59a9f5d66cd0f",
+   "bytes": 1061,
+   "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+   "fetch": "downloaded",
+   "fetch_s": 0.8,
+   "apply_s": 0.0
+  },
+  {
+   "digest": "sha256:75a2021f19117da26323e06fdda649de33616022103f9538440dae50f01753bb",
+   "bytes": 3186,
+   "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+   "fetch": "downloaded",
+   "fetch_s": 20.2,
+   "apply_s": 0.0
+  },
+  {
+   "digest": "sha256:7633e9a34fc5c84966cbf58edeaa19909623e80a0ac171f4bdd50f94d411d3b2",
+   "bytes": 187858968,
+   "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+   "fetch": "downloaded",
+   "fetch_s": 14.4,
+   "apply_s": 1.4
+  },
+  {
+   "digest": "sha256:b607f731b7631c12a21a2d4ec96421e41bf6eb0d9dfbf1a1793e4d80557e16bc",
+   "bytes": 2474,
+   "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+   "fetch": "downloaded",
+   "fetch_s": 37.4,
+   "apply_s": 0.0
+  },
+  {
+   "digest": "sha256:467d79f9db770d16a4eacbf2f547e2ab90622e31d8ad78da57d3824464bc9469",
+   "bytes": 18602102,
+   "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+   "fetch": "downloaded",
+   "fetch_s": 2.7,
+   "apply_s": 0.1
+  },
+  {
+   "digest": "sha256:9dc33a93f74b594c43f081a9dab0199c4e1315d68f084d27be57f2bb432b5841",
+   "bytes": 702,
+   "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+   "fetch": "downloaded",
+   "fetch_s": 0.8,
+   "apply_s": 0.0
+  },
+  {
+   "digest": "sha256:459187c6ea35c628865e628ab50491cd7dcc573942d070cd09ee0ec52abec581",
+   "bytes": 787,
+   "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+   "fetch": "downloaded",
+   "fetch_s": 28.3,
+   "apply_s": 0.0
+  }
+ ],
+ "reused": false,
+ "stats": {
+  "files": 101571,
+  "dirs": 6803,
+  "symlinks": 17888,
+  "hardlinks": 3643,
+  "whiteouts": 705,
+  "opaque": 3,
+  "skipped_dev": 0,
+  "skipped_bad": 14,
+  "errors": 0
+ },
+ "config": {
+  "Entrypoint": [
+   "/bin/sh",
+   "-c",
+   "/bin/bash"
+  ],
+  "Env": [
+   "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+  ],
+  "Labels": {
+   "io.buildah.version": "1.43.2"
+  },
+  "WorkingDir": "/home/delphi"
+ },
+ "seconds": 634.3,
+ "ok": true
+}

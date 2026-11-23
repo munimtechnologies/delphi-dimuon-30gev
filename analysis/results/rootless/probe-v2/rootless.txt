@@ -1,0 +1,149 @@
+delphi-rootless 0.1.1 IMAGE=gitlab-registry.cern.ch/delphi/deployment/delphi/al9_64_xrd:latest CACHE=/data INNER=/tmp/probe.sh
+
+==== 11:16:19 host
+uid=0(root) gid=0(root) groups=0(root)
+Linux 35a981ae90a8 6.6.114.1-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Mon Dec  1 20:46:23 UTC 2025 x86_64 GNU/Linux
+16
+               total        used        free      shared  buff/cache   available
+Mem:           10952         900        6205           3        4053       10051
+Swap:          16384          97       16286
+Filesystem      Size  Used Avail Use% Mounted on
+overlay        1007G  244G  712G  26% /
+overlay        1007G  244G  712G  26% /
+/dev/sdd       1007G  244G  712G  26% /data
+CapEff:	00000000000005fb
+NoNewPrivs:	1
+Seccomp:	2
+Seccomp_filters:	2
+
+==== 11:16:19 1. pull and unpack the image
+  layer sha256:08ac79bc1a05 downloaded 74 MB fetch 6s apply 3s
+  layer sha256:898d64d5ea20 downloaded 3 MB fetch 2s apply 0s
+  layer sha256:7b50f29ec635 downloaded 164 MB fetch 9s apply 4s
+  layer sha256:935a8f4d4358 downloaded 77 MB fetch 6s apply 0s
+  layer sha256:7924d59a2333 downloaded 586 MB fetch 56s apply 60s
+  layer sha256:046fa8881936 downloaded 0 MB fetch 2s apply 0s
+  layer sha256:e55b64347491 downloaded 0 MB fetch 1s apply 0s
+  layer sha256:7248d6cc269d downloaded 0 MB fetch 29s apply 0s
+  layer sha256:5a9b5322ecf9 downloaded 0 MB fetch 1s apply 0s
+  layer sha256:7efa62561d70 downloaded 0 MB fetch 1s apply 0s
+  layer sha256:8f3d4a63e551 downloaded 417 MB fetch 46s apply 41s
+  layer sha256:bf388af6bad2 downloaded 0 MB fetch 21s apply 0s
+  layer sha256:7ab697c823a1 downloaded 2358 MB fetch 149s apply 85s
+  layer sha256:bcb14b37745c downloaded 0 MB fetch 2s apply 0s
+  layer sha256:dc5f9c45d99e downloaded 0 MB fetch 1s apply 0s
+  layer sha256:edb893ffff29 downloaded 0 MB fetch 1s apply 0s
+  layer sha256:75a2021f1911 downloaded 0 MB fetch 20s apply 0s
+  layer sha256:7633e9a34fc5 downloaded 188 MB fetch 14s apply 1s
+  blob sha256:b607f731b763 attempt 1 failed: HTTP Error 408: Request Time-out
+  layer sha256:b607f731b763 downloaded 0 MB fetch 37s apply 0s
+  layer sha256:467d79f9db77 downloaded 19 MB fetch 3s apply 0s
+  layer sha256:9dc33a93f74b downloaded 0 MB fetch 1s apply 0s
+  layer sha256:459187c6ea35 downloaded 0 MB fetch 28s apply 0s
+OCIPULL: ok=True reused=False layers=22 seconds=634.3 stats={"files": 101571, "dirs": 6803, "symlinks": 17888, "hardlinks": 3643, "whiteouts": 705, "opaque": 3, "skipped_dev": 0, "skipped_bad": 14, "errors": 0} error=
+9.5G	/data/delphi-al9/rootfs
+NAME="AlmaLinux"
+VERSION="9.8 (Olive Jaguar)"
+ID="almalinux"
+delphi user id in image: 1000:1000
+/dev/sdd       1007G  254G  703G  27% /data
+
+==== 11:26:57 2. find proot binaries
+system proot: /usr/bin/proot
+  apt Version: 5.1.0-1.3+b1
+static proot sha256 db185300a9daabbce86aca7632d8c7fdc4249f6f153171954013b70c5f491ec0 (release SHA256SUMS: db185300a9daabbce86aca7632d8c7fdc4249f6f153171954013b70c5f491ec0)
+  |__|  |__|__\_____/\_____/\____| v5.5.0-25dc6a31
+static proot: /tmp/proot_static
+
+==== 11:26:57 3. try each way in (bash runs AND statx is translated)
+NAME="AlmaLinux"
+VERSION="9.8 (Olive Jaguar)"
+uid=0(root) gid=0(root) groups=0(root)
+INSIDE_OK
+ls: cannot access '/etc/profile.d/less.csh': No such file or directory
+ls: cannot access '/etc/profile.d/which2.sh': No such file or directory
+ls: cannot access '/etc/profile.d/debuginfod.sh': No such file or directory
+ls: cannot access '/etc/profile.d/lang.csh': No such file or directory
+METHOD: proot_apt rc=0 inside=yes statx=no in 1 s
+NAME="AlmaLinux"
+VERSION="9.8 (Olive Jaguar)"
+uid=0(root) gid=0(root) groups=0(root)
+INSIDE_OK
+ls: cannot access '/etc/profile.d/less.csh': No such file or directory
+ls: cannot access '/etc/profile.d/which2.sh': No such file or directory
+ls: cannot access '/etc/profile.d/debuginfod.sh': No such file or directory
+ls: cannot access '/etc/profile.d/lang.csh': No such file or directory
+METHOD: proot_apt_noseccomp rc=0 inside=yes statx=no in 0 s
+VERSION="9.8 (Olive Jaguar)"
+uid=0(root) gid=0(root) groups=0(root)
+INSIDE_OK
+STATX_OK
+total 92
+drwxr-xr-x  2 root root 4096 Nov 23 11:25 .
+drwxr-xr-x 77 root root 4096 Nov 23 11:26 ..
+-rw-r--r--  1 root root  196 Jan 31  2022 colorgrep.csh
+METHOD: proot_static rc=0 inside=yes statx=yes in 0 s
+method: proot_static statx=PASS
+
+==== 11:26:58 4. DELPHI environment: which user id gives the DELPHI tools
+  dellib=/delphi/releases/almalinux-9-x86_64_xrd/latest/scripts/dellib
+  cernlib=/delphi/releases/almalinux-9-x86_64_xrd/latest/cern/pro/bin/cernlib
+  nypatchy=/delphi/releases/almalinux-9-x86_64_xrd/latest/cern/pro/bin/nypatchy
+  uid=1000 user=delphi HOME=/home/delphi source=login
+  CERN=/delphi/releases/almalinux-9-x86_64_xrd/latest/cern
+  CERNLIB_XROOTD=ON
+  CERN_LEVEL=pro
+  CERN_LIB=/delphi/releases/almalinux-9-x86_64_xrd/latest/cern/pro/lib
+  CERN_PAM=/delphi/releases/almalinux-9-x86_64_xrd/latest/cern/pro/src/car
+  CERN_ROOT=/delphi/releases/almalinux-9-x86_64_xrd/latest/cern/pro
+  DELPHI=/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826
+  DELPHI_BATCAVE=/delphi/pdl
+  DELPHI_BIN=/delphi/releases/almalinux-9-x86_64_xrd/latest/bin
+  DELPHI_BLKD=/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/blkd
+  DELPHI_CRA=/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car
+  DELPHI_DAT=/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/dat
+  DELPHI_DATA_ROOT=/eos/opendata/delphi
+  DELPHI_DDB=/eos/opendata/delphi/condition-data
+  DELPHI_DDB_BIN=/delphi/releases/almalinux-9-x86_64_xrd/latest/ddb/bin
+  DELPHI_DDB_DIR=/delphi/releases/almalinux-9-x86_64_xrd/latest/ddb
+  DELPHI_ENV_SOURCE=login
+  DELPHI_INSTALL_DIR=/delphi
+  DELPHI_LIB=/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/lib
+  DELPHI_PAM=/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car
+  DELPHI_PATH=/delphi/releases/almalinux-9-x86_64_xrd/latest/bin
+  DELPHI_RELEASE=latest
+  DELPHI_XRD=_xrd
+  DELPHI_ZIP=on
+  FCOMP=gfortran
+  FFLAGS= -g -O0 -fPIC -finit-local-zero -fno-second-underscore -fno-backslash -fno-automatic -fno-f2c -std=legacy -fno-align-commons -Wtabs -Wno-conversion -Wline-truncation -Warray-bounds -Wno-align-commons -Wno-argument-mismatch -no-pie -fcommon -fno-aggressive-loop-optimizations -fstack-protector  -mfpmath=387 -fallow-invalid-boz -fallow-argument-mismatch 
+DELPHIENV: env=PASS id=1000:1000 method=proot_static dellib=/delphi/releases/almalinux-9-x86_64_xrd/latest/scripts/dellib cernlib=/delphi/releases/almalinux-9-x86_64_xrd/latest/cern/pro/bin/cernlib nypatchy=/delphi/releases/almalinux-9-x86_64_xrd/latest/cern/pro/bin/nypatchy 
+
+==== 11:26:59 5. DELPHI profile scripts (diagnosis)
+11597 /out/rootless/delphi_profile.txt
+/eos/opendata/delphi/collision-data
+/eos/opendata/delphi/condition-data
+/eos/opendata/delphi/documentation
+/eos/opendata/delphi/logbooks
+/eos/opendata/delphi/raw-data
+/eos/opendata/delphi/simulated-data
+/eos/opendata/delphi/upload
+xrdfs inside: PASS in 3 s
+
+==== 11:27:03 6. run /tmp/probe.sh inside (proot_static, id 1000:1000)
+
+==== id / os / home
+uid=1000(delphi) gid=1000(delphi) groups=1000(delphi),0(root)
+NAME="AlmaLinux"
+VERSION="9.8 (Olive Jaguar)"
+ID="almalinux"
+HOME=/home/delphi
+total 28
+drwx------  4 delphi delphi 4096 Nov 23 11:26 .
+drwxr-xr-x  3 delphi delphi 4096 Nov 23 11:25 ..
+-rw-r--r--  1 delphi delphi   18 Apr 30  2024 .bash_logout
+-rw-r--r--  1 delphi delphi  141 Apr 30  2024 .bash_profile
+-rw-r--r--  1 delphi delphi  515 Oct 17 11:35 .bashrc
+drwxr-xr-x 10 delphi delphi 4096 Nov 23 11:26 examples
+drwxr-xr-x  5 delphi delphi 4096 Nov 23 11:26 graexe
+inner rc=1 in 1 s
+ROOTLESS: R0=PASS R1=PASS method=proot_static statx=PASS env=PASS id=1000:1000 xrdfs=PASS inner_rc=1 version=0.1.1

@@ -1,0 +1,7 @@
+/eos/opendata/delphi/collision-data
+/eos/opendata/delphi/condition-data
+/eos/opendata/delphi/documentation
+/eos/opendata/delphi/logbooks
+/eos/opendata/delphi/raw-data
+/eos/opendata/delphi/simulated-data
+/eos/opendata/delphi/upload
