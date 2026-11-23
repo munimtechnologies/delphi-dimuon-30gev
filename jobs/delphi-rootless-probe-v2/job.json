@@ -1,0 +1,21 @@
+{
+  "name": "delphi-rootless-probe-v2",
+  "kind": "compete",
+  "workdir": "E:\\MV2-Pursuit\\work\\20261123T002951Z-science\\rootless2",
+  "image": "python:3.12",
+  "setup": [
+    "(apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq proot > /dev/null 2>&1); command -v proot || echo 'proot not installed by apt (the script will try the release binary)'"
+  ],
+  "run": [
+    "cd /work && bash -n delphi_rootless.sh > /out/compile.txt 2>&1; rc=$?; bash -n delphi_env.sh >> /out/compile.txt 2>&1 || rc=1; echo \"syntax rc=$rc\" >> /out/compile.txt; cat /out/compile.txt; exit $rc",
+    "cd /work && C=dd74c8ccc29ed0ce7487a9f32f13e3fa594b4913 && B=https://raw.githubusercontent.com/munimtechnologies/delphi-dimuon-30gev/$C && curl -fsSL --retry 3 -o ocipull.py $B/rootless/ocipull.py && curl -fsSL --retry 3 -o test_ocipull.py $B/rootless/test_ocipull.py && curl -fsSL --retry 3 -o /tmp/probe.sh $B/probe/probe.sh && printf '%s  %s\\n' bb3230f0a211e1d9974ca65197f20863349f25c243c8c9fed841116a7df2b303 ocipull.py 17406677f83daa1c8f6a8c007b647467658a3951b69cb4c6906dcc0fb6ac0b2a test_ocipull.py f5c809fff508175a34f4a8ce31db45efc9e4050e780e7d108176f60b9c6d8246 /tmp/probe.sh > /tmp/pins.txt && sha256sum -c /tmp/pins.txt; rc=$?; sha256sum ocipull.py test_ocipull.py delphi_rootless.sh delphi_env.sh /tmp/probe.sh | tee /out/sha256.txt; echo \"pinned fetch rc=$rc (commit $C)\"; exit $rc",
+    "cd /work && python -m py_compile ocipull.py test_ocipull.py >> /out/compile.txt 2>&1 && python -m unittest -v test_ocipull > /out/tests.txt 2>&1; rc=$?; cat /out/tests.txt; exit $rc",
+    "cd /work && bash delphi_rootless.sh /tmp/probe.sh > /out/rootless.txt 2>&1; rc=$?; head -c 8000 /out/rootless.txt; echo; echo '[...]'; tail -c 12000 /out/rootless.txt; grep -E '^(OCIPULL|ROOTLESS|DELPHIENV|METHOD):|xrdcp exit|dump.sh exit|xrdfs inside' /out/rootless.txt; exit $rc"
+  ],
+  "network": true,
+  "data_urls": [],
+  "data_key": "delphi-al9-rootfs",
+  "cpu": 2,
+  "memory_gb": 2,
+  "timeout_minutes": 240
+}

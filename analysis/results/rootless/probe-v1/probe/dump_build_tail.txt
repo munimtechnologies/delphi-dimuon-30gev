@@ -1,0 +1,6 @@
+./dump.sh: line 8: dellib: command not found
+./dump.sh: line 9: cernlib: command not found
+which: no nypatchy in (/home/delphi/.local/bin:/home/delphi/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/bin)
+Running  - dump.f dump.cra dump.ylog - - - dump.f .go
+./dump.sh: line 15: -: command not found
+./dump.sh: line 28: *.o: command not found

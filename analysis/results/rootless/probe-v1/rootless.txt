@@ -1,0 +1,389 @@
+delphi-rootless 0.1.0 IMAGE=gitlab-registry.cern.ch/delphi/deployment/delphi/al9_64_xrd:latest CACHE=/data INNER=/tmp/probe.sh
+
+==== 19:56:38 host
+uid=0(root) gid=0(root) groups=0(root)
+Linux d07d4d55e77f 6.18.58.1-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Tue Oct 27 00:24:11 UTC 2026 x86_64 GNU/Linux
+8
+               total        used        free      shared  buff/cache   available
+Mem:            7943        1625        3692          49        2860        6317
+Swap:           2048           0        2047
+Filesystem      Size  Used Avail Use% Mounted on
+overlay        1007G   23G  934G   3% /
+overlay        1007G   23G  934G   3% /
+/dev/sdf       1007G   23G  934G   3% /data
+CapEff:	00000000000005fb
+NoNewPrivs:	1
+Seccomp:	2
+Seccomp_filters:	2
+
+==== 19:56:38 1. pull and unpack the image
+  layer sha256:08ac79bc1a05 downloaded 74 MB fetch 11s apply 3s
+  layer sha256:898d64d5ea20 downloaded 3 MB fetch 2s apply 0s
+  layer sha256:7b50f29ec635 downloaded 164 MB fetch 22s apply 2s
+  layer sha256:935a8f4d4358 downloaded 77 MB fetch 17s apply 0s
+  layer sha256:7924d59a2333 downloaded 586 MB fetch 64s apply 17s
+  layer sha256:046fa8881936 downloaded 0 MB fetch 2s apply 0s
+  layer sha256:e55b64347491 downloaded 0 MB fetch 1s apply 0s
+  layer sha256:7248d6cc269d downloaded 0 MB fetch 1s apply 0s
+  layer sha256:5a9b5322ecf9 downloaded 0 MB fetch 1s apply 0s
+  layer sha256:7efa62561d70 downloaded 0 MB fetch 1s apply 0s
+  layer sha256:8f3d4a63e551 downloaded 417 MB fetch 55s apply 9s
+  layer sha256:bf388af6bad2 downloaded 0 MB fetch 1s apply 0s
+  blob sha256:7ab697c823a1 attempt 1 failed: digest mismatch for sha256:7ab697c823a1574b97d3376390b6a60be5e4644d38209d65d498d404c1ef5fbd
+  layer sha256:7ab697c823a1 downloaded 2358 MB fetch 1426s apply 73s
+  layer sha256:bcb14b37745c downloaded 0 MB fetch 2s apply 0s
+  layer sha256:dc5f9c45d99e downloaded 0 MB fetch 1s apply 0s
+  layer sha256:edb893ffff29 downloaded 0 MB fetch 1s apply 0s
+  layer sha256:75a2021f1911 downloaded 0 MB fetch 1s apply 0s
+  layer sha256:7633e9a34fc5 downloaded 188 MB fetch 20s apply 2s
+  layer sha256:b607f731b763 downloaded 0 MB fetch 1s apply 0s
+  layer sha256:467d79f9db77 downloaded 19 MB fetch 4s apply 0s
+  layer sha256:9dc33a93f74b downloaded 0 MB fetch 1s apply 0s
+  layer sha256:459187c6ea35 downloaded 0 MB fetch 1s apply 0s
+OCIPULL: ok=True reused=False layers=22 seconds=1744.8 stats={"files": 101571, "dirs": 6803, "symlinks": 17888, "hardlinks": 3643, "whiteouts": 705, "opaque": 3, "skipped_dev": 0, "skipped_bad": 14, "errors": 0} error=
+9.5G	/data/delphi-al9/rootfs
+total 80
+drwxr-xr-x 18 root root 4096 Nov 22 20:25 .
+drwxr-xr-x  4 root root 4096 Nov 22 19:56 ..
+-rw-r--r--  1 root root   72 Nov 22 20:25 .ocipull-complete
+-rw-r--r--  1 root root  122 Nov 22 20:25 .ocipull-env.sh
+drwxr-xr-x  2 root root 4096 Nov 22 19:56 afs
+lrwxrwxrwx  1 root root    7 Nov 22 19:56 bin -> usr/bin
+drwxr-xr-x 10 root root 4096 Nov 22 20:25 delphi
+drwxr-xr-x  2 root root 4096 Nov 22 19:56 dev
+drwxr-xr-x 77 root root 4096 Nov 22 20:25 etc
+drwxr-xr-x  3 root root 4096 Nov 22 20:25 home
+lrwxrwxrwx  1 root root    7 Nov 22 19:56 lib -> usr/lib
+lrwxrwxrwx  1 root root    9 Nov 22 19:56 lib64 -> usr/lib64
+drwxr-xr-x  2 root root 4096 Nov 22 19:56 media
+drwxr-xr-x  2 root root 4096 Nov 22 19:56 mnt
+drwxr-xr-x  3 root root 4096 Nov 22 20:00 opt
+drwxr-xr-x  2 root root 4096 Nov 22 19:56 proc
+drwxr-x---  3 root root 4096 Nov 22 19:57 root
+drwxr-xr-x 15 root root 4096 Nov 22 20:00 run
+lrwxrwxrwx  1 root root    8 Nov 22 19:56 sbin -> usr/sbin
+drwxr-xr-x  2 root root 4096 Nov 22 19:56 srv
+drwxr-xr-x  2 root root 4096 Nov 22 19:56 sys
+drwxrwxrwx  2 root root 4096 Nov 22 19:56 tmp
+drwxr-xr-x 12 root root 4096 Nov 22 19:56 usr
+drwxr-xr-x 18 root root 4096 Nov 22 19:56 var
+NAME="AlmaLinux"
+VERSION="9.8 (Olive Jaguar)"
+ID="almalinux"
+colorgrep.csh colorgrep.sh colorxzgrep.csh colorxzgrep.sh colorzgrep.csh colorzgrep.sh csh.local debuginfod.csh debuginfod.sh delphi.csh delphi.sh flatpak.sh gawk.csh gawk.sh lang.csh lang.sh less.csh less.sh sh.local which2.csh which2.sh 
+/dev/sdf       1007G   32G  925G   4% /data
+
+==== 20:25:43 2. find proot
+proot: /usr/bin/proot
+ _____ _____              ___
+|  __ \  __ \_____  _____|   |_
+|   __/     /  _  \/  _  \    _|
+
+==== 20:25:43 3. try each way in
+NAME="AlmaLinux"
+VERSION="9.8 (Olive Jaguar)"
+uid=0(root) gid=0(root) groups=0(root)
+INSIDE_OK
+proot rc=0 in 0 s
+method: proot
+
+==== 20:25:43 4. tools inside
+bash      /usr/bin/bash
+gfortran  /usr/bin/gfortran
+gcc       /usr/bin/gcc
+nypatchy  MISSING
+xrdcp     /usr/bin/xrdcp
+xrdfs     /usr/bin/xrdfs
+python3   /usr/bin/python3
+git       /usr/bin/git
+curl      /usr/bin/curl
+pdftotext MISSING
+colorgrep.csh
+colorgrep.sh
+colorxzgrep.csh
+colorxzgrep.sh
+colorzgrep.csh
+colorzgrep.sh
+csh.local
+debuginfod.csh
+debuginfod.sh
+delphi.csh
+delphi.sh
+flatpak.sh
+gawk.csh
+gawk.sh
+lang.csh
+lang.sh
+less.csh
+less.sh
+sh.local
+which2.csh
+which2.sh
+HOME=/home/delphi
+PATH=/usr/local/sbin:/usr/sbin:/usr/bin:/bin
+/eos/opendata/delphi/collision-data
+/eos/opendata/delphi/condition-data
+/eos/opendata/delphi/documentation
+/eos/opendata/delphi/logbooks
+/eos/opendata/delphi/raw-data
+/eos/opendata/delphi/simulated-data
+/eos/opendata/delphi/upload
+xrdfs inside: PASS in 2 s
+
+==== 20:25:46 5. run /tmp/probe.sh inside (proot)
+
+==== id / os / home
+uid=0(root) gid=0(root) groups=0(root)
+NAME="AlmaLinux"
+VERSION="9.8 (Olive Jaguar)"
+ID="almalinux"
+HOME=/home/delphi
+ls: cannot access '/home/delphi': No such file or directory
+
+==== profile.d
+colorgrep.csh
+colorgrep.sh
+colorxzgrep.csh
+colorxzgrep.sh
+colorzgrep.csh
+colorzgrep.sh
+csh.local
+debuginfod.csh
+debuginfod.sh
+delphi.csh
+delphi.sh
+flatpak.sh
+gawk.csh
+gawk.sh
+lang.csh
+lang.sh
+less.csh
+less.sh
+sh.local
+which2.csh
+which2.sh
+
+==== env (filtered)
+HOME=/home/delphi
+PATH=/home/delphi/.local/bin:/home/delphi/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/bin
+
+==== commands
+nypatchy   MISSING
+dellib     MISSING
+cernlib    MISSING
+xrdcp      /usr/bin/xrdcp
+xrdfs      /usr/bin/xrdfs
+gfortran   /usr/bin/gfortran
+gcc        /usr/bin/gcc
+pdftotext  MISSING
+python3    /usr/bin/python3
+git        /usr/bin/git
+runsim     MISSING
+des        MISSING
+dstana     MISSING
+
+==== nproc / mem / disk
+8
+               total        used        free      shared  buff/cache   available
+Mem:            7943        1685        1566          49        4933        6257
+Swap:           2048           0        2047
+Filesystem      Size  Used Avail Use% Mounted on
+-              1007G   32G  925G   4% /tmp
+/dev/sdf       1007G   32G  925G   4% /out
+
+==== find examples and .car files
+/delphi/examples/dump/dump.car
+/delphi/examples/dump/dump.cra
+/delphi/examples/dump/dump.sh
+/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/161018/src/car/skelana.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/161018/src/car/muflag.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/161018/src/car/aabtagxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/161018/src/car/phdstxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/161018/src/car/stdcdes.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car/skelana.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car/muflag.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car/aabtagxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car/phdstxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car/stdcdes.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/prerelease/src/car/skelana.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/prerelease/src/car/muflag.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/prerelease/src/car/aabtagxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/prerelease/src/car/phdstxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/prerelease/src/car/stdcdes.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/va0u_rd/src/car/muflag.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/va0u_rd/src/car/aabtagxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/va0u_rd/src/car/phdstxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/va0u_rd/src/car/stdcdes.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v91f_rd/src/car/muflag.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v91f_rd/src/car/aabtagxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v91f_rd/src/car/phdstxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v91f_rd/src/car/stdcdes.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/va0e_rd/src/car/muflag.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/va0e_rd/src/car/aabtagxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/va0e_rd/src/car/phdstxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/va0e_rd/src/car/stdcdes.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v92e/src/car/muflag.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v92e/src/car/aabtagxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v92e/src/car/phdstxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v92e/src/car/stdcdes.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v96g_rd/src/car/muflag.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v96g_rd/src/car/aabtagxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v96g_rd/src/car/phdstxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v96g_rd/src/car/stdcdes.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/va0e/src/car/muflag.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/va0e/src/car/aabtagxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/va0e/src/car/phdstxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/va0e/src/car/stdcdes.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v96g/src/car/muflag.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v96g/src/car/aabtagxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v96g/src/car/phdstxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v96g/src/car/stdcdes.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v95d/src/car/muflag.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v95d/src/car/aabtagxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v95d/src/car/phdstxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v95d/src/car/stdcdes.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v91f/src/car/muflag.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v91f/src/car/aabtagxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v91f/src/car/phdstxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v91f/src/car/stdcdes.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v90e_rd/src/car/muflag.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v90e_rd/src/car/aabtagxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v90e_rd/src/car/phdstxx.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v90e_rd/src/car/stdcdes.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v97g/src/car/muflag.car
+/delphi/releases/almalinux-9-x86_64_xrd/latest/simana/v97g/src/car/aabtagxx.car
+examples dir: /delphi/examples/dump
+ls: cannot access '/delphi/examples': No such file or directory
+-rw-r--r-- 1 root root 517838 Nov 22 20:25 /out/probe/examples_all.tgz
+ls: cannot access '/delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/161018/src/car/skelana.car': No such file or directory
+90 /out/probe/skelana_decks.txt
+saved muflag.car
+saved muflag.car
+saved muflag.car
+saved aabtagxx.car
+saved aabtagxx.car
+saved aabtagxx.car
+saved stdcdes.car
+saved stdcdes.car
+saved stdcdes.car
+
+==== nickname catalogue search
+files mentioning short94_c2:
+/delphi/pdl/index_old.txt
+/delphi/pdl/index.txt.06042026.txt
+/delphi/pdl/index.txt
+/delphi/pdl/index.08022026.txt
+/delphi/pdl/fatmen/short94_c2.pdl
+--- /delphi/pdl/index_old.txt
+--- /delphi/pdl/index.txt.06042026.txt
+--- /delphi/pdl/index.txt
+--- /delphi/pdl/index.08022026.txt
+--- /delphi/pdl/fatmen/short94_c2.pdl
+801
+
+==== xrootd listing
+/eos/opendata/delphi/collision-data
+/eos/opendata/delphi/condition-data
+/eos/opendata/delphi/documentation
+/eos/opendata/delphi/logbooks
+/eos/opendata/delphi/raw-data
+/eos/opendata/delphi/simulated-data
+/eos/opendata/delphi/upload
+400 /out/probe/eos_collision_dirs.txt
+243 /out/probe/eos_Y13709.txt
+-rw-r----- simko us  5663584 2015-10-29 01:52:41 /eos/opendata/delphi/collision-data/Y13709/Y12340-Y13709.import
+-rw-r----- simko us 96230400 2015-10-30 13:30:41 /eos/opendata/delphi/collision-data/Y13709/Y13709.1.al
+-rw-r----- simko us 83404800 2015-10-29 08:08:53 /eos/opendata/delphi/collision-data/Y13709/Y13709.10.al
+
+==== xrdcp one short94 file
+xrdcp exit 0 in 12 s
+-rw-r--r-- 1 root root 96230400 Nov 22 20:27 /tmp/d1.al
+
+==== manuals
+got skelana.pdf
+got 99_175_prog_239.pdf
+got DELPHI_Data_preservation-8.pdf
+-rw-r--r-- 1 root root   148 Nov 22 20:26 /out/probe/catalogue_files.txt
+-rw-r--r-- 1 root root 70489 Nov 22 20:26 /out/probe/catalogue_lines.txt
+-rw-r--r-- 1 root root   290 Nov 22 20:25 /out/probe/commands.txt
+-rw-r--r-- 1 root root   104 Nov 22 20:25 /out/probe/env.txt
+-rw-r--r-- 1 root root 25665 Nov 22 20:26 /out/probe/eos_Y13709.txt
+-rw-r--r-- 1 root root 17227 Nov 22 20:26 /out/probe/eos_collision_dirs.txt
+-rw-r--r-- 1 root root   231 Nov 22 20:26 /out/probe/eos_top.txt
+-rw-r--r-- 1 root root     0 Nov 22 20:25 /out/probe/examples_root_list.txt
+-rw-r--r-- 1 root root  4705 Nov 22 20:25 /out/probe/found_files.txt
+-rw-r--r-- 1 root root  6890 Nov 22 20:25 /out/probe/skelana_decks.txt
+-rw-r--r-- 1 root root    67 Nov 22 20:27 /out/probe/xrdcp_result.txt
+
+==== git clone examples
+cloned examples
+cloned modern-delphi-examples
+
+==== dump example on Y13709.1.al
+dump.sh exit 127 in 0 s
+./dump.sh: line 8: dellib: command not found
+./dump.sh: line 9: cernlib: command not found
+which: no nypatchy in (/home/delphi/.local/bin:/home/delphi/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/bin)
+Running  - dump.f dump.cra dump.ylog - - - dump.f .go
+./dump.sh: line 15: -: command not found
+./dump.sh: line 28: *.o: command not found
+ls: cannot access 'dump.car': No such file or directory
+ls: cannot access 'dump_build.txt': No such file or directory
+ls: cannot access 'PDLINPUT': No such file or directory
+ls: cannot access 'README.md': No such file or directory
+ls: cannot access 'dump.cra': No such file or directory
+ls: cannot access 'dump.err': No such file or directory
+ls: cannot access 'dump.log': No such file or directory
+ls: cannot access 'dump.sh': No such file or directory
+ls: cannot access 'dump.csh': No such file or directory
+total 8
+drwxr-xr-x 3 root root 4096 Nov 22 19:56 .
+drwxr-xr-x 1 root root 4096 Nov 22 19:56 ..
+-????????? ? ?    ?       ?            ? PDLINPUT
+-????????? ? ?    ?       ?            ? README.md
+-????????? ? ?    ?       ?            ? dump.car
+-????????? ? ?    ?       ?            ? dump.cra
+-????????? ? ?    ?       ?            ? dump.csh
+-????????? ? ?    ?       ?            ? dump.err
+-????????? ? ?    ?       ?            ? dump.log
+-????????? ? ?    ?       ?            ? dump.sh
+-????????? ? ?    ?       ?            ? dump_build.txt
+0 dump.log
+58 dump.err
+0
+
+==== done
+total 1984
+drwxr-xr-x 2 root root   4096 Nov 22 20:27 .
+drwxr-xr-x 4 root root   4096 Nov 22 20:25 ..
+-rw-r--r-- 1 root root      0 Nov 22 20:25 .w
+-rw-r--r-- 1 root root 174717 Nov 22 20:27 99_175_prog_239.pdf
+-rw-r--r-- 1 root root  45811 Nov 22 20:27 DELPHI_Data_preservation-8.pdf
+-rw-r--r-- 1 root root 124138 Nov 22 20:25 aabtagxx.car.gz
+-rw-r--r-- 1 root root    148 Nov 22 20:26 catalogue_files.txt
+-rw-r--r-- 1 root root  70489 Nov 22 20:26 catalogue_lines.txt
+-rw-r--r-- 1 root root    290 Nov 22 20:25 commands.txt
+-rw-r--r-- 1 root root     58 Nov 22 20:27 dump.err.head
+-rw-r--r-- 1 root root     58 Nov 22 20:27 dump.err.tail
+-rw-r--r-- 1 root root      0 Nov 22 20:27 dump.log.head
+-rw-r--r-- 1 root root      0 Nov 22 20:27 dump.log.tail
+-rw-r--r-- 1 root root    334 Nov 22 20:27 dump_build_tail.txt
+-rw-r--r-- 1 root root    104 Nov 22 20:25 env.txt
+-rw-r--r-- 1 root root  25665 Nov 22 20:26 eos_Y13709.txt
+-rw-r--r-- 1 root root  17227 Nov 22 20:26 eos_collision_dirs.txt
+-rw-r--r-- 1 root root    231 Nov 22 20:26 eos_top.txt
+-rw-r--r-- 1 root root 517838 Nov 22 20:25 examples_all.tgz
+-rw-r--r-- 1 root root  55481 Nov 22 20:25 examples_dump.tgz
+-rw-r--r-- 1 root root      0 Nov 22 20:25 examples_root_list.txt
+-rw-r--r-- 1 root root   4705 Nov 22 20:25 found_files.txt
+-rw-r--r-- 1 root root 517780 Nov 22 20:27 git_examples.tgz
+-rw-r--r-- 1 root root  33634 Nov 22 20:27 git_modern-delphi-examples.tgz
+-rw-r--r-- 1 root root  18048 Nov 22 20:25 muflag.car.gz
+-rw-r--r-- 1 root root  54047 Nov 22 20:25 skelana.car.gz
+-rw-r--r-- 1 root root 264402 Nov 22 20:27 skelana.pdf
+-rw-r--r-- 1 root root   6890 Nov 22 20:25 skelana_decks.txt
+-rw-r--r-- 1 root root  18102 Nov 22 20:25 stdcdes.car.gz
+-rw-r--r-- 1 root root     67 Nov 22 20:27 xrdcp_result.txt
+2.0M	/out/probe
+inner rc=0 in 92 s
+ROOTLESS: R0=PASS R1=PASS method=proot xrdfs=PASS inner_rc=0

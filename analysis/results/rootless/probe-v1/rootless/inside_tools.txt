@@ -1,0 +1,33 @@
+bash      /usr/bin/bash
+gfortran  /usr/bin/gfortran
+gcc       /usr/bin/gcc
+nypatchy  MISSING
+xrdcp     /usr/bin/xrdcp
+xrdfs     /usr/bin/xrdfs
+python3   /usr/bin/python3
+git       /usr/bin/git
+curl      /usr/bin/curl
+pdftotext MISSING
+colorgrep.csh
+colorgrep.sh
+colorxzgrep.csh
+colorxzgrep.sh
+colorzgrep.csh
+colorzgrep.sh
+csh.local
+debuginfod.csh
+debuginfod.sh
+delphi.csh
+delphi.sh
+flatpak.sh
+gawk.csh
+gawk.sh
+lang.csh
+lang.sh
+less.csh
+less.sh
+sh.local
+which2.csh
+which2.sh
+HOME=/home/delphi
+PATH=/usr/local/sbin:/usr/sbin:/usr/bin:/bin

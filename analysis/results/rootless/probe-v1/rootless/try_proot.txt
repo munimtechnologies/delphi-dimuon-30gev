@@ -1,0 +1,4 @@
+NAME="AlmaLinux"
+VERSION="9.8 (Olive Jaguar)"
+uid=0(root) gid=0(root) groups=0(root)
+INSIDE_OK

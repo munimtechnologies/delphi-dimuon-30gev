@@ -1,0 +1,13 @@
+nypatchy   MISSING
+dellib     MISSING
+cernlib    MISSING
+xrdcp      /usr/bin/xrdcp
+xrdfs      /usr/bin/xrdfs
+gfortran   /usr/bin/gfortran
+gcc        /usr/bin/gcc
+pdftotext  MISSING
+python3    /usr/bin/python3
+git        /usr/bin/git
+runsim     MISSING
+des        MISSING
+dstana     MISSING

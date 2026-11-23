@@ -1,0 +1,2 @@
+-rw-r--r-- 1 root root 96230400 Nov 22 20:27 /tmp/d1.al
+seconds=13
