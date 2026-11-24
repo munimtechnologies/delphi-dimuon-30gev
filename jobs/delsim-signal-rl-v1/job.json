@@ -1,0 +1,20 @@
+{
+  "name": "delsim-signal-rl-v1",
+  "kind": "compete",
+  "workdir": "E:/MV2-Pursuit/work/20261124T021711Z-science/staged/delsimrl",
+  "image": "python:3.12",
+  "setup": [
+    "(apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq proot > /dev/null 2>&1); command -v proot || echo 'proot not installed by apt (delphi_rootless.sh will try the release binary)'"
+  ],
+  "run": [
+    "cd /work && sed -i 's/\\r$//' fetch.sh inner_delsim.sh && bash -n fetch.sh && bash -n inner_delsim.sh && bash fetch.sh > /out/fetch.txt 2>&1; rc=$?; cat /out/fetch.txt; exit $rc",
+    "cd /work && python -m py_compile ocipull.py gen_signal.py sigana.py test_sigana.py dimusel.py btagcal.py > /out/compile.txt 2>&1; rc=$?; for f in delphi_rootless.sh delphi_env.sh run_delsim.sh inner_delsim.sh; do bash -n $f >> /out/compile.txt 2>&1 || rc=1; done; echo \"syntax rc=$rc\" >> /out/compile.txt; cat /out/compile.txt; exit $rc",
+    "cd /work && bash delphi_rootless.sh /work/inner_delsim.sh > /out/rootless.txt 2>&1; rc=$?; head -c 5000 /out/rootless.txt; echo; echo '[...]'; tail -c 16000 /out/rootless.txt; grep -E '^(OCIPULL|ROOTLESS|DELPHIENV|METHOD|DELSIM_RL|DELSIM_RL_STATUS):|inner rc=|FATAL|^smoke |^runsim |^prerun rc|FADGEN_EVENTS|dump.sh rc=|Ran [0-9]+ test|^(OK|FAILED)' /out/rootless.txt; echo '--- status.txt'; cat /out/delsim/status.txt 2>/dev/null; echo '--- SIGANA_JSON'; head -c 40000 /out/delsim/sigana.json 2>/dev/null; echo; echo '--- gen_stats.json'; head -c 6000 /out/delsim/gen/gen_stats.json 2>/dev/null; echo; exit $rc"
+  ],
+  "network": true,
+  "data_urls": [],
+  "data_key": "delphi-al9-rootfs",
+  "cpu": 2,
+  "memory_gb": 3,
+  "timeout_minutes": 600
+}
