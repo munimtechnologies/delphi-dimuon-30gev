@@ -1,0 +1,10 @@
+/eos/opendata/delphi/collision-data/Y13709/Y13709.1.al
+/eos/opendata/delphi/collision-data/Y13709/Y13709.41.al
+/eos/opendata/delphi/collision-data/Y13709/Y13709.81.al
+/eos/opendata/delphi/collision-data/Y13709/Y13709.121.al
+/eos/opendata/delphi/collision-data/Y13709/Y13709.161.al
+/eos/opendata/delphi/collision-data/Y13709/Y13709.201.al
+/eos/opendata/delphi/simulated-data/cern/kk2f4146/v94c/91.25/kk2f4146_qqpy_91.25_10000.sdst
+/eos/opendata/delphi/simulated-data/cern/kk2f4146/v94c/91.25/kk2f4146_qqpy_91.25_10020.sdst
+/eos/opendata/delphi/simulated-data/cern/kk2f4146/v94c/91.25/kk2f4146_qqpy_91.25_10040.sdst
+/eos/opendata/delphi/simulated-data/cern/kk2f4146/v94c/91.25/kk2f4146_qqpy_91.25_10061.sdst

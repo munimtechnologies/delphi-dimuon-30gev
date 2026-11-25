@@ -1,0 +1,4 @@
+/eos/opendata/delphi/simulated-data/cern/kk2f4146/v94c/89.437
+/eos/opendata/delphi/simulated-data/cern/kk2f4146/v94c/91.25
+/eos/opendata/delphi/simulated-data/cern/kk2f4146/v94c/91.309
+/eos/opendata/delphi/simulated-data/cern/kk2f4146/v94c/92.964

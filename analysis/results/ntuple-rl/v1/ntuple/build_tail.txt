@@ -1,0 +1,80 @@
+ Read Pam file: PHDST 3.15/04               IHEP/Protvino team
+
+ ---> start reading file  /delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car/stdcdes.car
+
+ Read Pam file: unknown
+
+ Read Pam file: DELPHI Standard commons    Version 2.0/01
+
+ ---> start reading file  /delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car/jetset74.car
+
+ Read Pam file: unknown
+
+ Read Pam file: JETSET   7.4/05     950127 13:42 CERN POOL JETSET = W5035
+
+ ---> start reading file  /delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car/vecsub72.car
+
+ Read Pam file: unknown
+
+ Read Pam file: VECSUB 1.84     Time-stamp: <97/05/21 10:26:08 antilog>
+
+ ---> start reading file  /delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car/muflag.car
+
+ Read Pam file: unknown
+
+ Read Pam file: MUFLAG 2.01      940423       Muid routine (calls MUCFIX)   
+
+ ---> start reading file  /delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car/haccorxx.car
+
+ Read Pam file: unknown
+
+ Read Pam file: HACCOR 16.3 - 9/10/96 - Version 16.3 of HACCOR 
+
+ ---> start reading file  /delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car/elepha32.car
+
+ Read Pam file: unknown
+
+ Read Pam file: ELEPHANT ELEctron PHoton ANalysis Tool (V 32 Fri Mar 20 08:5
+
+ ---> start reading file  /delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car/aabtagxx.car
+
+ Read Pam file: unknown
+
+ Read Pam file: AABTAG  VERSION 7.14/02  140802  10:30:00
+
+ ---> start reading file  /delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car/mammoth.car
+
+ Read Pam file: unknown
+
+ Read Pam file: MAMMOTH V 3.0 16/12/96
+
+ ---> start reading file  /delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car/pxrich.car
+
+ Read Pam file: unknown
+
+ Read Pam file: PXRICH V4.04 (14/10/99) - RICH DST decoding
+
+ ---> start reading file  /delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car/ribmean.car
+
+ Read Pam file: unknown
+
+ Read Pam file: RICH PARTICLE IDENTIFICATION PACKAGE 3.3 - M.BA AND P.K.
+
+ ---> start reading file  /delphi/releases/almalinux-9-x86_64_xrd/latest/dstana/270826/src/car/remclu.car
+
+ Read Pam file: unknown
+
+ Read Pam file: REMCLU V 2.1  Time-stamp: <2002-04-29 13:50:32 cossutti> 
+
+ ---> start reading file  dump.car
+
+ Read Pam file: unknown
+
+
+ Written:
+   physical FORT:0          8 units   1912 lines to file  dump.f
+
+    **!!    1 warnings  !!**
+
+/usr/bin/ld: cannot find -lXrdPosix
+collect2: error: ld returned 1 exit status

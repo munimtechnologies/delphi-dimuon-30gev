@@ -1,0 +1,87 @@
+{
+ "contract": "mv2-compete-result-v1",
+ "name": "dimu-ntuple-rl-v1",
+ "id": "34504cb097fd",
+ "field": "science",
+ "run": "20261123T160547Z-science",
+ "kind": "compete",
+ "status": "failed",
+ "reason": "run step exited 5",
+ "host": "dell",
+ "image": "python:3.12",
+ "started_at": "2026-11-25T06:58:16.388917+00:00",
+ "finished_at": "2026-11-25T07:19:39.291447+00:00",
+ "duration_seconds": 1282,
+ "limits": {
+  "cpu": 2.0,
+  "memory_gb": 2.0,
+  "timeout_minutes": 360.0
+ },
+ "peak_memory_gb": null,
+ "network": {
+  "setup": true,
+  "run": true
+ },
+ "steps": [
+  {
+   "step": "setup-01-apt-get",
+   "cmd": "(apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq proot > /dev/null 2>&1); command -v proot || echo 'proot not installed by apt (delphi_rootless.sh will try the release binary)'",
+   "exit": 0,
+   "seconds": 5
+  },
+  {
+   "step": "run-01-cd",
+   "cmd": "cd /work && sed -i 's/\\r$//' fetch.sh inner_ntuple.sh && bash -n fetch.sh && bash -n inner_ntuple.sh && bash fetch.sh > /out/fetch.txt 2>&1; rc=$?; cat /out/fetch.txt; exit $rc",
+   "exit": 0,
+   "seconds": 1
+  },
+  {
+   "step": "run-02-cd",
+   "cmd": "cd /work && python -m py_compile ocipull.py validate.py test_validate.py > /out/compile.txt 2>&1; rc=$?; for f in delphi_rootless.sh delphi_env.sh run_ntuple.sh inner_ntuple.sh; do bash -n $f >> /out/compile.txt 2>&1 || rc=1; done; echo \"syntax rc=$rc\" >> /out/compile.txt; cat /out/compile.txt; exit $rc",
+   "exit": 0,
+   "seconds": 0
+  },
+  {
+   "step": "run-03-cd",
+   "cmd": "cd /work && bash delphi_rootless.sh /work/inner_ntuple.sh > /out/rootless.txt 2>&1; rc=$?; head -c 5000 /out/rootless.txt; echo; echo '[...]'; tail -c 16000 /out/rootless.txt; grep -E '^(OCIPULL|ROOTLESS|DELPHIENV|METHOD|NTUPLE_RL|NTUPLE_RL_RUN):|inner rc=|FATAL' /out/rootless.txt; echo '--- VALIDATION_JSON'; cat /out/ntuple/validation_val.json 2>/dev/null | head -c 20000; echo; echo '--- runs.txt",
+   "exit": 5,
+   "seconds": 52
+  }
+ ],
+ "out_files": [
+  "compile.txt",
+  "fetch.txt",
+  "ntuple/build_errors.txt",
+  "ntuple/build_tail.txt",
+  "ntuple/data_all_val.txt",
+  "ntuple/dump.cra.orig",
+  "ntuple/dump_car_structure.txt",
+  "ntuple/input_files_val.txt",
+  "ntuple/mc_energies.txt",
+  "ntuple/mc_versions.txt",
+  "ntuple/skelana_sim_words.txt",
+  "ntuple/user02_orig_head.txt",
+  "rootless/delphi_profile.txt",
+  "rootless/delphi_uid.txt",
+  "rootless/env_1000_1000.txt",
+  "rootless/inside_xrdfs.txt",
+  "rootless/proot_static_sha256.txt",
+  "rootless/pull.json",
+  "rootless/rootfs_size.txt",
+  "rootless/try_proot_apt.txt",
+  "rootless/try_proot_apt_noseccomp.txt",
+  "rootless/try_proot_static.txt",
+  "rootless.txt",
+  "sha256.txt"
+ ],
+ "out_files_total": 24,
+ "out_skipped": [],
+ "upload_skipped": [],
+ "summary_tail": "[run-03-cd stdout]  REMCLU V 2.1  Time-stamp: <2002-04-29 13:50:32 cossutti> \n\n ---> start reading file  dump.car\n\n Read Pam file: unknown\n\n\n Written:\n   physical FORT:0          8 units   1912 lines to file  dump.f\n\n    **!!    1 warnings  !!**\n\n/usr/bin/ld: cannot find -lXrdPosix\ncollect2: error: ld returned 1 exit status\nNTUPLE_RL: run_ntuple rc=5\ninner rc=5 in 41 s\nROOTLESS: R0=PASS R1=PASS method=proot_static statx=PASS env=PASS id=1000:1000 xrdfs=PASS inner_rc=5 version=0.1.1\nOCIPULL: ok=True reused=True layers=0 seconds=1.6 stats=null error=\nMETHOD: proot_apt rc=0 inside=yes statx=no in 0 s\nMETHOD: proot_apt_noseccomp rc=0 inside=yes statx=no in 0 s\nMETHOD: proot_static rc=0 inside=yes statx=yes in 0 s\nDELPHIENV: env=PASS id=1000:1000 method=proot_static dellib=/delphi/releases/almalinux-9-x86_64_xrd/latest/scripts/dellib cernlib=/delphi/releases/almalinux-9-x86_64_xrd/latest/cern/pro/bin/cernlib nypatchy=/delphi/releases/almalinux-9-x86_64_xrd/latest/cern/pro/bin/nypatchy \nFATAL: build failed (rc=127)\nNTUPLE_RL: run_ntuple rc=5\ninner rc=5 in 41 s\nROOTLESS: R0=PASS R1=PASS method=proot_static statx=PASS env=PASS id=1000:1000 xrdfs=PASS inner_rc=5 version=0.1.1\n--- VALIDATION_JSON\n\n--- runs.txt\n",
+ "paths": {
+  "workdir": "/work (copy of E:\\MV2-Pursuit\\work\\20261123T160547Z-science\\dntrl)",
+  "out": "/out -> out/",
+  "data": "/data (docker volume mv2c-data-delphi-al9-rootfs, kept for later jobs)"
+ },
+ "note": ""
+}

@@ -1,0 +1,23 @@
+{
+ "ocipull": "0.1.0",
+ "image": "gitlab-registry.cern.ch/delphi/deployment/delphi/al9_64_xrd:latest",
+ "manifest_digest": "sha256:fafdb8b45892b350aa1756b697527180b7bc1465df53c3e1a707cb90dcf2c3bc",
+ "layers": [],
+ "reused": true,
+ "config": {
+  "Entrypoint": [
+   "/bin/sh",
+   "-c",
+   "/bin/bash"
+  ],
+  "Env": [
+   "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+  ],
+  "Labels": {
+   "io.buildah.version": "1.43.2"
+  },
+  "WorkingDir": "/home/delphi"
+ },
+ "seconds": 1.6,
+ "ok": true
+}

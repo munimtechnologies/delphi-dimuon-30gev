@@ -1,0 +1,8 @@
+NAME="AlmaLinux"
+VERSION="9.8 (Olive Jaguar)"
+uid=0(root) gid=0(root) groups=0(root)
+INSIDE_OK
+ls: cannot access '/etc/profile.d/colorxzgrep.sh': No such file or directory
+ls: cannot access '/etc/profile.d/colorzgrep.sh': No such file or directory
+ls: cannot access '/etc/profile.d/gawk.csh': No such file or directory
+ls: cannot access '/etc/profile.d/which2.sh': No such file or directory
