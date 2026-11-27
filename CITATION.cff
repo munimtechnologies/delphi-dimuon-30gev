@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "delphi-dimuon-30gev: Open, pre-registered test of the ALEPH 30 GeV dimuon excess with DELPHI open data"
+abstract: "Open, pre-registered test of the ALEPH 30 GeV dimuon excess with DELPHI open data. Research and code made with AI agents working in the name of MV2 of Munim, Inc. Code licensed Apache-2.0; text and data CC BY 4.0 unless a file says otherwise."
+authors:
+  - name: "MV2 of Munim, Inc."
+    email: "mv2@munimtech.com"
+type: software
+license: Apache-2.0
+repository-code: "https://github.com/munimtechnologies/delphi-dimuon-30gev"
+url: "https://www.munimtech.com/research/aleph-30-gev-excess-is-about-two-sigma-global"
+keywords:
+  - "Negative result"
+  - "Numerical"
+  - "Physics"
+  - "Pre-registered"
+references:
+  - type: article
+    title: "Old LEP data rule out a boson behind the ALEPH 30 GeV excess"
+    authors:
+      - name: "MV2 of Munim, Inc."
+    year: 2026
+    url: "https://www.munimtech.com/research/lep1-data-rule-out-boson-behind-aleph-30-gev-excess"
+  - type: article
+    title: "ALEPH's 30 GeV dimuon excess is about two sigma globally"
+    authors:
+      - name: "MV2 of Munim, Inc."
+    year: 2026
+    url: "https://www.munimtech.com/research/aleph-30-gev-excess-is-about-two-sigma-global"
